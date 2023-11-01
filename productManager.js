@@ -3,8 +3,8 @@ class ProductManager {
       this.products = [];
       this.productIdCounter = 1;
     }
-    
-    //Agrega producto si todos los campos existen y si el codigo nose repite
+
+    //Agrega producto si todos los campos existen y si el codigo no se repite
     addProduct(product) {
         //Si un campo no se agrega muestra el error
       if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
