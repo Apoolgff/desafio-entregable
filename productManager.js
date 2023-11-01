@@ -81,7 +81,7 @@ class ProductManager {
   const allProducts = productManager.getProducts();
   console.log(allProducts);
 
-  //Testeo para obtener todos los prodcutor por el ID
+  //Testeo para obtener un producto por el ID
   const productById = productManager.getProductById(2);
   console.log(productById);
 
