@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Silla",
+    "description": "Sirve para sentarte",
+    "price": 19.99,
+    "thumbnail": "silla.jpg",
+    "code": "PROD1",
+    "stock": 100,
+    "id": 1
+  },
+  {
+    "title": "Peine",
+    "description": "Sirve para peinarte",
+    "price": 9.99,
+    "thumbnail": "peine.jpg",
+    "code": "PROD2",
+    "stock": 30,
+    "id": 2
+  },
+  {
+    "title": "TV",
+    "description": "Sirve para entretenerte viendola",
+    "price": 99.99,
+    "thumbnail": "tv.jpg",
+    "code": "PROD3",
+    "stock": 20,
+    "id": 3
+  },
+  {
+    "title": "Cuchillo",
+    "description": "Sirve para cortar",
+    "price": 14.99,
+    "thumbnail": "cuchillo.jpg",
+    "code": "PROD4",
+    "stock": 85,
+    "id": 4
+  }
+]
