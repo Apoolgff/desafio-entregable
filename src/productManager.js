@@ -8,7 +8,7 @@ class ProductManager {
     this.loadProducts();
   }
 
-  //Carga los productos del json en el array
+  //Funcion para Cargar los datos del JSON
   async loadProducts() {
     try {
       const data = await fs.readFile(this.path, 'utf8');
@@ -19,7 +19,7 @@ class ProductManager {
     }
   }
 
-  //Actualiza las ID
+  //Funcion para generar el ID
   updateNextId() {
     if (this.products.length > 0) {
       const maxId = Math.max(...this.products.map(product => product.id));
@@ -27,7 +27,7 @@ class ProductManager {
     }
   }
 
-  //Guarda los productos en el json
+  //Funcion para guardar los productos en el JSON
   async saveProducts() {
     try {
       await fs.writeFile(this.path, JSON.stringify(this.products, null, 2), 'utf8');
@@ -36,9 +36,9 @@ class ProductManager {
     }
   }
 
-  //Agrega un producto si tiene todos los campos y si no tiene "code" repetido
+  //Funcion para agregar/crear un producto
   async addProduct(product) {
-    if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
+    if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
       console.error('Todos los campos son obligatorios.');
       return;
     }
@@ -49,8 +49,9 @@ class ProductManager {
     }
 
     const newProduct = {
+      id: this.nextId++,
+      status: true,
       ...product,
-      id: this.nextId++
     };
 
     this.products.push(newProduct);
@@ -58,7 +59,7 @@ class ProductManager {
     return newProduct;
   }
 
-  //muestra todos los productos con el limit de la query
+  //Funcion para mostrar/obtener todos los productos con limite
   async getProductsLimited(limit) {
     if (limit) {
       return this.products.slice(0, limit);
@@ -67,12 +68,12 @@ class ProductManager {
     }
   }
 
-  //Muestra todos los productos
+  //Funcion para mostrar/obtener todos los productos
   async getProducts() {
-      return this.products;
+    return this.products;
   }
 
-  //Muestra el producto segun el ID
+  //Funcion para mostrar/obtener un producto segun su ID
   async getProductById(id) {
     const product = this.products.find(product => product.id === id);
     if (!product) {
@@ -81,7 +82,7 @@ class ProductManager {
     return product;
   }
 
-  //Actualiza el producto segun ID y los campos a editar
+  //funcion para modificar un producto segun su ID
   async updateProduct(id, updatedFields) {
     const index = this.products.findIndex(product => product.id === id);
     if (index !== -1) {
@@ -91,7 +92,7 @@ class ProductManager {
     }
   }
 
-  //Borra producto segun el ID
+  //Funcion para eliminar un producto segun su ID
   async deleteProduct(id) {
     const index = this.products.findIndex(product => product.id === id);
     if (index !== -1) {
@@ -142,4 +143,3 @@ console.log('Producto actualizado:', updatedProduct);
 //Elimina un producto por ID
 const deletedProduct = productManager.deleteProduct(productId);
 console.log('Producto eliminado:', deletedProduct);*/
-module.exports = ProductManager;
