@@ -1,29 +1,58 @@
 [
   {
-    "title": "Silla",
-    "description": "Sirve para sentarte",
-    "price": 19.99,
-    "thumbnail": "silla.jpg",
-    "code": "PROD1",
-    "stock": 100,
-    "id": 1
-  },
-  {
-    "title": "Peine",
-    "description": "Sirve para peinarte",
-    "price": 9.99,
-    "thumbnail": "peine.jpg",
-    "code": "PROD2",
-    "stock": 30,
-    "id": 2
-  },
-  {
-    "title": "TV",
-    "description": "Sirve para entretenerte viendola",
-    "price": 99.99,
-    "thumbnail": "tv.jpg",
-    "code": "PROD3",
+    "id": 1,
+    "title": "Laptop",
+    "description": "Potente laptop para trabajo y entretenimiento",
+    "code": "LT100",
+    "price": 999.99,
+    "status": true,
     "stock": 20,
-    "id": 3
+    "category": "Electrónicos",
+    "thumbnails": [
+      "/images/laptop1.jpg",
+      "/images/laptop2.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Smartphone",
+    "description": "Teléfono inteligente de última generación",
+    "code": "SP200",
+    "price": 699.99,
+    "status": true,
+    "stock": 30,
+    "category": "Electrónicos",
+    "thumbnails": [
+      "/images/smartphone1.jpg",
+      "/images/smartphone2.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Auriculares",
+    "description": "Auriculares inalámbricos de alta calidad",
+    "code": "AH300",
+    "price": 129.99,
+    "status": true,
+    "stock": 50,
+    "category": "Electrónicos",
+    "thumbnails": [
+      "/images/auriculares1.jpg",
+      "/images/auriculares2.jpg"
+    ]
+  },
+  {
+    "id": 5,
+    "status": true,
+    "title": "Mouse",
+    "description": "Mouse inalámbrico potente",
+    "code": "MS400",
+    "price": 14.99,
+    "stock": 60,
+    "category": "Electrónicos",
+    "thumbnails": [
+      "/images/mouse1.jpg",
+      "/images/mouse2.jpg"
+    ]
   }
 ]
