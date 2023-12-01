@@ -9,8 +9,7 @@
     "stock": 20,
     "category": "Electrónicos",
     "thumbnails": [
-      "/images/laptop1.jpg",
-      "/images/laptop2.jpg"
+      "/images/laptop1.webp"
     ]
   },
   {
@@ -23,8 +22,7 @@
     "stock": 30,
     "category": "Electrónicos",
     "thumbnails": [
-      "/images/smartphone1.jpg",
-      "/images/smartphone2.jpg"
+      "/images/smartphone1.webp"
     ]
   },
   {
@@ -37,8 +35,7 @@
     "stock": 50,
     "category": "Electrónicos",
     "thumbnails": [
-      "/images/auriculares1.jpg",
-      "/images/auriculares2.jpg"
+      "/images/auriculares1.webp"
     ]
   },
   {
@@ -51,8 +48,7 @@
     "stock": 60,
     "category": "Electrónicos",
     "thumbnails": [
-      "/images/mouse1.jpg",
-      "/images/mouse2.jpg"
+      "/images/mouse1.webp"
     ]
   }
 ]

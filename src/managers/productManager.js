@@ -8,6 +8,15 @@ class ProductManager {
     this.loadProducts();
   }
 
+  static getInstance(path) {
+    if (!ProductManager.instance) {
+      ProductManager.instance = new ProductManager(path);
+    }
+    return ProductManager.instance;
+  }
+
+
+
   //Funcion para Cargar los datos del JSON
   async loadProducts() {
     try {
@@ -69,7 +78,7 @@ class ProductManager {
   }
 
   //Funcion para mostrar/obtener todos los productos
-  async getProducts() {
+   getProducts() {
     return this.products;
   }
 
@@ -100,46 +109,10 @@ class ProductManager {
       await this.saveProducts();
       return deletedProduct;
     } else {
-      throw new Error('El producto no fue encontrado.');
+      throw new Error('El producto no fue encontrado. ID: ' + id);
     }
   }
 }
 
 module.exports = ProductManager;
 
-
-// Ejemplo de uso (COMENTAR LOS FRAGMENTOS DE CODIGO QUE HAGAN FALTA PARA PODER TESTEAR BIEN CADA PARTE):
-
-//EJEMPLOS DE FUNCIONAMIENTO COMENTADOS:
-
-//const productManager = new ProductManager('../productos.json');
-
-// Agrega un producto, se puede poner incompleto para testear el error o con "code" repetido para testear el error al intentar agregar un producto
-/*const newProduct = {
-    title: 'Cuchillo',
-    description: 'Sirve para cortar',
-    price: 4.99,
-    thumbnail: 'cuchillo.jpg',
-    code: 'PROD4',
-    stock: 60,
-};*/
-//productManager.addProduct(newProduct);
-
-/*/Muestra todos los productos
-const allProducts = productManager.getProducts();
-console.log('Todos los productos:', allProducts);
-
-const productId = 4;//VARIABLE ID PARA PODER TESTEAR DISTINTAS FUNCIONES
-
-//Muestra un producto por ID
-const productById = productManager.getProductById(productId);
-console.log(`Producto con ID ${productId}:`, productById);
-
-//Actualiza un producto por ID
-const updatedFields = { price: 39.99, stock: 32 };
-const updatedProduct = productManager.updateProduct(productId, updatedFields);
-console.log('Producto actualizado:', updatedProduct);
-
-//Elimina un producto por ID
-const deletedProduct = productManager.deleteProduct(productId);
-console.log('Producto eliminado:', deletedProduct);*/
