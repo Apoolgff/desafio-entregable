@@ -11,13 +11,13 @@ const productManager = ProductManager.getInstance('./src/mock/productos.json');
 //Ruta para home
 router.get('/',  (req, res) => {
     const products =  productManager.getProducts();
-    res.render('home', { title: 'Home', style: 'style.css', body: 'home', products });
+    res.render('home', { title: 'Home', style: 'home.css', body: 'home', products });
 });
 
 // Ruta para realTimeProducts
 router.get('/realtimeproducts',  (req, res) => {
     const products =  productManager.getProducts();
-    res.render('realTimeProducts', { title: 'Real-Time Products', style: 'style.css', body: 'realTimeProducts', products });
+    res.render('realTimeProducts', { title: 'Real-Time Products', style: 'realTimeProducts.css', body: 'realTimeProducts', products });
 });
 
 

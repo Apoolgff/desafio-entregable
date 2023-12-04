@@ -14,7 +14,7 @@ function configureSocketIO(server) {
     io.on('connection', (socket) => {
       console.log('Un cliente se ha conectado');
   
-      // Enviar datos iniciales al cliente cuando se conecta
+      // Envia datos iniciales al cliente cuando se conecta
       const initialProducts = productManager.getProducts();
       socket.emit('updateProducts', initialProducts);
     });

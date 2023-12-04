@@ -1,3 +1,6 @@
+/*CODIGO PARA MOSTRAR LA LISTA DE PRODUCTOS EN TIEMPO REAL EN HOME SI HICIERA FALTA EN EL FUTURO*/
+
+
 /*const socket = io();
 
 const updateProductList = (data) => {
@@ -26,17 +29,17 @@ const updateProductList = (data) => {
         </ul>
       `;
 
-      // Agregar clases directamente al elemento img dentro de .thumbnails
+      
       const images = listItem.querySelectorAll('.thumbnails img');
       images.forEach(image => {
         image.classList.add('image');
       });
 
-      // Agregar clases directamente a .thumbnails
+      
       const thumbnailList = listItem.querySelector('.thumbnails');
       thumbnailList.classList.add('thumbnails');
 
-      // Agregar clases directamente a .products li
+      
       listItem.classList.add('product-item');
 
       productsList.appendChild(listItem);
@@ -46,7 +49,6 @@ const updateProductList = (data) => {
   }
 };
 
-// Escuchar la actualización de la lista de productos desde el servidor
 socket.on('updateProducts', updateProductList);*/
 
 

@@ -42,28 +42,28 @@ console.log('Socket.io server listening on port 8080');
 configureSocketIO(io, productManager);
 
 io.on('connection', (socket) => {
-  // Enviar datos iniciales al cliente cuando se conecta
+  
   console.log('Un cliente se ha conectado');
 
-  // Enviar datos iniciales al cliente cuando se conecta
+  
   const initialProducts = productManager.getProducts();
   socket.emit('updateProducts', initialProducts);
 
-  // Escuchar eventos de creación de producto desde el cliente
+  // Escucha eventos de creación de producto desde el cliente
   socket.on('createProduct', (newProduct) => {
-    const createdProduct = productManager.addProduct(newProduct);
+    productManager.addProduct(newProduct);
     io.emit('updateProducts', productManager.getProducts());
   });
 
-  // Escuchar eventos de eliminación de producto desde el cliente
+  // Escucha eventos de eliminación de producto desde el cliente
   socket.on('deleteProduct', (productId) => {
     try {
-      const deletedProduct = productManager.deleteProduct(productId);
-      // Emitir el evento 'deleteProduct' a todos los clientes
+      productManager.deleteProduct(productId);
+      // Emite el evento 'deleteProduct' a todos los clientes
       io.emit('deleteProduct', productId);
     } catch (error) {
       console.error(error.message);
-      // Enviar un mensaje de error al cliente si el producto no fue encontrado
+      // Envia un mensaje de error al cliente si el producto no fue encontrado
       socket.emit('deleteProductError', { productId, error: error.message });
     }
   });

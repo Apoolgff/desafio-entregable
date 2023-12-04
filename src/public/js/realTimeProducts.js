@@ -1,7 +1,7 @@
 const socket = io();
 
 function createProduct() {
-  // Recopilar datos del formulario
+  // Recopila datos del formulario
   const newProduct = {
     title: document.getElementById('title').value,
     description: document.getElementById('description').value,
@@ -12,19 +12,29 @@ function createProduct() {
     thumbnails: document.getElementById('thumbnails').value.split(','),
   };
 
-  // Emitir el evento 'createProduct' con los datos del nuevo producto
+  // Emite el evento 'createProduct' con los datos del nuevo producto
   socket.emit('createProduct', newProduct);
+
+  // Limpia los campos del formulario despues de agregar el producto
+  document.getElementById('title').value = '';
+  document.getElementById('description').value = '';
+  document.getElementById('code').value = '';
+  document.getElementById('price').value = '';
+  document.getElementById('stock').value = '';
+  document.getElementById('category').value = '';
+  document.getElementById('thumbnails').value = '';
 }
 
-// Escuchar eventos de actualización de productos
+// Escucha eventos de actualización de productos
 socket.on('updateProducts', (products) => {
-  // Lógica para actualizar la lista de productos en la vista
+  // Logica que actualiza la lista de productos en la vista
   const productsList = document.querySelector('.products');
   productsList.innerHTML = ""; // Limpiar la lista antes de actualizar
 
   products.forEach((product) => {
-    // Crear elementos HTML para cada producto y agregarlos a la lista
+    // Crea elementos HTML para cada producto y los agrega a la lista
     const li = document.createElement('li');
+    li.classList.add('product-card');
     li.innerHTML = `
       <strong>ID:</strong> ${product.id}<br>
       <strong>Title:</strong> ${product.title}<br>
@@ -45,17 +55,20 @@ socket.on('updateProducts', (products) => {
 });
 
 function deleteProduct() {
-    // Obtener el ID del producto a eliminar
+    // Obtiene el ID del producto a eliminar
     const productId = parseInt(document.getElementById('productId').value);
   
-    // Emitir el evento 'deleteProduct' con el ID del producto a eliminar
+    // Emite el evento 'deleteProduct' con el ID del producto a eliminar
     socket.emit('deleteProduct', productId);
+
+    // Limpia el campo del formulario
+    document.getElementById('productId').value = '';
   }
   
-  // Escuchar eventos de eliminación de productos
+  // Escucha el evento de eliminación de productos
   socket.on('deleteProduct', (productId) => {
     try {
-      // Lógica para eliminar el producto de la vista
+      // Logica para eliminar el producto de la vista
       const productsList = document.querySelector('.products');
       const productElement = document.getElementById(`product_${productId}`);
   

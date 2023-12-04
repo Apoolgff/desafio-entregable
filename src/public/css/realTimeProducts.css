@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: aqua;
+  }
+  
+  h1 {
+    color: #bb1010;
+    text-align: center;
+  }
+  
+  .products ul {
+    list-style-type: none;
+    padding: 0;
+    display: inline;
+    vertical-align: top;
+  }
+  
+.page-container{
+    display: flex;
+    justify-content: space-between;
+}
+  
+  .products strong {
+    color: #004ea1;
+  }
+  
+  .thumbnails li {
+    width: 105px;
+  }
+  
+  .image {
+    max-width: 100px;
+    height: auto;
+    border: 3px solid #000000;
+    background-color: white;
+  }
+
+  .product-card {
+    border: 3px solid #000000;
+    background-color: rgb(255, 232, 127);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .product-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+/* FORMULARIOS */
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+  }
+  
+  form label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  form input, form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+  
+  form button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  form button:hover {
+    background-color: #45a049;
+  }
+  
+ 
+  #deleteProductForm {
+    background-color: #f2dede;
+  }
+  
+  #createProductForm {
+    background-color: #d9edf7;
+  }
+  
+  
