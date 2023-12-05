@@ -2,7 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const { Server } = require('socket.io');
 const path = require('path');
-const { productsRouter, configureSocketIO, checkSocketIO } = require('./routes/products.router');
+const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/cart.router');
 const viewsRouter = require('./routes/views.router');
 
@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const productManager = ProductManager.getInstance('./src/mock/productos.json');
 
 
-app.use('/api/products', checkSocketIO, productsRouter);
+app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
 
@@ -39,13 +39,13 @@ const io = new Server(serverHttp);
 console.log('Socket.io server listening on port 8080');
 
 
-configureSocketIO(io, productManager);
+//Sockets
 
 io.on('connection', (socket) => {
   
   console.log('Un cliente se ha conectado');
 
-  
+
   const initialProducts = productManager.getProducts();
   socket.emit('updateProducts', initialProducts);
 
