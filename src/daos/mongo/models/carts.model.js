@@ -11,4 +11,4 @@ const CartsSchema = Schema({
 
 const cartsModel = model(cartsCollection, CartsSchema)
 
-module.exports = {cartsModel}
+module.exports = cartsModel
