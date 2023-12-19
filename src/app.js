@@ -5,11 +5,17 @@ const path = require('path');
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/cart.router');
 const viewsRouter = require('./routes/views.router');
+const { connect } = require('mongoose')
 
 const ProductManager = require('./managers/productManager');
 
 const app = express();
 const port = 8080;
+const connectDB = async () => {
+  await connect('mongodb+srv://paologff:Databasecoder@cluster0.ssinb4w.mongodb.net/ecommerce?retryWrites=true&w=majority')
+  console.log('Base de datos conectada')
+}
+connectDB()
 
 // Configuración de Handlebars
 const hbs = exphbs.create({ extname: '.hbs', defaultLayout: 'main', layoutsDir: path.join(__dirname, 'views/layouts')  });
