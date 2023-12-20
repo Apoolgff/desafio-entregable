@@ -62,21 +62,21 @@ io.on('connection', async (socket) => {
     console.error('Error al obtener los productos:', error.message);
   }
 
-  // Escucha eventos de creación de producto desde el cliente
+ 
   socket.on('createProduct', async (newProduct) => {
     await productDao.addProduct(newProduct);
     io.emit('updateProducts', await productDao.getProducts());
   });
 
-  // Escucha eventos de eliminación de producto desde el cliente
+
   socket.on('deleteProduct', async (productId) => {
     try {
       await productDao.deleteProduct(productId);
-      // Emite el evento 'deleteProduct' a todos los clientes
+
       io.emit('deleteProduct', productId.toString());
     } catch (error) {
       console.error(error.message);
-      // Envia un mensaje de error al cliente si el producto no fue encontrado
+     
       socket.emit('deleteProductError', { productId, error: error.message });
     }
   });
@@ -84,21 +84,21 @@ io.on('connection', async (socket) => {
   console.log('Nuevo cliente conectado');
 
     try {
-        // Obtener mensajes al conectarse un nuevo cliente
+
         const messages = await messageDao.getMessages();
         socket.emit('updateMessages', messages);
     } catch (error) {
         console.error('Error al obtener mensajes:', error.message);
     }
 
-    // Escuchar eventos de mensajes
+    //Escucha eventos de mensajes
     socket.on('sendMessage', async (user, message) => {
         try {
-            // Guardar el mensaje en la base de datos
+            
             await messageDao.addMessage(user, message);
-            // Obtener todos los mensajes después de agregar uno nuevo
+            
             const messages = await messageDao.getMessages();
-            // Emitir a todos los clientes la actualización de mensajes
+            
             io.emit('updateMessages', messages);
         } catch (error) {
             console.error('Error al enviar mensaje:', error.message);

@@ -18,16 +18,20 @@ class MessageDaoMongo {
 
     async addMessage(user, message) {
         try {
-            const existingUser = await this.model.findOne({ user });
-
+            let existingUser = await this.model.findOne({ user });
+    
             if (existingUser) {
-                // Si el usuario ya existe, agregar el nuevo mensaje al array
+              
                 existingUser.messages.push({ message });
-                await existingUser.save();
             } else {
-                // Si el usuario no existe, crear un nuevo documento con el mensaje
-                await this.model.create({ user, messages: [{ message }] });
+
+                existingUser = await this.model.create({ user, messages: [{ message }] });
             }
+    
+            
+            const result = await existingUser.save();
+    
+            return result;
         } catch (error) {
             console.error('Error al agregar el mensaje:', error.message);
             throw error;

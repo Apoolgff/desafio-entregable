@@ -12,18 +12,18 @@ class ProductDaoMongo {
                 return null;
             }
 
-            // Verificar si ya existe un producto con el mismo código
+           
             const existingProduct = await this.model.findOne({ code: product.code });
             if (existingProduct) {
                 console.error('El campo "code" ya está en uso.');
                 return null;
             }
 
-            // Agregar las imágenes en miniatura si están presentes
+           
             const thumbnails = product.thumbnails || [];
 
 
-            // Crear un nuevo producto utilizando el modelo de Mongoose
+          
             const newProduct = await this.model.create({
                 title: product.title,
                 description: product.description,

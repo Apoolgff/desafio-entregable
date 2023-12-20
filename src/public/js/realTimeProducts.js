@@ -25,14 +25,14 @@ function createProduct() {
   document.getElementById('thumbnails').value = '';
 }
 
-// Escucha eventos de actualización de productos
+
 socket.on('updateProducts', (products) => {
-  // Logica que actualiza la lista de productos en la vista
+
   const productsList = document.querySelector('.products');
-  productsList.innerHTML = ""; // Limpiar la lista antes de actualizar
+  productsList.innerHTML = ""; 
 
   products.forEach((product) => {
-    // Crea elementos HTML para cada producto y los agrega a la lista
+    
     const li = document.createElement('li');
     li.classList.add('product-card');
     li.id = `product_${product._id}`;
@@ -57,20 +57,20 @@ socket.on('updateProducts', (products) => {
 });
 
 function deleteProduct() {
-    // Obtiene el ID del producto a eliminar
+
     const productId = document.getElementById('productId').value;
   
-    // Emite el evento 'deleteProduct' con el ID del producto a eliminar
+   
     socket.emit('deleteProduct', productId);
 
-    // Limpia el campo del formulario
+
     document.getElementById('productId').value = '';
   }
   
-  // Escucha el evento de eliminación de productos
+
   socket.on('deleteProduct', (productId) => {
     try {
-      // Logica para eliminar el producto de la vista
+
       const productsList = document.querySelector('.products');
       const productElement = document.getElementById(`product_${productId}`);
   
