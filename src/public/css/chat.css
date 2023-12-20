@@ -1,0 +1,39 @@
+/* public/css/chat.css */
+
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  #chat-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  #message-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #message-list li {
+    margin-bottom: 10px;
+  }
+  
+  #message-form {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  #message-input {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  

@@ -35,8 +35,9 @@ socket.on('updateProducts', (products) => {
     // Crea elementos HTML para cada producto y los agrega a la lista
     const li = document.createElement('li');
     li.classList.add('product-card');
+    li.id = `product_${product._id}`;
     li.innerHTML = `
-      <strong>ID:</strong> ${product.id}<br>
+      <strong>ID:</strong> ${product._id}<br>
       <strong>Title:</strong> ${product.title}<br>
       <strong>Description:</strong> ${product.description}<br>
       <strong>Code:</strong> ${product.code}<br>
@@ -52,11 +53,12 @@ socket.on('updateProducts', (products) => {
 
     productsList.appendChild(li);
   });
+
 });
 
 function deleteProduct() {
     // Obtiene el ID del producto a eliminar
-    const productId = parseInt(document.getElementById('productId').value);
+    const productId = document.getElementById('productId').value;
   
     // Emite el evento 'deleteProduct' con el ID del producto a eliminar
     socket.emit('deleteProduct', productId);

@@ -34,7 +34,7 @@ class ProductDaoMongo {
                 status: true,
                 thumbnails: thumbnails,
             });
-
+            console.log('Created Product:', newProduct);
             return newProduct;
         } catch (error) {
             console.error('Error al agregar el producto:', error.message);
@@ -44,7 +44,13 @@ class ProductDaoMongo {
 
 
     async getProducts() {
-        return await this.model.find()
+        try {
+            const products= await this.model.find();
+            return products
+          } catch (error) {
+            console.error('Error al obtener los productos:', error.message);
+            throw error;
+          }
     }
 
     async getProductsLimited(limit) {
@@ -55,7 +61,20 @@ class ProductDaoMongo {
         }
     }
 
-    async getProductById(pid) { }
+    async getProductById(id) { 
+        try {
+            const product = await this.model.findById(id);
+      
+            if (!product) {
+                throw new Error('El producto no fue encontrado.');
+            }
+      
+            return product;
+        } catch (error) {
+            console.error('Error al obtener el producto por ID:', error.message);
+            throw error;
+        }
+    }
 
     async updateProduct(pid, updatedFields) {
         try {
@@ -77,7 +96,15 @@ class ProductDaoMongo {
         }
     }
 
-    async deleteProduct(pid) { }
+    async deleteProduct(pid) { 
+        try {
+            const deletedProduct = await this.model.findByIdAndDelete(pid);
+            return deletedProduct;
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error.message);
+            throw error;
+        }
+    }
 
 }
 

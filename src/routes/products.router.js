@@ -1,11 +1,13 @@
 const { Router } = require('express');
-const ProductManager = require('../managers/productManager');
+//const ProductManager = require('../managers/productManager');
 const ProductDaoMongo = require('../daos/mongo/productManagerMongo.js')
 
 const productsRouter = Router();
-const productManager = new ProductManager('./src/mock/productos.json');
+//const productManager = new ProductManager('./src/mock/productos.json');
 
 const productService = new ProductDaoMongo()
+
+
 
 productsRouter.get('/', async (req, res) =>{
   try {
@@ -20,7 +22,7 @@ productsRouter.get('/', async (req, res) =>{
 
 productsRouter.get('/:pid', async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid);
+    const productId = req.params.pid;
     const product = await productService.getProductById(productId);
     res.json({ product });//res.send({status: 'success', payload: product})
   } catch (error) {
@@ -42,7 +44,7 @@ productsRouter.post('/', async (req, res) => {
 
 productsRouter.put('/:pid', async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid);
+    const productId = req.params.pid;
     const updatedProduct = await productService.updateProduct(productId, req.body);
     res.json({ product: updatedProduct });//res.send({status: 'success', payload: updatedProduct})
   } catch (error) {
@@ -50,6 +52,24 @@ productsRouter.put('/:pid', async (req, res) => {
     res.status(404).send('Product Not Found');
   }
 });
+
+productsRouter.delete('/:pid', async (req, res) => {
+  try {
+    const productId = req.params.pid;
+    const deletedProduct = await productService.deleteProduct(productId);
+
+    if (deletedProduct) {
+      res.json({ product: deletedProduct });//res.send({status: 'success', payload: deletedProduct})
+    } else {
+      res.status(404).send('Product Not Found');
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//ROUTER ANTERIORES
 
 /*productsRouter.get('/', async (req, res) => {
   try {
@@ -95,7 +115,7 @@ productsRouter.put('/:pid', async (req, res) => {
   }
 });*/
 
-productsRouter.delete('/:pid', async (req, res) => {
+/*productsRouter.delete('/:pid', async (req, res) => {
   try {
     const productId = parseInt(req.params.pid);
     const deletedProduct = await productManager.deleteProduct(productId);
@@ -105,6 +125,6 @@ productsRouter.delete('/:pid', async (req, res) => {
     console.error(error.message);
     res.status(404).send('Product Not Found');
   }
-});
+});*/
 
 module.exports = productsRouter;

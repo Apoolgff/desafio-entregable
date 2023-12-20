@@ -6,7 +6,7 @@ const MessagesSchema = Schema({
     user: {
         type: String,
         required: true,
-        unique
+        unique: true
     },
     message: {
         type: String,
