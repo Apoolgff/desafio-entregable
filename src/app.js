@@ -92,10 +92,10 @@ io.on('connection', async (socket) => {
     }
 
     // Escuchar eventos de mensajes
-    socket.on('sendMessage', async (data) => {
+    socket.on('sendMessage', async (user, message) => {
         try {
             // Guardar el mensaje en la base de datos
-            await messageDao.addMessage(data);
+            await messageDao.addMessage(user, message);
             // Obtener todos los mensajes después de agregar uno nuevo
             const messages = await messageDao.getMessages();
             // Emitir a todos los clientes la actualización de mensajes

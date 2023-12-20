@@ -1,4 +1,4 @@
-const { Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const messagesCollection = 'Messages'
 
@@ -8,10 +8,12 @@ const MessagesSchema = Schema({
         required: true,
         unique: true
     },
-    message: {
-        type: String,
-        required: true
-    }
+    messages: [{
+        message: {
+            type: String
+        }
+
+    }],
 })
 
 const messagesModel = model(messagesCollection, MessagesSchema)
