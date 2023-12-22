@@ -6,14 +6,10 @@ const MessagesSchema = Schema({
     user: {
         type: String,
         required: true,
-        unique: true
     },
-    messages: [{
-        message: {
-            type: String
-        }
-
-    }],
+    message: {
+        type: String
+    }
 })
 
 const messagesModel = model(messagesCollection, MessagesSchema)

@@ -10,6 +10,10 @@ h1{
     text-align: center;
 }
 
+li strong{
+    font-weight: bold;
+}
+
 
 #chat-container {
     max-width: 600px;

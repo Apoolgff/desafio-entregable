@@ -18,20 +18,8 @@ class MessageDaoMongo {
 
     async addMessage(user, message) {
         try {
-            let existingUser = await this.model.findOne({ user });
-    
-            if (existingUser) {
-              
-                existingUser.messages.push({ message });
-            } else {
-
-                existingUser = await this.model.create({ user, messages: [{ message }] });
-            }
-    
+           return await this.model.create({ user, message });
             
-            const result = await existingUser.save();
-    
-            return result;
         } catch (error) {
             console.error('Error al agregar el mensaje:', error.message);
             throw error;
@@ -40,3 +28,4 @@ class MessageDaoMongo {
 }
 
 module.exports = MessageDaoMongo;
+
