@@ -1,0 +1,20 @@
+<h1>Detalle del Carrito</h1>
+<div id="cart-details">
+    <ul>
+        {{#each cart.products}}
+        <li>
+            <p><strong>Id: </strong>{{this.productId._id}}</p>
+            <p><strong>Producto: </strong>{{this.productId.title}}</p>
+            <p><strong>Descripcion: </strong>{{this.productId.description}}</p>
+            <p><strong>Codigo: </strong>{{this.productId.code}}</p>
+            <p><strong>Stock: </strong>{{this.productId.stock}}</p>
+            <p><strong>Categoria: </strong>{{this.productId.category}}</p>
+            <p><strong>Cantidad: </strong>{{this.quantity}}</p>
+            <p><strong>Precio unitario: </strong>${{this.productId.price}}</p>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src=""></script>

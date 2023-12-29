@@ -1,0 +1,41 @@
+<h1>Lista de Productos</h1>
+<ul class="products">
+  {{#each products}}
+    <li class="product-card">
+      <strong>ID:</strong> {{_id}}<br>
+      <strong>Title:</strong> {{title}}<br>
+      <strong>Description:</strong> {{description}}<br>
+      <strong>Code:</strong> {{code}}<br>
+      <strong>Price:</strong> ${{price}}<br>
+      <strong>Status:</strong> {{status}}<br>
+      <strong>Stock:</strong> {{stock}}<br>
+      <strong>Category:</strong> {{category}}<br>
+      <strong>Thumbnails:</strong>
+      <ul class="thumbnails">
+        {{#each thumbnails}}
+          <li><img class="image" src="{{this}}" alt="Thumbnail"></li>
+        {{/each}}        
+      </ul>
+      <button class="add-to-cart-btn">Agregar al carrito</button><!--AUN NO FUNCIONAL, NO FUE PEDIDO EN LA ENTREGA YA QUE NO TENEMOS FORMA AUN DE LIGARLO A UN CARRITO ESPECIFICO POR ESTA VIA, CALCULO QUE CUANDO SE IMPLEMENTEN LAS SESIONES SE PODRA -->
+    </li>
+  {{/each}}
+</ul>
+
+<!-- Paginación -->
+<div class="pagination">
+  {{#if pagination.hasPrevPage}}
+    <a href="{{pagination.prevLink}}">Anterior</a>
+  {{/if}}
+
+  <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
+
+  {{#if pagination.hasNextPage}}
+    <a href="{{pagination.nextLink}}">Siguiente</a>
+  {{/if}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+
+
+

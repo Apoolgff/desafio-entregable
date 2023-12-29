@@ -5,6 +5,7 @@ class ProductDaoMongo {
         this.model = productsModel
     }
 
+    //Agrega/Crea un producto
     async addProduct(product) {
         try {
             if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
@@ -42,7 +43,7 @@ class ProductDaoMongo {
         }
     }
 
-
+    //Muestra todos los productos 
     async getProducts() {
         try {
             const products= await this.model.find();
@@ -53,14 +54,53 @@ class ProductDaoMongo {
           }
     }
 
-    async getProductsLimited(limit) {
-        if (limit) {
-            return this.model.find().limit(limit);
-        } else {
-            return this.model.find();
+    // Muestra los productos con paginacion segun los filtros deseados
+    async getProductsLimited({ limit = 1, page = 1, sort, query } = {}) {
+        try {
+            const options = {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                sort: sort ? { price: sort === 'asc' ? 1 : -1 } : undefined,
+            };
+    
+            let filter = {};
+    
+            if (query) {
+                // Verifica si query es un estado valido (true o false)
+                const isStatus = query.toLowerCase() === 'true' || query.toLowerCase() === 'false';
+    
+                if (isStatus) {
+                    filter.status = query.toLowerCase() === 'true';
+                } else {
+                    // Si no es un estado, entonces es una categoría y mostrara solo la categoria deseada y no todos los productos
+                    filter.category = query;
+                }
+            }
+    
+            const result = await this.model.paginate(filter, options);
+    
+            const response = {
+                status: 'success',
+                payload: result.docs,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.hasPrevPage ? `/products?limit=${limit}&page=${result.prevPage}` : null,
+                nextLink: result.hasNextPage ? `/products?limit=${limit}&page=${result.nextPage}` : null,
+            };
+    
+            return response;
+        } catch (error) {
+            console.error('Error al obtener los productos paginados:', error.message);
+            throw error;
         }
     }
 
+
+    //Mostrar un producto segun ID
     async getProductById(id) { 
         try {
             const product = await this.model.findById(id);
@@ -76,6 +116,7 @@ class ProductDaoMongo {
         }
     }
 
+    //Actualizar un producto segun ID
     async updateProduct(pid, updatedFields) {
         try {
             const updatedProduct = await this.model.findOneAndUpdate(
@@ -96,6 +137,7 @@ class ProductDaoMongo {
         }
     }
 
+    //Eliminar producto segun ID
     async deleteProduct(pid) { 
         try {
             const deletedProduct = await this.model.findByIdAndDelete(pid);

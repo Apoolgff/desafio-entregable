@@ -8,18 +8,19 @@ const productsRouter = Router();
 const productService = new ProductDaoMongo()
 
 
-
+//Mostrar productos con diferentes filtros y paginacion
 productsRouter.get('/', async (req, res) =>{
   try {
-    const limit = parseInt(req.query.limit) || undefined;
-    const products = await productService.getProductsLimited(limit);
-    res.json({ products });//res.send({ status: 'success', payload: products})
-  } catch (error) {
+    const { limit, page, sort, query } = req.query;
+    const result = await productService.getProductsLimited({ limit, page, sort, query });
+    res.json(result);//res.send({status: 'success', payload: result})
+} catch (error) {
     console.error(error.message);
     res.status(500).send('Internal Server Error');
-  }
+}
 });
 
+//Mostrar producto segun ID
 productsRouter.get('/:pid', async (req, res) => {
   try {
     const productId = req.params.pid;
@@ -31,6 +32,7 @@ productsRouter.get('/:pid', async (req, res) => {
   }
 });
 
+//Agregar producto
 productsRouter.post('/', async (req, res) => {
   try {
     const newProduct = await productService.addProduct(req.body);
@@ -42,6 +44,7 @@ productsRouter.post('/', async (req, res) => {
   }
 });
 
+//Modificar un producto segun su ID
 productsRouter.put('/:pid', async (req, res) => {
   try {
     const productId = req.params.pid;
@@ -53,6 +56,7 @@ productsRouter.put('/:pid', async (req, res) => {
   }
 });
 
+//Eliminar un producto segun su ID
 productsRouter.delete('/:pid', async (req, res) => {
   try {
     const productId = req.params.pid;
@@ -69,7 +73,7 @@ productsRouter.delete('/:pid', async (req, res) => {
   }
 });
 
-//ROUTER ANTERIORES
+//ROUTER ANTERIORES (ya no los usamos)
 
 /*productsRouter.get('/', async (req, res) => {
   try {

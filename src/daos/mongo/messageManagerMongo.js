@@ -1,4 +1,4 @@
-// daos/mongo/messageDaoMongo.js
+
 const MessageModel = require('./models/messages.model');
 
 class MessageDaoMongo {
@@ -6,6 +6,7 @@ class MessageDaoMongo {
         this.model = MessageModel;
     }
 
+    //Muestra todos los mensajes
     async getMessages() {
         try {
             const messages = await this.model.find();
@@ -16,6 +17,7 @@ class MessageDaoMongo {
         }
     }
 
+    //Agrega un mensaje
     async addMessage(user, message) {
         try {
            return await this.model.create({ user, message });
