@@ -9,6 +9,9 @@ const { connectDB } = require('./config')
 const ProductDaoMongo = require('./daos/mongo/productManagerMongo');
 const MessageDaoMongo = require('./daos/mongo/messageManagerMongo');
 //const ProductManager = require('./managers/productManager');
+const cookieParser = require('cookie-parser');
+const session = require('express-session')
+const MongoStore = require('connect-mongo');
 
 const app = express();
 const port = 8080;
@@ -28,6 +31,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cookieParser())
+app.use(session({
+  secret: 'secretCoder',
+  resave: true,
+  saveUninitialized: true,
+}))
 
 
 //const productManager = ProductManager.getInstance('./src/mock/productos.json');
