@@ -96,6 +96,9 @@ cartsRouter.delete('/:cid', async (req, res) => {
     res.status(400).send('Bad Request');
   }
 });
+
+//ROUTER ANTERIORES (ya no lo usamos)
+
 /*cartsRouter.post('/', async (req, res) => {
   try {
     const newCart = await cartManager.createCart();

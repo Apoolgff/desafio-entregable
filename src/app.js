@@ -20,10 +20,13 @@ const port = 8080;
 connectDB()
 
 // Configuración de Handlebars
-const hbs = exphbs.create({ extname: '.hbs', defaultLayout: 'main', layoutsDir: path.join(__dirname, 'views/layouts'),runtimeOptions: {
-  allowProtoPropertiesByDefault: true,
-  allowProtoMethodsByDefault: true,
-}, });
+const hbs = exphbs.create({
+  extname: '.hbs', defaultLayout: 'main', layoutsDir: path.join(__dirname, 'views/layouts'), runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
+});
+
 app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'views'));
@@ -34,12 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cookieParser())
 app.use(session({
-  store: MongoStore.create({ 
-    mongoUrl: 'mongodb+srv://paologff:Databasecoder@cluster0.ssinb4w.mongodb.net/ecommerce?retryWrites=true&w=majority', 
-    /*mongoOptions:{
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },*/
+  store: MongoStore.create({
+    mongoUrl: 'mongodb+srv://paologff:Databasecoder@cluster0.ssinb4w.mongodb.net/ecommerce?retryWrites=true&w=majority',
     ttl: 60 * 60,
   }),
   secret: 'secretCoder',
@@ -48,7 +47,7 @@ app.use(session({
 }))
 
 
-//const productManager = ProductManager.getInstance('./src/mock/productos.json');
+//const productManager = ProductManager.getInstance('./src/mock/productos.json'); (ya no se usa)
 
 
 app.use('/api/products', productsRouter);
@@ -56,6 +55,10 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/session', sessionRouter)
 app.use('/', viewsRouter);
 
+//Para que la primer pagina se el login
+app.get('/', (req, res) => {
+  res.redirect('/login');
+});
 
 const serverHttp = app.listen(port, err => {
   if (err) console.log(err)
@@ -81,7 +84,7 @@ io.on('connection', async (socket) => {
     console.error('Error al obtener los productos:', error.message);
   }
 
- 
+
   socket.on('createProduct', async (newProduct) => {
     await productDao.addProduct(newProduct);
     io.emit('updateProducts', await productDao.getProducts());
@@ -95,33 +98,33 @@ io.on('connection', async (socket) => {
       io.emit('deleteProduct', productId.toString());
     } catch (error) {
       console.error(error.message);
-     
+
       socket.emit('deleteProductError', { productId, error: error.message });
     }
   });
 
   console.log('Nuevo cliente conectado');
 
+  try {
+
+    const messages = await messageDao.getMessages();
+    socket.emit('updateMessages', messages);
+  } catch (error) {
+    console.error('Error al obtener mensajes:', error.message);
+  }
+
+  //Escucha eventos de mensajes
+  socket.on('sendMessage', async (user, message) => {
     try {
 
-        const messages = await messageDao.getMessages();
-        socket.emit('updateMessages', messages);
-    } catch (error) {
-        console.error('Error al obtener mensajes:', error.message);
-    }
+      await messageDao.addMessage(user, message);
 
-    //Escucha eventos de mensajes
-    socket.on('sendMessage', async (user, message) => {
-        try {
-            
-            await messageDao.addMessage(user, message);
-            
-            const messages = await messageDao.getMessages();
-            
-            io.emit('updateMessages', messages);
-        } catch (error) {
-            console.error('Error al enviar mensaje:', error.message);
-        }
-    });
+      const messages = await messageDao.getMessages();
+
+      io.emit('updateMessages', messages);
+    } catch (error) {
+      console.error('Error al enviar mensaje:', error.message);
+    }
+  });
 
 });

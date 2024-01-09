@@ -2,7 +2,6 @@ const { Schema, model } = require('mongoose');
 
 const usersCollection = "Users"
 
-// Definir el esquema del usuario
 const usersSchema = Schema({
   first_name: {
     type: String,
@@ -27,7 +26,6 @@ const usersSchema = Schema({
   }
 })
 
-// Crear el modelo de usuario basado en el esquema
 const usersModel = model(usersCollection, usersSchema)
 
 module.exports = {usersModel}

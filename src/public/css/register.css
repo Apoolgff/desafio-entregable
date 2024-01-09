@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(149, 255, 255);
+    background-color: #f4f4f4;
     font-family: Arial, sans-serif;
     display: flex;
     align-items: center;
@@ -7,19 +7,12 @@ body {
     height: 100vh;
     margin: 0;
   }
-
-  .container{
-    display: flex;
-    flex-direction: column;
-  }
   
   .auth-container {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    margin: auto;
   }
   
   form {

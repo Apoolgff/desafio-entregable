@@ -12,16 +12,18 @@ const productService = new ProductDaoMongo()
 const messageService = new MessageDaoMongo()
 const cartService = new CartDaoMongo()
 
+//Ruta para el login
 router.get('/login', async (req, res) => {
     res.render('login', { title: 'Login', style: 'login.css', body: 'login' });
 });
 
+//Ruta para el registro
 router.get('/register', async (req, res) => {
     res.render('register', { title: 'Register', style: 'login.css', body: 'register' });
 });
 
-//Ruta para home
-router.get('/', async (req, res) => {
+//Ruta para home (cambie la ruta de '/' a '/home' para que al entrar al localhost la primer pagina sea el login)
+router.get('/home', async (req, res) => {
     const products = await productService.getProducts();
     res.render('home', { title: 'Home', style: 'products.css', body: 'home', products });
 });
@@ -63,9 +65,6 @@ router.get('/carts/:cid', async (req, res) => {
         res.status(404).send('Cart Not Found');
     }
 });
-
-
-
 
 
 module.exports = router;

@@ -1,22 +1,22 @@
 
-const {usersModel} = require('./models/user.model');
+const { usersModel } = require('./models/user.model');
 
 class UserDaoMongo {
     constructor() {
         this.model = usersModel;
     }
 
-    // Muestra todos los usuarios
+    // Muestra un usuario especifico segun su Email
     async getUser(email) {
         try {
-            const users = await this.model.findOne({email});
+            const users = await this.model.findOne({ email });
             return users;
         } catch (error) {
             throw new Error(`Error al obtener usuario: ${error.message}`);
         }
     }
 
-    // Agrega un usuario
+    // Crea un usuario
     async createUser(user) {
         try {
             if (!user.first_name || !user.last_name || !user.email || !user.password) {
@@ -29,7 +29,7 @@ class UserDaoMongo {
                 return;
             }
 
-            
+
             const newUser = await this.model.create({
                 first_name: user.first_name,
                 last_name: user.last_name,
@@ -39,9 +39,6 @@ class UserDaoMongo {
             console.log('Created User:', newUser.first_name, newUser.last_name, newUser.email);
             return newUser;
 
-            /*const newUser = new this.model(user);
-            await newUser.save();
-            return newUser;*/
         } catch (error) {
             throw new Error(`Error al crear usuario: ${error.message}`);
         }

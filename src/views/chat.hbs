@@ -1,20 +1,20 @@
 <h1>Chat</h1>
 
-    <div id="chat-container">
-        <div id="message-form">
-            <input type="text" id="user-input" placeholder="Tu Mail">
-            <input type="text" id="message-input" placeholder="Tu mensaje">
-            <button id="send-button">Enviar</button>
-        </div>
-        <ul id="message-list">
-           
-            {{#each messages}}
-                {{#each this.messages}}
-                    <li><strong>{{user}}:</strong> {{message}}</li>
-                {{/each}}
-            {{/each}}
-        </ul>
+<div id="chat-container">
+    <div id="message-form">
+        <input type="text" id="user-input" placeholder="Tu Mail">
+        <input type="text" id="message-input" placeholder="Tu mensaje">
+        <button id="send-button">Enviar</button>
     </div>
+    <ul id="message-list">
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/chat.js"></script>
+        {{#each messages}}
+        {{#each this.messages}}
+        <li><strong>{{user}}:</strong> {{message}}</li>
+        {{/each}}
+        {{/each}}
+    </ul>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>
