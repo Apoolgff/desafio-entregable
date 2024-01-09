@@ -16,9 +16,11 @@ sessionRouter.post('/login', async (req, res) => {
 
 
     if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-        req.session.user = { email, role: 'admin' };
+        req.session.user = { first_name: user.first_name, email, role: 'admin' };
+        console.log('Es admin')
     } else {
-        req.session.user = { email, role: 'usuario' };
+        req.session.user = { first_name: user.first_name, last_name: user.last_name, email, role: 'usuario' };
+        console.log('Es usuario')
     }
 
     res.redirect('/products');
@@ -56,15 +58,15 @@ sessionRouter.post('/register', async (req, res) => {
   
       // Puedes establecer la sesión del usuario directamente si es necesario
   
-      res.send({ status: 'success',
+      /*res.send({ status: 'success',
       payload: {
         first_name: result.first_name,
         last_name: result.last_name,
         email: result.email,
         _id: result.id
-      }})//res.send({status: 'success', payload: product})
+      }})*///res.send({status: 'success', payload: product})
       // Redirige a la página de productos o a la que prefieras después del registro
-      res.redirect('/products');
+      res.redirect('/login');
     } catch (error) {
       console.error('Error al registrar usuario:', error.message);
       res.send('Error al registrar usuario. Inténtalo de nuevo.');

@@ -1,4 +1,9 @@
-<h1>Lista de Productos</h1>
+<h1>Bienvenido {{user.first_name}} {{user.last_name}}!</h1>
+{{#if user}}
+  <p><span>Rol:</span> {{user.role}}</p>
+  <a href="/api/session/logout" class="logout-btn">Logout</a>
+{{/if}}
+<h2>Lista de Productos</h2>
 <ul class="products">
   {{#each products}}
     <li class="product-card">

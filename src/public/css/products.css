@@ -1,11 +1,39 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: aqua;
+    background-color: rgb(149, 255, 255);
   }
   
   h1 {
-    color: #bb1010;
+    color: #001ac3;
+  }
+
+  p{
+    font-weight: bold;
+    font-size: 20px;
+    color: #001ac3;
+  }
+
+  p span{
+    font-weight: bolder;
+    font-size: 15px;
+    color: #001074
+  }
+
+  a.logout-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #bb1010; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+  
+
+  a.logout-btn:hover {
+    background-color: #cc0000;
   }
   
   .products ul {

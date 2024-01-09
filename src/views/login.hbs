@@ -1,15 +1,16 @@
-<!-- views/login.hbs -->
+<div class="container">
+    <h1>BIENVENIDO AL E-COMMERCE</h1>
+    <div class="auth-container">
+        <h2>Login</h2>
+        <form action="/api/session/login" method="POST">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
 
-<div class="auth-container">
-  <h1>Login</h1>
-  <form action="/api/session/login" method="POST">
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-
-    <button type="submit" class="auth-button">Iniciar Sesión</button>
-  </form>
-  <p>¿No tienes una cuenta? <a href="/register">Regístrate</a></p>
+            <button type="submit" class="auth-button">Iniciar Sesión</button>
+        </form>
+        <p>¿No tienes una cuenta? <a href="/register">Regístrate</a></p>
+    </div>
 </div>

@@ -1,23 +1,26 @@
-<div class="auth-container">
-  <h1>Register</h1>
-  <form id="registerForm" action="/api/session/register" method="POST">
-    
-    <label for="first_name">Nombre:</label>
-    <input type="text" id="first_name" name="first_name" required>
+<div class="container">
+    <h1>BIENVENIDO AL E-COMMERCE</h1>
+    <div class="auth-container">
+        <h1>Register</h1>
+        <form id="registerForm" action="/api/session/register" method="POST">
 
-    <label for="last_name">Apellido:</label>
-    <input type="text" id="last_name" name="last_name" required>
+            <label for="first_name">Nombre:</label>
+            <input type="text" id="first_name" name="first_name" required>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+            <label for="last_name">Apellido:</label>
+            <input type="text" id="last_name" name="last_name" required>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
 
-   <label for="confirmPassword">Confirma el Password:</label>
-    <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
 
-    <button type="submit">Registrate</button>
-  </form>
-  <p>¿Ya tienes una cuenta? <a href="/login">Login</a></p>
+            <label for="confirmPassword">Confirma el Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <button type="submit">Registrate</button>
+        </form>
+        <p>¿Ya tienes una cuenta? <a href="/login">Login</a></p>
+    </div>
 </div>

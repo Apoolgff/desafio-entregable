@@ -42,9 +42,10 @@ router.get('/chat', async (req, res) => {
 router.get('/products', async (req, res) => {
     try {
         const { limit, page, sort, query } = req.query;
+        const user = req.session.user;
         //MODIFICAR LIMIT, PAGE, SORT, QUERY SEGUN LO QUE SE QUIERA PARA PODER PROBAR QUE TODO FUNCIONA tanto desde aca como desde el url
         const result = await productService.getProductsLimited({ limit, page, sort, query });//query: 'Computacion' o 'Electrónicos'
-        res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: result.payload, pagination: result });
+        res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: result.payload, pagination: result, user });
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
