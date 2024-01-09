@@ -5,6 +5,7 @@ const path = require('path');
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/cart.router');
 const viewsRouter = require('./routes/views.router');
+const sessionRouter = require('./routes/session.router')
 const { connectDB } = require('./config')
 const ProductDaoMongo = require('./daos/mongo/productManagerMongo');
 const MessageDaoMongo = require('./daos/mongo/messageManagerMongo');
@@ -33,6 +34,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cookieParser())
 app.use(session({
+  store: MongoStore.create({ 
+    mongoUrl: 'mongodb+srv://paologff:Databasecoder@cluster0.ssinb4w.mongodb.net/ecommerce?retryWrites=true&w=majority', 
+    /*mongoOptions:{
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },*/
+    ttl: 15,
+  }),
   secret: 'secretCoder',
   resave: true,
   saveUninitialized: true,
@@ -44,6 +53,7 @@ app.use(session({
 
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
+app.use('/api/session', sessionRouter)
 app.use('/', viewsRouter);
 
 

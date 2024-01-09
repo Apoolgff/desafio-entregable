@@ -55,7 +55,7 @@ class ProductDaoMongo {
     }
 
     // Muestra los productos con paginacion segun los filtros deseados
-    async getProductsLimited({ limit = 1, page = 1, sort, query } = {}) {
+    async getProductsLimited({ limit = 2, page = 1, sort, query } = {}) {
         try {
             const options = {
                 page: parseInt(page),

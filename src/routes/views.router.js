@@ -12,6 +12,14 @@ const productService = new ProductDaoMongo()
 const messageService = new MessageDaoMongo()
 const cartService = new CartDaoMongo()
 
+router.get('/login', async (req, res) => {
+    res.render('login', { title: 'Login', style: 'login.css', body: 'login' });
+});
+
+router.get('/register', async (req, res) => {
+    res.render('register', { title: 'Register', style: 'login.css', body: 'register' });
+});
+
 //Ruta para home
 router.get('/', async (req, res) => {
     const products = await productService.getProducts();
