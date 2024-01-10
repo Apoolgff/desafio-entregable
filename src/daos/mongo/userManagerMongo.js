@@ -7,10 +7,10 @@ class UserDaoMongo {
     }
 
     // Muestra un usuario especifico segun su Email
-    async getUser(email) {
+    async getUser(email, password) {
         try {
-            const users = await this.model.findOne({ email });
-            return users;
+            const user = await this.model.findOne({ email, password });
+            return user;
         } catch (error) {
             throw new Error(`Error al obtener usuario: ${error.message}`);
         }
@@ -21,12 +21,12 @@ class UserDaoMongo {
         try {
             if (!user.first_name || !user.last_name || !user.email || !user.password) {
                 console.error('Todos los campos son obligatorios.');
-                return null;
+                return { error: 'Todos los campos son obligatorios.' };
             }
             const existingUser = await this.model.findOne({ email: user.email });
             if (existingUser) {
                 console.error('Ese Email ya esta en uso.');
-                return;
+                return { error: 'Ese Email ya está en uso.' };
             }
 
 

@@ -7,6 +7,7 @@ const userService = new UserDaoMongo();
 sessionRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
+
     if(!email || !password ){
         return res.send('Todos los campos son obligatorios')
     }
@@ -19,7 +20,7 @@ sessionRouter.post('/login', async (req, res) => {
         return res.redirect('/products'); 
     }
 
-    const user = await userService.getUser(email)
+    const user = await userService.getUser(email, password)
     if(!user){
         return res.send('Email o Password invalidos')
     }
@@ -60,6 +61,10 @@ sessionRouter.post('/register', async (req, res) => {
       }
       // Crea un nuevo usuario
       const result = await userService.createUser(newUser);
+
+      if (result.error) {
+        return res.send(result.error);
+    }
   
       res.redirect('/login');
     } catch (error) {
