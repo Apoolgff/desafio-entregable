@@ -39,7 +39,7 @@ app.use(cookieParser())
 app.use(session({
   store: MongoStore.create({
     mongoUrl: 'mongodb+srv://paologff:Databasecoder@cluster0.ssinb4w.mongodb.net/ecommerce?retryWrites=true&w=majority',
-    ttl: 60 * 60,
+    ttl: 60000,
   }),
   secret: 'secretCoder',
   resave: true,

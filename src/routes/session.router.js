@@ -3,11 +3,12 @@ const UserDaoMongo = require('../daos/mongo/userManagerMongo');
 const sessionRouter= Router();
 const userService = new UserDaoMongo();
 
+
 //Ruta para el login
 sessionRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-
+    //En el form del login yo puse como que los campos son "required" lo que hace que este error no pueda darse, pero por las dudas...
     if(!email || !password ){
         return res.send('Todos los campos son obligatorios')
     }
@@ -15,7 +16,7 @@ sessionRouter.post('/login', async (req, res) => {
     //Verifica si es el admin (que no vive en la base de datos) para poder ingresar
     //Como esta especificado en el proceso de testing.
     if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-        req.session.user = { first_name: 'Admin', email, role: 'admin' };
+        req.session.user = { first_name: 'Coder', email, role: 'admin' };
         console.log('Es admin');
         return res.redirect('/products'); 
     }

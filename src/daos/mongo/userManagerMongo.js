@@ -1,4 +1,3 @@
-
 const { usersModel } = require('./models/user.model');
 
 class UserDaoMongo {
@@ -19,6 +18,8 @@ class UserDaoMongo {
     // Crea un usuario
     async createUser(user) {
         try {
+
+            //En el form del register yo puse como que los campos son "required" lo que hace que este error no pueda darse, pero por las dudas...
             if (!user.first_name || !user.last_name || !user.email || !user.password) {
                 console.error('Todos los campos son obligatorios.');
                 return { error: 'Todos los campos son obligatorios.' };
