@@ -9,7 +9,7 @@ const sessionRouter = require('./routes/session.router')
 const { connectDB } = require('./config')
 const ProductDaoMongo = require('./daos/mongo/productManagerMongo');
 const MessageDaoMongo = require('./daos/mongo/messageManagerMongo');
-//const ProductManager = require('./managers/productManager');
+
 const cookieParser = require('cookie-parser');
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
@@ -45,9 +45,6 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
 }))
-
-
-//const productManager = ProductManager.getInstance('./src/mock/productos.json'); (ya no se usa)
 
 
 app.use('/api/products', productsRouter);
