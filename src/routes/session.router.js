@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const UserDaoMongo = require('../daos/mongo/userManagerMongo');
 const sessionRouter= Router();
-const userService = new UserDaoMongo();
-const { createHash, isValidPassword} = require ('../utils/hashPassword')
+const userService = new UserDaoMongo();//Sin uso aca
+const { createHash, isValidPassword} = require ('../utils/hashPassword')//Sin uso aca
 const passport = require('passport')
 
 
@@ -21,8 +21,8 @@ sessionRouter.get('/logout', async (req, res) => {
 sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/faillogin'}), async (req, res) => {
   if(!req.user) return res.status(401).send({status: 'error', error: 'Invalid Credential'})
 
-  req.session.user = { first_name: req.user.first_name, last_name: req.user.last_name, email: req.user.email, role: 'usuario' };
-  res.redirect('/products');
+  req.session.user = { first_name: req.user.first_name, last_name: req.user.last_name, email: req.user.email, role: req.user.role };
+  res.redirect('/products');//Redirige al usuario a la página de productos despues del login exitoso
   //res.send({status: 'success', message: 'Login success'})
 })
 sessionRouter.get('/faillogin', (req, res) => {
@@ -33,8 +33,8 @@ sessionRouter.get('/faillogin', (req, res) => {
 sessionRouter.post('/register', passport.authenticate('register', { 
   failureRedirect: '/api/session/failregister'
 }), (req, res) => {
-  // Esta función se ejecuta después de un registro exitoso
-  res.redirect('/login');  // Redirige al usuario a la página de inicio de sesión después del registro exitoso
+  //Esta funcion se ejecuta despues de un registro exitoso
+  res.redirect('/login');  //Redirige al usuario a la página de inicio de sesion despues del registro exitoso
 });
 sessionRouter.get('/failregister', (req, res) => {
   console.log('Fail strategy')
@@ -42,6 +42,7 @@ sessionRouter.get('/failregister', (req, res) => {
 })
 
 //Ruta para el login(USANDO PASSPORT, QUEDA COMENTADO POR LAS DUDAS)
+
 /*sessionRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -78,6 +79,7 @@ sessionRouter.get('/failregister', (req, res) => {
 
 
 //Ruta para registrarse (USANDO PASSPORT, QUEDA COMENTADO POR LAS DUDAS)
+
 /*sessionRouter.post('/register', async (req, res) => {
     const { first_name, last_name, email, password, confirmPassword } = req.body;
 

@@ -5,7 +5,7 @@ class UserDaoMongo {
         this.model = usersModel;
     }
 
-    // Muestra un usuario especifico segun su Email
+    // Muestra un usuario especifico segun un filtro
     async getUser(filter) {
         try {
             const user = await this.model.findOne(filter);
@@ -36,6 +36,7 @@ class UserDaoMongo {
                 last_name: user.last_name,
                 email: user.email,
                 password: user.password,
+                role: user.role,
             });
             console.log('Created User:', newUser.first_name, newUser.last_name, newUser.email);
             return newUser;

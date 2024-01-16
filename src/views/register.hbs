@@ -19,6 +19,15 @@
             <label for="confirmPassword">Confirma el Password:</label>
             <input type="password" id="confirmPassword" name="confirmPassword" required>
 
+            <div class="radio-container">
+                <label for="role">Rol:</label>
+                <label class='radio-label' for="userRole">Usuario</label>
+                <input type="radio" id="userRole" name="role" value="usuario" checked>
+
+                <label class='radio-label' for="adminRole">Admin</label>
+                <input type="radio" id="adminRole" name="role" value="admin">
+            </div>
+
             <button type="submit">Registrate</button>
         </form>
         <p>¿Ya tienes una cuenta? <a href="/login">Login</a></p>

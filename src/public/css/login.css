@@ -30,7 +30,20 @@ body {
   
   label {
     font-weight: bold;
-  }
+}
+
+.radio-container {
+  display: flex;
+  align-items: center;
+}
+
+.radio-label{
+  margin-left: 10px;
+}
+
+input[type="radio"] {
+  margin-right: 30px; 
+}
   
   button {
     cursor: pointer;
