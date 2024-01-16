@@ -14,6 +14,9 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
 
+const passport = require('passport')
+const { initializePassport } = require('./config/passport.config')
+
 const app = express();
 const port = 8080;
 
@@ -46,6 +49,9 @@ app.use(session({
   saveUninitialized: true,
 }))
 
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);

@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
 
-exports.createHash = async password => await bcrypt.hash(password, bcrypt.genSalt(10))
+exports.createHash = async password => await bcrypt.hash(password, await bcrypt.genSalt(10))
 
-exports.isValidPassword = async (user, password) => await bcrypt.compare(password, user.password)
+exports.isValidPassword = async (password, userPasswordHash) => await bcrypt.compare(password, userPasswordHash);

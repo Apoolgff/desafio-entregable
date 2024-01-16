@@ -6,9 +6,9 @@ class UserDaoMongo {
     }
 
     // Muestra un usuario especifico segun su Email
-    async getUser(email, password) {
+    async getUser(filter) {
         try {
-            const user = await this.model.findOne({ email, password });
+            const user = await this.model.findOne(filter);
             return user;
         } catch (error) {
             throw new Error(`Error al obtener usuario: ${error.message}`);
