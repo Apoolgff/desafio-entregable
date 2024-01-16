@@ -18,6 +18,7 @@ sessionRouter.get('/logout', async (req, res) => {
     });
 });
 
+//Ruta para el Login
 sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/faillogin'}), async (req, res) => {
   if(!req.user) return res.status(401).send({status: 'error', error: 'Invalid Credential'})
 
@@ -30,6 +31,7 @@ sessionRouter.get('/faillogin', (req, res) => {
   res.send({status: 'error', error: 'Failed login'})
 })
 
+//Ruta para el Registro
 sessionRouter.post('/register', passport.authenticate('register', { 
   failureRedirect: '/api/session/failregister'
 }), (req, res) => {
