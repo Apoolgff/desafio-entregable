@@ -35,7 +35,6 @@ sessionRouter.get('/faillogin', (req, res) => {
 sessionRouter.post('/register', passport.authenticate('register', { 
   failureRedirect: '/api/session/failregister'
 }), (req, res) => {
-  //Esta funcion se ejecuta despues de un registro exitoso
   res.redirect('/login');  //Redirige al usuario a la página de inicio de sesion despues del registro exitoso
 });
 sessionRouter.get('/failregister', (req, res) => {
