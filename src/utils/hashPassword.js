@@ -1,3 +1,4 @@
+//Hash de Password
 const bcrypt = require('bcrypt')
 
 exports.createHash = async password => await bcrypt.hash(password, await bcrypt.genSalt(10))
