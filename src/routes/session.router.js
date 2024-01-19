@@ -2,7 +2,7 @@ const { Router } = require('express');
 const UserDaoMongo = require('../daos/mongo/userManagerMongo');
 const sessionRouter= Router();
 const userService = new UserDaoMongo();//Sin uso aca
-const { createHash, isValidPassword} = require ('../utils/hashPassword')//Sin uso aca
+const { createHash, isValidPassword} = require ('../utils/hashPassword')//Sin uso aca 
 const passport = require('passport')
 
 
