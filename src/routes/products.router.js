@@ -1,9 +1,9 @@
 const { Router } = require('express');
-//const ProductManager = require('../managers/productManager'); previo
+//const ProductManager = require('../managers/productManager');
 const ProductDaoMongo = require('../daos/mongo/productManagerMongo.js')
 
 const productsRouter = Router();
-//const productManager = new ProductManager('./src/mock/productos.json'); previo
+//const productManager = new ProductManager('./src/mock/productos.json');
 
 const productService = new ProductDaoMongo()
 
