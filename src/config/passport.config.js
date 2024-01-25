@@ -1,21 +1,58 @@
-const passport = require('passport')
-const local = require('passport-local')
-const userDaoMongo = require('../daos/mongo/userManagerMongo')
-const { createHash, isValidPassword } = require('../utils/hashPassword')
+// passport.config.js
+const passport = require('passport');
+const userDaoMongo = require('../daos/mongo/userManagerMongo');
+const jwt = require('passport-jwt');
 
-const LocalStrategy = local.Strategy
-const userService = new userDaoMongo()
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+const { cookieExtractor, JWT_PRIVATE_KEY } = require('../utils/jwt');
 
-
-/*NOTA 1:
-Agregue a la base de datos el email: 'adminCoder@coder.com' password 'adminCod3r123' y un formato para elegir si ser admin o usuario
-porque aunque en entregas pasadas pedia que no viva en la base de datos, con el serializeUser, deserializeUser y otras cuestiones no dimos como hacerlo 
-sin que de error el hardcodear un usuario/admin */
-
-/*NOTA 2:
-Elegi este passport para hacer ya que el profesor dijo que podiamos elegir entre el local y el de github. */
+const userService = new userDaoMongo();
 
 exports.initializePassport = () => {
+    const cookieExtractor = req => {
+        let token = null;
+        if (req && req.cookies) {
+            token = req.cookies['token'];
+        }
+        return token;
+    };
+
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: JWT_PRIVATE_KEY,
+    }, async (jwt_payload, done) => {
+        try {
+            const user = await userService.getUser({ _id: jwt_payload.id });
+            if (!user) {
+                return done(null, false, { message: 'Usuario no encontrado' });
+            }
+            return done(null, user);
+        } catch (error) {
+            return done(error);
+        }
+    }));
+
+    passport.use('current', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: JWT_PRIVATE_KEY,
+    }, async (jwt_payload, done) => {
+        try {
+            return done(null, jwt_payload);
+        } catch (error) {
+            return done(error);
+        }
+    }));
+};
+
+
+
+
+
+
+
+//YA NO LO USAMOS PARA ESTA ENTREGA
+/*exports.initializePassport = () => {
 
     passport.use('register', new LocalStrategy({
         passReqToCallback: true,
@@ -80,4 +117,4 @@ exports.initializePassport = () => {
             return done(error)
         }
     }))
-}
+}*/

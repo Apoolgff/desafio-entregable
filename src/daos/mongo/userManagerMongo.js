@@ -36,6 +36,7 @@ class UserDaoMongo {
                 last_name: user.last_name,
                 email: user.email,
                 password: user.password,
+                age: user.age,
                 role: user.role,
             });
             console.log('Created User:', newUser.first_name, newUser.last_name, newUser.email);

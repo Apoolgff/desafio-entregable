@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 
 const usersCollection = "Users"
 
@@ -23,6 +23,14 @@ const usersSchema = Schema({
     type: String,
     required: true,
     trim: true
+  },
+  age:{
+    type: Number,
+    required: true,
+    trim: true
+  },
+  cart: {
+  cartId: { type: Types.ObjectId, ref: 'Carts'/*, required: true*/ },
   },
   role: {
     type: String,

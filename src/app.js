@@ -39,7 +39,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cookieParser())
-app.use(session({
+
+//YA NO USAMOS SESSION
+/*app.use(session({
   store: MongoStore.create({
     mongoUrl: 'mongodb+srv://paologff:Databasecoder@cluster0.ssinb4w.mongodb.net/ecommerce?retryWrites=true&w=majority',
     ttl: 60000,
@@ -47,11 +49,13 @@ app.use(session({
   secret: 'secretCoder',
   resave: true,
   saveUninitialized: true,
-}))
+}))*/
 
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
+
+//app.use(passport.initialize()) YA NO USAMOS
+//app.use(passport.session()) YA NO USAMOS
 
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);

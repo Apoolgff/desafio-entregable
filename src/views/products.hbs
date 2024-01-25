@@ -1,8 +1,9 @@
-<h1>Bienvenido {{user.first_name}} {{user.last_name}}!</h1>
 {{#if user}}
+  <h1>Bienvenido {{user.first_name}} {{user.last_name}}!</h1>
   <p><span>Rol:</span> {{user.role}}</p>
-  <a href="/api/session/logout" class="logout-btn">Logout</a>
+  <button id="logoutButton">Logout</button>
 {{/if}}
+
 <h2>Lista de Productos</h2>
 <ul class="products">
   {{#each products}}
@@ -40,6 +41,26 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
+<script>
+  document.getElementById('logoutButton').addEventListener('click', function() {
+    // Realiza una solicitud al servidor para invalidar el token
+    fetch('/api/session/logout', {
+      method: 'GET',
+      credentials: 'include', // Incluye las cookies en la solicitud
+    })
+    .then(response => {
+      if (response.ok) {
+        // Redirige al usuario al inicio de sesión después de invalidar el token
+        window.location.href = '/login';
+      } else {
+        // Maneja casos de error según sea necesario
+        console.error('Error en el logout:', response.statusText);
+      }
+    })
+    .catch(error => console.error('Error en el logout:', error));
+  });
+</script>
+
 
 
 

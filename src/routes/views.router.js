@@ -3,6 +3,8 @@ const { Router } = require('express');
 const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
 const MessageDaoMongo = require('../daos/mongo/messageManagerMongo')
 const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
+const jwt = require('jsonwebtoken');
+
 const router= Router();
 
 //Instancia compartida del ProductManager (ya no lo usamos)
@@ -41,18 +43,33 @@ router.get('/chat', async (req, res) => {
 });
 
 //Ruta para productos
+// Ruta para productos
 router.get('/products', async (req, res) => {
     try {
         const { limit, page, sort, query } = req.query;
-        const user = req.session.user;
-        //MODIFICAR LIMIT, PAGE, SORT, QUERY SEGUN LO QUE SE QUIERA PARA PODER PROBAR QUE TODO FUNCIONA tanto desde aca como desde el url
-        const result = await productService.getProductsLimited({ limit, page, sort, query });//query: 'Computacion' o 'Electrónicos'
-        res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: result.payload, pagination: result, user });
+
+        // Obtener el token de la cookie
+        const token = req.cookies.token;
+
+        // Verificar si no hay token
+        if (!token) {
+            // Manejar el caso en el que el usuario no está autenticado
+            return res.redirect('/login'); // Redirigir al usuario al login
+        }
+
+        // Decodificar el token para obtener la información del usuario
+        const decodedToken = jwt.verify(token, 'CoderSecretJasonWebToken');
+
+        // Ahora, `decodedToken` contiene la información del usuario
+
+        const result = await productService.getProductsLimited({ limit, page, sort, query });
+        res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: result.payload, pagination: result, user: decodedToken });
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 //Ruta para el carrito
 router.get('/carts/:cid', async (req, res) => {
