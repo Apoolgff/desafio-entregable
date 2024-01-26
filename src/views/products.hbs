@@ -1,67 +1,228 @@
 {{#if user}}
-  <h1>Bienvenido {{user.first_name}} {{user.last_name}}!</h1>
-  <p><span>Rol:</span> {{user.role}}</p>
-  <button id="logoutButton">Logout</button>
-{{/if}}
+<div class="container">
+  <div class="product-container">
+    <h1>Bienvenido {{user.first_name}} {{user.last_name}}!</h1>
+    <p><span>Rol:</span> {{user.role}}</p>
+    <p><span>ID Carrito:</span> {{user.cart.cartId._id}}</p>
 
-<h2>Lista de Productos</h2>
-<ul class="products">
-  {{#each products}}
-    <li class="product-card">
-      <strong>ID:</strong> {{_id}}<br>
-      <strong>Title:</strong> {{title}}<br>
-      <strong>Description:</strong> {{description}}<br>
-      <strong>Code:</strong> {{code}}<br>
-      <strong>Price:</strong> ${{price}}<br>
-      <strong>Status:</strong> {{status}}<br>
-      <strong>Stock:</strong> {{stock}}<br>
-      <strong>Category:</strong> {{category}}<br>
-      <strong>Thumbnails:</strong>
-      <ul class="thumbnails">
-        {{#each thumbnails}}
+    <button id="logout-btn">Logout</button>
+
+    <h2>Lista de Productos</h2>
+    <ul class="products">
+      {{#each products}}
+      <li class="product-card">
+        <strong>ID:</strong> {{_id}}<br>
+        <strong>Title:</strong> {{title}}<br>
+        <strong>Description:</strong> {{description}}<br>
+        <strong>Code:</strong> {{code}}<br>
+        <strong>Price:</strong> ${{price}}<br>
+        <strong>Status:</strong> {{status}}<br>
+        <strong>Stock:</strong> {{stock}}<br>
+        <strong>Category:</strong> {{category}}<br>
+        <strong>Thumbnails:</strong>
+        <ul class="thumbnails">
+          {{#each thumbnails}}
           <li><img class="image" src="{{this}}" alt="Thumbnail"></li>
-        {{/each}}        
-      </ul>
-      <button class="add-to-cart-btn">Agregar al carrito</button><!--AUN NO FUNCIONAL, NO FUE PEDIDO EN LA ENTREGA YA QUE NO TENEMOS FORMA AUN DE LIGARLO A UN CARRITO ESPECIFICO POR ESTA VIA, CALCULO QUE CUANDO SE IMPLEMENTEN LAS SESIONES SE PODRA -->
-    </li>
-  {{/each}}
-</ul>
+          {{/each}}
+        </ul>
+        <button class="add-to-cart-btn" data-product-id="{{_id}}" data-cart-id="{{user.cart.cartId._id}}">Agregar al
+          carrito</button>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+  <div class="cart" data-cart-id="{{user.cart.cartId._id}}">
+    <h2>Carrito</h2>
+    <p><strong>ID del carrito: </strong>{{user.cart.cartId._id}}</p>
+    <ul>
+      {{#each user.cart.products}}
 
+      {{/each}}
+    </ul>
+
+    <button class="clear-cart-btn">Vaciar Carrito</button>
+  </div>
+  {{else}}
+  <p>Usuario no autenticado. Por favor, inicie sesión.</p>
+  {{/if}}
+</div>
 <!-- Paginación -->
 <div class="pagination">
   {{#if pagination.hasPrevPage}}
-    <a href="{{pagination.prevLink}}">Anterior</a>
+  <a href="{{pagination.prevLink}}">Anterior</a>
   {{/if}}
 
   <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
 
   {{#if pagination.hasNextPage}}
-    <a href="{{pagination.nextLink}}">Siguiente</a>
+  <a href="{{pagination.nextLink}}">Siguiente</a>
   {{/if}}
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  document.getElementById('logoutButton').addEventListener('click', function() {
-    // Realiza una solicitud al servidor para invalidar el token
+  document.getElementById('logout-btn').addEventListener('click', function () {
     fetch('/api/session/logout', {
       method: 'GET',
-      credentials: 'include', // Incluye las cookies en la solicitud
+      credentials: 'include',
     })
-    .then(response => {
-      if (response.ok) {
-        // Redirige al usuario al inicio de sesión después de invalidar el token
-        window.location.href = '/login';
-      } else {
-        // Maneja casos de error según sea necesario
-        console.error('Error en el logout:', response.statusText);
-      }
-    })
-    .catch(error => console.error('Error en el logout:', error));
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '/login';
+        } else {
+          console.error('Error en el logout:', response.statusText);
+        }
+      })
+      .catch(error => console.error('Error en el logout:', error));
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    const clearCartButton = document.querySelector('.clear-cart-btn');
+    const cartElement = document.querySelector('.cart');
+    const cartId = cartElement.dataset.cartId;
+
+    //Cargar el carrito al entrar
+    fetch(`/api/carts/${cartId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+
+        renderCart(data.cart);
+      }).catch(error => {
+        console.error('Error en la solicitud de obtener el carrito:', error);
+      });
+
+
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const productId = this.getAttribute('data-product-id');
+        console.log('Product ID:', productId);
+        console.log('Cart ID:', cartId);
+        addToCart(productId, cartId);
+      });
+    });
+
+    clearCartButton.addEventListener('click', function () {
+      clearCart(cartId);
+    });
+
+    //Agrega producto al carrito
+    function addToCart(productId, cartId) {
+      console.log('Add to cart clicked for product ID:', productId, cartId);
+      fetch(`/api/carts/${cartId}/product/${productId}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity: 1 }),
+      })
+        .then(response => response.json())
+        .then(data => {
+
+          fetch(`/api/carts/${cartId}`)
+            .then(response => response.json())
+            .then(data => {
+
+              renderCart(data.cart);
+            })
+            .catch(error => console.error('Error al obtener el carrito actualizado:', error));
+        })
+        .catch(error => console.error('Error al agregar al carrito:', error));
+    }
+
+
+    //Elimina todos los productos del carrito
+    function clearCart(cartId) {
+      fetch(`/api/carts/${cartId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+        .then(response => response.json())
+        .then(data => {
+          renderCart(data.cart);
+        })
+        .catch(error => console.error('Error al vaciar el carrito:', error));
+    }
+
+    //Renderiza el carrito y lo mantiene actualizado
+    function renderCart(cart) {
+      const cartList = document.querySelector('.cart ul');
+
+      cartList.innerHTML = '';
+
+      //Itera sobre los productos en el carrito y crea elementos HTML para cada uno
+      cart.products.forEach(product => {
+        const listItem = document.createElement('li');
+
+        const productIdParagraph = document.createElement('p');
+        productIdParagraph.innerHTML = `<strong>ID: </strong>${product.productId._id}`;
+        listItem.appendChild(productIdParagraph);
+
+        const productTitleParagraph = document.createElement('p');
+        productTitleParagraph.innerHTML = `<strong>Producto: </strong>${product.productId.title}`;
+        listItem.appendChild(productTitleParagraph);
+
+        const thumbnailsContainer = document.createElement('div');
+        thumbnailsContainer.innerHTML = `<strong>Thumbnails:</strong><ul class="thumbnails">${product.productId.thumbnails.map(thumbnail => `<li><img class="image" src="${thumbnail}" alt="Thumbnail"></li>`).join('')}</ul>`;
+        listItem.appendChild(thumbnailsContainer);
+
+        const productDescriptionParagraph = document.createElement('p');
+        productDescriptionParagraph.innerHTML = `<strong>Descripción: </strong>${product.productId.description}`;
+        listItem.appendChild(productDescriptionParagraph);
+
+        const productCodeParagraph = document.createElement('p');
+        productCodeParagraph.innerHTML = `<strong>Código: </strong>${product.productId.code}`;
+        listItem.appendChild(productCodeParagraph);
+
+        const productCategoryParagraph = document.createElement('p');
+        productCategoryParagraph.innerHTML = `<strong>Categoría: </strong>${product.productId.category}`;
+        listItem.appendChild(productCategoryParagraph);
+
+        const productPriceParagraph = document.createElement('p');
+        productPriceParagraph.innerHTML = `<strong>Precio unitario: </strong>$${product.productId.price}`;
+        listItem.appendChild(productPriceParagraph);
+
+        const quantityParagraph = document.createElement('p');
+        quantityParagraph.innerHTML = `<strong>Cantidad: </strong>${product.quantity}`;
+        listItem.appendChild(quantityParagraph);
+
+        const removeButton = document.createElement('button');
+        removeButton.classList.add('remove-from-cart-btn');
+        removeButton.setAttribute('data-product-id', product.productId._id);
+        removeButton.innerHTML = 'Eliminar del carrito';
+        removeButton.addEventListener('click', function () {
+          const productId = this.getAttribute('data-product-id');
+          removeFromCart(productId);
+        });
+        listItem.appendChild(removeButton);
+
+
+        cartList.appendChild(listItem);
+      });
+    }
+
+    //Elimina un producto del carrito
+    function removeFromCart(productId) {
+      const cartId = document.querySelector('.cart').dataset.cartId;
+
+      fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+        .then(response => response.json())
+        .then(data => {
+
+          renderCart(data.cart);
+        })
+        .catch(error => console.error('Error al eliminar del carrito:', error));
+    }
+
+
   });
 </script>
-
-
-
-
-

@@ -21,7 +21,6 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Código del lado del cliente para enviar la solicitud al servidor
             fetch('/api/session/login', {
                 method: 'POST',
                 headers: {
@@ -32,18 +31,17 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Redirige a "/products" después de un inicio de sesión exitoso
+                    //Redirige a "/products" despues de un inicio de sesion exitoso
                     window.location.href = '/products';
 
-                    // Agrega la llamada fetch para obtener la información del usuario actual
+                    //Agrega la llamada fetch para obtener la informacion del usuario actual
                     fetch('http://localhost:8080/api/session/current', {
                         method: 'GET',
-                        credentials: 'include',  // Incluye las cookies en la solicitud
+                        credentials: 'include',
                     })
                     .then(response => response.json())
                     .then(userData => {
                         console.log('Información del usuario actual:', userData);
-                        // Puedes hacer algo con la información del usuario aquí si es necesario
                     })
                     .catch(error => console.error('Error al obtener la información del usuario actual:', error));
                 } else {

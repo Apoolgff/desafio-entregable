@@ -66,13 +66,13 @@ class ProductDaoMongo {
             let filter = {};
     
             if (query) {
-                // Verifica si query es un estado valido (true o false)
+                //Verifica si query es un estado valido (true o false)
                 const isStatus = query.toLowerCase() === 'true' || query.toLowerCase() === 'false';
     
                 if (isStatus) {
                     filter.status = query.toLowerCase() === 'true';
                 } else {
-                    // Si no es un estado, entonces es una categoría y mostrara solo la categoria deseada y no todos los productos
+                    //Si no es un estado, entonces es una categoría y mostrara solo la categoria deseada y no todos los productos
                     filter.category = query;
                 }
             }

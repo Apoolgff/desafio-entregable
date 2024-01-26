@@ -22,8 +22,8 @@ cartsRouter.post('/', async (req, res) => {
 cartsRouter.get('/:cid', async (req, res) => {
   try {
     //const cartId = req.params.cid;(anterior)
-    const {cid} = req.params
-    const cart = await cartService.getCart({_id: cid});
+    const { cid } = req.params
+    const cart = await cartService.getCart({ _id: cid });
     res.json({ cart });//res.send({status: 'success', payload: cart})
   } catch (error) {
     console.error(error.message);
@@ -38,7 +38,8 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) => {
     const productId = req.params.pid;
     const quantity = req.body.quantity || 1;
     const updatedCart = await cartService.addProductToCart(cartId, productId, quantity);
-    res.json({ cart: updatedCart });//res.send({status: 'success', payload: updatedCart})
+    
+     res.json({ cart: updatedCart });//res.send({status: 'success', payload: updatedCart})
   } catch (error) {
     console.error(error.message);
     res.status(400).send('Bad Request');
@@ -51,6 +52,7 @@ cartsRouter.delete('/:cid/products/:pid', async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
     const updatedCart = await cartService.removeProductFromCart(cartId, productId);
+
     res.json({ cart: updatedCart });
   } catch (error) {
     console.error(error.message);

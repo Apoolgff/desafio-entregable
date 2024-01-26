@@ -1,5 +1,4 @@
-// jwtPassport.middleware.js
-const passport = require('passport');  // Añade esta línea al inicio del archivo
+const passport = require('passport');
 
 exports.authorizationJwt = role => {
     return async (req, res, next) => {

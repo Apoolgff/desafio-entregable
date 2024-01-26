@@ -2,7 +2,7 @@ const { Schema, model, Types } = require('mongoose');
 
 const usersCollection = "Users"
 
-const usersSchema = Schema({
+const UsersSchema = Schema({
   first_name: {
     type: String,
     required: true,
@@ -38,6 +38,10 @@ const usersSchema = Schema({
   }
 })
 
-const usersModel = model(usersCollection, usersSchema)
+UsersSchema.pre('findOne', function(){
+  this.populate('cart.cartId')
+})
+
+const usersModel = model(usersCollection, UsersSchema)
 
 module.exports = {usersModel}

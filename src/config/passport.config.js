@@ -1,4 +1,3 @@
-// passport.config.js
 const passport = require('passport');
 const userDaoMongo = require('../daos/mongo/userManagerMongo');
 const jwt = require('passport-jwt');

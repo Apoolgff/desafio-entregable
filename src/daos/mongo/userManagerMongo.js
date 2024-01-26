@@ -1,4 +1,7 @@
 const { usersModel } = require('./models/user.model');
+const CartDaoMongo = require('./cartManagerMongo')
+
+const cartService = new CartDaoMongo()
 
 class UserDaoMongo {
     constructor() {
@@ -37,6 +40,7 @@ class UserDaoMongo {
                 email: user.email,
                 password: user.password,
                 age: user.age,
+                cart: { cartId: (await cartService.createCart())._id },
                 role: user.role,
             });
             console.log('Created User:', newUser.first_name, newUser.last_name, newUser.email);

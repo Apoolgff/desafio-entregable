@@ -14,12 +14,13 @@ sessionRouter.get('/current', passportCall('jwt'), authenticationJwtCurrent, (re
 });
 
 sessionRouter.get('/logout', passport.authenticate('jwt', { session: false }), (req, res) => {
-  // Borra la cookie del token
+  //Borra la cookie del token
   res.clearCookie('token');
 
-  // Responde con éxito
   res.status(200).json({ status: 'success', message: 'Logout successful' });
 });
+
+//PASSPORT SIN JWT, YA NO LO USO PERO POR LAS DUDAS QUEDA ACA POR AHORA
 //Ruta para logout
 /*sessionRouter.get('/logout', async (req, res) => {
     req.session.destroy((err) => {
@@ -56,7 +57,7 @@ sessionRouter.get('/failregister', (req, res) => {
   res.send({status: 'error', error: 'Failed'})
 })*/
 
-//Ruta para el login(USANDO PASSPORT, QUEDA COMENTADO POR LAS DUDAS)
+
 
 sessionRouter.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -86,7 +87,7 @@ sessionRouter.post('/login', async (req, res) => {
     return res.status(401).send('Contraseña inválida');
   }
 console.log(user)
-  const token = createToken({id: user._id, first_name: user.first_name, last_name: user.last_name, email, role: user.role })
+  const token = createToken({id: user._id, first_name: user.first_name, last_name: user.last_name, email, cart: user.cart, role: user.role })
   res.cookie('token', token,{
       maxAge: 60 * 60 * 1000 * 24,
       httpOnly: true,

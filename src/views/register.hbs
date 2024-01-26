@@ -48,7 +48,7 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     const confirmPassword = document.getElementById('confirmPassword').value;
     const role = document.querySelector('input[name="role"]:checked').value;
 
-    // Realiza la solicitud de registro al servidor
+    //Realiza la solicitud de registro al servidor
     fetch('/api/session/register', {
         method: 'POST',
         headers: {
@@ -59,7 +59,7 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Redirige a la página de inicio de sesión después de un registro exitoso
+            //Redirige a la página de inicio de sesion despues de un registro exitoso
             window.location.href = data.redirectUrl;
         } else {
             console.error('Error:', data.error);

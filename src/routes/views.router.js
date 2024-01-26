@@ -5,7 +5,7 @@ const MessageDaoMongo = require('../daos/mongo/messageManagerMongo')
 const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const jwt = require('jsonwebtoken');
 
-const router= Router();
+const router = Router();
 
 //Instancia compartida del ProductManager (ya no lo usamos)
 //const productManager = ProductManager.getInstance('./src/mock/productos.json');
@@ -32,35 +32,34 @@ router.get('/home', async (req, res) => {
 
 // Ruta para realTimeProducts
 router.get('/realtimeproducts', async (req, res) => {
-    const products =  await productService.getProducts();
+    const products = await productService.getProducts();
     res.render('realTimeProducts', { title: 'Real-Time Products', style: 'realTimeProducts.css', body: 'realTimeProducts', products });
 });
 
 //Ruta para el chat
 router.get('/chat', async (req, res) => {
-    const messages =  await messageService.getMessages();
+    const messages = await messageService.getMessages();
     res.render('chat', { title: 'Chat', style: 'chat.css', body: 'chat', messages });
 });
 
-//Ruta para productos
 // Ruta para productos
 router.get('/products', async (req, res) => {
     try {
         const { limit, page, sort, query } = req.query;
 
-        // Obtener el token de la cookie
+        //Obtener el token de la cookie
         const token = req.cookies.token;
 
-        // Verificar si no hay token
+        //Verificar si no hay token
         if (!token) {
-            // Manejar el caso en el que el usuario no está autenticado
+            //Maneja el caso en el que el usuario no está autenticado
             return res.redirect('/login'); // Redirigir al usuario al login
         }
 
-        // Decodificar el token para obtener la información del usuario
+        //Decodificar el token para obtener la información del usuario
         const decodedToken = jwt.verify(token, 'CoderSecretJasonWebToken');
 
-        // Ahora, `decodedToken` contiene la información del usuario
+        //decodedToken contiene la información del usuario
 
         const result = await productService.getProductsLimited({ limit, page, sort, query });
         res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: result.payload, pagination: result, user: decodedToken });
