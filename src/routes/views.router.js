@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const router = Router();
 
-//Instancia compartida del ProductManager (ya no lo usamos)
+//Instancia compartida del ProductManager (ya no lo usamos) 
 //const productManager = ProductManager.getInstance('./src/mock/productos.json');
 
 const productService = new ProductDaoMongo()
