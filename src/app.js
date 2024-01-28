@@ -133,6 +133,5 @@ io.on('connection', async (socket) => {
       console.error('Error al enviar mensaje:', error.message);
     }
   });
-
-
+  
 });
