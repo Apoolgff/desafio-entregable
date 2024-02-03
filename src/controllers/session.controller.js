@@ -1,0 +1,1 @@
+const UserDaoMongo = require('../daos/mongo/userManagerMongo')
