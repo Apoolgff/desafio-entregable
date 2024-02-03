@@ -2,17 +2,19 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const { Server } = require('socket.io');
 const path = require('path');
-const productsRouter = require('./routes/products.router');
-const cartsRouter = require('./routes/cart.router');
-const viewsRouter = require('./routes/views.router');
-const sessionRouter = require('./routes/session.router')
+//const productsRouter = require('./routes/apis/products.router');
+//const cartsRouter = require('./routes/apis/cart.router');
+//const viewsRouter = require('./routes/views.router');
+//const sessionRouter = require('./routes/apis/session.router')
 const { connectDB } = require('./config')
 const ProductDaoMongo = require('./daos/mongo/productManagerMongo');
 const MessageDaoMongo = require('./daos/mongo/messageManagerMongo');
 
 const cookieParser = require('cookie-parser');
-const session = require('express-session')
-const MongoStore = require('connect-mongo');
+//const session = require('express-session')
+//const MongoStore = require('connect-mongo');
+
+const appRouter = require('./routes/index')
 
 const passport = require('passport')
 const { initializePassport } = require('./config/passport.config')
@@ -57,15 +59,17 @@ app.use(passport.initialize())
 //app.use(passport.initialize()) YA NO USAMOS
 //app.use(passport.session()) YA NO USAMOS
 
-app.use('/api/products', productsRouter);
+/*app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/session', sessionRouter)
-app.use('/', viewsRouter);
+app.use('/', viewsRouter);*/
+
+app.use(appRouter)
 
 //Para que la primer pagina se el login
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   res.redirect('/login');
-});
+});*/
 
 const serverHttp = app.listen(port, err => {
   if (err) console.log(err)

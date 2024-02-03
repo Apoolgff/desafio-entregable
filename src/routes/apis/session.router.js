@@ -1,12 +1,12 @@
 const { Router } = require('express');
-const UserDaoMongo = require('../daos/mongo/userManagerMongo');
+const UserDaoMongo = require('../../daos/mongo/userManagerMongo');
 const sessionRouter = Router();
 const userService = new UserDaoMongo();
-const { createHash, isValidPassword } = require('../utils/hashPassword') 
+const { createHash, isValidPassword } = require('../../utils/hashPassword') 
 const passport = require('passport');
-const { createToken } = require('../utils/jwt');
-const { passportCall } = require ('../utils/passportCall.js')
-const { authorizationJwt,  authenticationJwtCurrent  } = require('../middlewares/jwtPassport.middleware')
+const { createToken } = require('../../utils/jwt');
+const { passportCall } = require ('../../utils/passportCall.js')
+const { authorizationJwt,  authenticationJwtCurrent  } = require('../../middlewares/jwtPassport.middleware')
 
 
 sessionRouter.get('/current', passportCall('jwt'), authenticationJwtCurrent, (req, res) => {
