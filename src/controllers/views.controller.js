@@ -19,7 +19,7 @@ class ViewsController{
     }
 
     home = async (req, res) => {
-        const products = await this.productService.getProducts()
+        const products = await this.productService.getProducts();
         res.render('home', { title: 'Home', style: 'products.css', body: 'home', products });
     }
 
