@@ -9,12 +9,12 @@ const userController = new UserController()
 const passport = require('passport');
 //const { createToken } = require('../../utils/jwt');
 const { passportCall } = require ('../../utils/passportCall.js')
-const { authenticationJwtCurrent  } = require('../../middlewares/jwtPassport.middleware')
+const { authenticationJwtCurrent } = require('../../middlewares/jwtPassport.middleware')
 
 
 sessionRouter.get('/current', passportCall('jwt'), authenticationJwtCurrent, userController.getCurrentUser);
 
-sessionRouter.get('/logout', passport.authenticate('jwt', { session: false }), userController.userLogout);
+sessionRouter.get('/logout', passport.authenticate('jwt', { session: false }),  userController.userLogout);
 
 sessionRouter.post('/login', userController.userLogin);
 

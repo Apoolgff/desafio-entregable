@@ -1,4 +1,7 @@
 const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
+const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
+
+const productService = new ProductDaoMongo()
 
 class CartController{
     constructor(){
@@ -29,17 +32,32 @@ class CartController{
 
     addProductToCart = async (req, res) => {
         try {
-            const cartId = req.params.cid;
-            const productId = req.params.pid;
-            const quantity = req.body.quantity || 1;
-            const updatedCart = await this.cartService.addProductToCart(cartId, productId, quantity);
-
-            res.json({ cart: updatedCart });//res.send({status: 'success', payload: updatedCart})
+          const cartId = req.params.cid;
+          const productId = req.params.pid;
+          const quantity = req.body.quantity || 1;
+      
+          const cart = await this.cartService.getCart(cartId);
+          if (!cart) {
+            throw new Error('El carrito no fue encontrado.');
+          }
+      
+          const product = await productService.getProductById(productId)
+          if (!product) {
+            throw new Error('El producto no fue encontrado.');
+          }
+      
+          // Llama a addProductToCart sin esperar el resultado
+          this.cartService.addProductToCart(cartId, productId, quantity);
+      
+          // Retorna el carrito actualizado después de la operación
+          const updatedCart = await this.cartService.getCart(cartId);
+          res.json({ cart: updatedCart });
         } catch (error) {
-            console.error(error.message);
-            res.status(400).send('Bad Request');
+          console.error(error.message);
+          res.status(400).send('Bad Request');
         }
-    }
+      }
+      
 
     removeProductFromCart = async (req, res) => {
         try {

@@ -2,6 +2,7 @@ const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
 const MessageDaoMongo = require('../daos/mongo/messageManagerMongo')
 const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const jwt = require('jsonwebtoken');
+const { configObject } = require('../config/index')
 
 class ViewsController{
     constructor(){
@@ -35,7 +36,24 @@ class ViewsController{
 
     products = async (req, res) => {
         try {
-            const { limit, page, sort, query } = req.query;
+            const { limit = 2, page = 1, sort, query } = req.query;
+            const options = {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                sort: sort ? { price: sort === 'asc' ? 1 : -1 } : undefined,
+            };
+    
+            let filter = {};
+    
+            if (query) {
+                const isStatus = query.toLowerCase() === 'true' || query.toLowerCase() === 'false';
+    
+                if (isStatus) {
+                    filter.status = query.toLowerCase() === 'true';
+                } else {
+                    filter.category = query;
+                }
+            }
     
             //Obtener el token de la cookie
             const token = req.cookies.token;
@@ -47,12 +65,25 @@ class ViewsController{
             }
     
             //Decodificar el token para obtener la información del usuario
-            const decodedToken = jwt.verify(token, 'CoderSecretJasonWebToken');
+            const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
     
             //decodedToken contiene la información del usuario
     
-            const result = await this.productService.getProductsLimited({ limit, page, sort, query });
-            res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: result.payload, pagination: result, user: decodedToken });
+            const result = await this.productService.getProductsLimited({ filter, options });
+            const response = {
+                status: 'success',
+                payload: result.docs,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.hasPrevPage ? `/products?limit=${limit}&page=${result.prevPage}` : null,
+                nextLink: result.hasNextPage ? `/products?limit=${limit}&page=${result.nextPage}` : null,
+            };
+            
+            res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: response.payload, pagination: response, user: decodedToken });
         } catch (error) {
             console.error(error.message);
             res.status(500).send('Internal Server Error');

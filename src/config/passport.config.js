@@ -5,6 +5,7 @@ const jwt = require('passport-jwt');
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 const { cookieExtractor, JWT_PRIVATE_KEY } = require('../utils/jwt');
+const { configObject } = require('./index')
 
 const userService = new userDaoMongo();
 
@@ -19,7 +20,7 @@ exports.initializePassport = () => {
 
     passport.use('jwt', new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: JWT_PRIVATE_KEY,
+        secretOrKey: configObject.jwt_secret_key,
     }, async (jwt_payload, done) => {
         try {
             const user = await userService.getUser({ _id: jwt_payload.id });
@@ -34,7 +35,7 @@ exports.initializePassport = () => {
 
     passport.use('current', new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: JWT_PRIVATE_KEY,
+        secretOrKey: configObject.jwt_secret_key,
     }, async (jwt_payload, done) => {
         try {
             return done(null, jwt_payload);

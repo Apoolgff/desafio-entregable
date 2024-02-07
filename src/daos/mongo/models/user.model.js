@@ -30,7 +30,7 @@ const UsersSchema = Schema({
     trim: true
   },
   cart: {
-  cartId: { type: Types.ObjectId, ref: 'Carts'/*, required: true*/ },
+    type: Types.ObjectId, ref: 'Carts',
   },
   role: {
     type: String,
@@ -39,7 +39,7 @@ const UsersSchema = Schema({
 })
 
 UsersSchema.pre('findOne', function(){
-  this.populate('cart.cartId')
+  this.populate('cart')
 })
 
 const usersModel = model(usersCollection, UsersSchema)
