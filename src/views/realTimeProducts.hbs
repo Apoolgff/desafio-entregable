@@ -1,46 +1,70 @@
-<h1>Real-Time View</h1>
-<div class="page-container">
-  <div>
-    <h2>Eliminar producto por ID</h2>
-    <form id="deleteProductForm">
-      <label for="productId">ID del Producto:</label>
-      <input type="text" id="productId" name="productId" required>
-      <button type="button" onclick="deleteProduct()">Eliminar Producto</button>
-    </form>
-  </div>
-  <div>
-    <h2>Agregar un producto</h2>
-    <form id="createProductForm">
-      <label for="title">Nombre del Producto:</label>
-      <input type="text" id="title" name="title" required><br>
+{{#if user}}
+<div class="container">
+  <div class="product-container">
+    <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
+    <p><span>Rol:</span> {{user.role}}</p>
 
-      <label for="description">Descripcion:</label>
-      <input type="text" id="description" name="description" required><br>
+    <button id="logout-btn">Logout</button>
+{{/if}}
+    <h1>Administrador de Productos</h1>
+    <div class="page-container">
+      <div>
+        <h2>Eliminar producto por ID</h2>
+        <form id="deleteProductForm">
+          <label for="productId">ID del Producto:</label>
+          <input type="text" id="productId" name="productId" required>
+          <button type="button" onclick="deleteProduct()">Eliminar Producto</button>
+        </form>
+      </div>
+      <div>
+        <h2>Agregar un producto</h2>
+        <form id="createProductForm">
+          <label for="title">Nombre del Producto:</label>
+          <input type="text" id="title" name="title" required><br>
 
-      <label for="code">Codigo:</label>
-      <input type="text" id="code" name="code" required><br>
+          <label for="description">Descripcion:</label>
+          <input type="text" id="description" name="description" required><br>
 
-      <label for="price">Precio:</label>
-      <input type="number" id="price" name="price" required><br>
+          <label for="code">Codigo:</label>
+          <input type="text" id="code" name="code" required><br>
 
-      <label for="stock">Stock:</label>
-      <input type="number" id="stock" name="stock" required><br>
+          <label for="price">Precio:</label>
+          <input type="number" id="price" name="price" required><br>
 
-      <label for="category">Categoria:</label>
-      <input type="text" id="category" name="category" required><br>
+          <label for="stock">Stock:</label>
+          <input type="number" id="stock" name="stock" required><br>
 
-      <label for="thumbnails">Imagenes ("/images/laptop1.webp" para testear):</label>
-      <input type="text" id="thumbnails" name="thumbnails" required><br>
+          <label for="category">Categoria:</label>
+          <input type="text" id="category" name="category" required><br>
 
-      <button type="button" onclick="createProduct()">Agregar Producto</button>
-    </form>
-  </div>
-  <div>
-    <h2>Lista de Productos en tiempo real</h2>
-    <ul class="products">
+          <label for="thumbnails">Imagenes ("/images/laptop1.webp" para testear):</label>
+          <input type="text" id="thumbnails" name="thumbnails" required><br>
 
-    </ul>
-  </div>
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/realTimeProducts.js"></script>
+          <button type="button" onclick="createProduct()">Agregar Producto</button>
+        </form>
+      </div>
+      <div>
+        <h2>Lista de Productos en tiempo real</h2>
+        <ul class="products">
+
+        </ul>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/realTimeProducts.js"></script>
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', function () {
+    fetch('/api/session/logout', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '/login';
+        } else {
+          console.error('Error en el logout:', response.statusText);
+        }
+      })
+      .catch(error => console.error('Error en el logout:', error));
+  });
+    </script>

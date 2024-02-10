@@ -4,15 +4,16 @@ const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const jwt = require('jsonwebtoken');
 const { configObject } = require('../config/index')
 
-class ViewsController{
-    constructor(){
+class ViewsController {
+    constructor() {
         this.productService = new ProductDaoMongo()
         this.messageService = new MessageDaoMongo()
         this.cartService = new CartDaoMongo()
     }
 
     login = async (req, res) => {
-        res.render('login', { title: 'Login', style: 'login.css', body: 'login' });
+
+        res.render('login', { title: 'Login', style: 'login.css', body: 'login'});
     }
 
     register = async (req, res) => {
@@ -25,8 +26,19 @@ class ViewsController{
     }
 
     realTimeProducts = async (req, res) => {
+        //Obtener el token de la cookie
+        const token = req.cookies.token;
+
+        //Verificar si no hay token
+        if (!token) {
+            //Maneja el caso en el que el usuario no está autenticado
+            return res.redirect('/login'); // Redirigir al usuario al login
+        }
+
+        //Decodificar el token para obtener la información del usuario
+        const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
         const products = await this.productService.getProducts();
-        res.render('realTimeProducts', { title: 'Real-Time Products', style: 'realTimeProducts.css', body: 'realTimeProducts', products });
+        res.render('realTimeProducts', { title: 'Real-Time Products', style: 'realTimeProducts.css', body: 'realTimeProducts', products, user:decodedToken });
     }
 
     chat = async (req, res) => {
@@ -42,33 +54,33 @@ class ViewsController{
                 limit: parseInt(limit),
                 sort: sort ? { price: sort === 'asc' ? 1 : -1 } : undefined,
             };
-    
+
             let filter = {};
-    
+
             if (query) {
                 const isStatus = query.toLowerCase() === 'true' || query.toLowerCase() === 'false';
-    
+
                 if (isStatus) {
                     filter.status = query.toLowerCase() === 'true';
                 } else {
                     filter.category = query;
                 }
             }
-    
+
             //Obtener el token de la cookie
             const token = req.cookies.token;
-    
+
             //Verificar si no hay token
             if (!token) {
                 //Maneja el caso en el que el usuario no está autenticado
                 return res.redirect('/login'); // Redirigir al usuario al login
             }
-    
+
             //Decodificar el token para obtener la información del usuario
             const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
-    
+
             //decodedToken contiene la información del usuario
-    
+
             const result = await this.productService.getProductsLimited({ filter, options });
             const response = {
                 status: 'success',
@@ -82,7 +94,7 @@ class ViewsController{
                 prevLink: result.hasPrevPage ? `/products?limit=${limit}&page=${result.prevPage}` : null,
                 nextLink: result.hasNextPage ? `/products?limit=${limit}&page=${result.nextPage}` : null,
             };
-            
+
             res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: response.payload, pagination: response, user: decodedToken });
         } catch (error) {
             console.error(error.message);

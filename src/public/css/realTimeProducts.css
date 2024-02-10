@@ -8,6 +8,37 @@ body {
     color: #bb1010;
     text-align: center;
   }
+
+  p{
+    font-weight: bold;
+    font-size: 20px;
+    color: #001ac3;
+  }
+
+
+
+  span{
+    font-weight: bolder;
+    font-size: 25px;
+    color: #001074
+  }
+
+  #logout-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #bb1010; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+  
+
+  #logout-btn:hover {
+    background-color: #cc0000;
+  }
+
   
   .products ul {
     list-style-type: none;
