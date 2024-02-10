@@ -10,7 +10,7 @@ class UserDaoMongo {
 
     // Muestra un usuario especifico segun un filtro
     async getUser(filter) {
-            return await this.model.findOne(filter);
+        return await this.model.findOne(filter);
     }
 
     // Crea un usuario

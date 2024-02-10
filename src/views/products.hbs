@@ -2,6 +2,8 @@
 <div class="container">
   <div class="product-container">
     <h1>Bienvenido {{user.first_name}} {{user.last_name}}!</h1>
+    <p><span>Email:</span> <span class="user-email">{{user.email}}</span></p>
+
     <p><span>Rol:</span> {{user.role}}</p>
     <p><span>ID Carrito:</span> {{user.cart._id}}</p>
 
@@ -38,6 +40,7 @@
   <div class="cart" data-cart-id="{{user.cart._id}}">
     <h2>Carrito</h2>
     <p><strong>ID del carrito: </strong>{{user.cart._id}}</p>
+    <p id="total"><strong>Total a Pagar: </strong></p>
     <ul>
       {{#each user.cart.products}}
 
@@ -45,6 +48,7 @@
     </ul>
 
     <button class="clear-cart-btn">Vaciar Carrito</button>
+    <button class="purchase-btn">Realizar Compra</button>
   </div>
   {{else}}
   <p>Usuario no autenticado. Por favor, inicie sesión.</p>
@@ -85,6 +89,10 @@
     const clearCartButton = document.querySelector('.clear-cart-btn');
     const cartElement = document.querySelector('.cart');
     const cartId = cartElement.dataset.cartId;
+    const totalAmountDisplay = document.createElement('p'); // Elemento para mostrar el total
+
+    // Agregar elemento para mostrar el total al carrito
+    cartElement.appendChild(totalAmountDisplay);
 
     //Cargar el carrito al entrar
     fetch(`/api/carts/${cartId}`)
@@ -102,50 +110,50 @@
       });
 
 
-  addToCartButtons.forEach(button => {
-    button.addEventListener('click', function () {
-      const productId = this.getAttribute('data-product-id');
-      const cartId = cartElement.dataset.cartId;
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const productId = this.getAttribute('data-product-id');
+        const cartId = cartElement.dataset.cartId;
 
-      // Obtener el valor del campo de entrada de cantidad
-      const quantityInput = document.getElementById(`quantity-input-${productId}`);
-      const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+        // Obtener el valor del campo de entrada de cantidad
+        const quantityInput = document.getElementById(`quantity-input-${productId}`);
+        const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
 
-      addToCart(productId, cartId, quantity);
+        addToCart(productId, cartId, quantity);
+      });
     });
-  });
 
     clearCartButton.addEventListener('click', function () {
       clearCart(cartId);
     });
 
     //Agrega producto al carrito
-// Modificar la función addToCart para aceptar la cantidad
-async function addToCart(productId, cartId, quantity) {
-  try {
-    console.log('Add to cart clicked for product ID:', productId, cartId);
+    // Modificar la función addToCart para aceptar la cantidad
+    async function addToCart(productId, cartId, quantity) {
+      try {
+        console.log('Add to cart clicked for product ID:', productId, cartId);
 
-    const addToCartResponse = await fetch(`/api/carts/${cartId}/product/${productId}`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ quantity }),
-    });
-    const addToCartData = await addToCartResponse.json();
+        const addToCartResponse = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ quantity }),
+        });
+        const addToCartData = await addToCartResponse.json();
 
-    // Esperar un breve momento
-    await new Promise(resolve => setTimeout(resolve, 500));
+        // Esperar un breve momento
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-    const updatedCartResponse = await fetch(`/api/carts/${cartId}`);
-    const updatedCartData = await updatedCartResponse.json();
+        const updatedCartResponse = await fetch(`/api/carts/${cartId}`);
+        const updatedCartData = await updatedCartResponse.json();
 
-    renderCart(updatedCartData.cart);
-  } catch (error) {
-    console.error('Error al agregar al carrito:', error);
-  }
-}
+        renderCart(updatedCartData.cart);
+      } catch (error) {
+        console.error('Error al agregar al carrito:', error);
+      }
+    }
 
 
 
@@ -163,62 +171,73 @@ async function addToCart(productId, cartId, quantity) {
         .catch(error => console.error('Error al vaciar el carrito:', error));
     }
 
-    //Renderiza el carrito y lo mantiene actualizado
+
     function renderCart(cart) {
+      let totalPrice = 0;
       const cartList = document.querySelector('.cart ul');
+      const totalAmountDisplay = document.getElementById('total');
 
       cartList.innerHTML = '';
 
-      //Itera sobre los productos en el carrito y crea elementos HTML para cada uno
-      cart.products.forEach(product => {
-        const listItem = document.createElement('li');
 
-        const productIdParagraph = document.createElement('p');
-        productIdParagraph.innerHTML = `<strong>ID: </strong>${product.productId._id}`;
-        listItem.appendChild(productIdParagraph);
+      if (cart && cart.products) {
 
-        const productTitleParagraph = document.createElement('p');
-        productTitleParagraph.innerHTML = `<strong>Producto: </strong>${product.productId.title}`;
-        listItem.appendChild(productTitleParagraph);
+        cart.products.forEach(product => {
+          const listItem = document.createElement('li');
 
-        const thumbnailsContainer = document.createElement('div');
-        thumbnailsContainer.innerHTML = `<strong>Thumbnails:</strong><ul class="thumbnails">${product.productId.thumbnails.map(thumbnail => `<li><img class="image" src="${thumbnail}" alt="Thumbnail"></li>`).join('')}</ul>`;
-        listItem.appendChild(thumbnailsContainer);
+          const productIdParagraph = document.createElement('p');
+          productIdParagraph.innerHTML = `<strong>ID: </strong>${product.productId._id}`;
+          listItem.appendChild(productIdParagraph);
 
-        const productDescriptionParagraph = document.createElement('p');
-        productDescriptionParagraph.innerHTML = `<strong>Descripción: </strong>${product.productId.description}`;
-        listItem.appendChild(productDescriptionParagraph);
+          const productTitleParagraph = document.createElement('p');
+          productTitleParagraph.innerHTML = `<strong>Producto: </strong>${product.productId.title}`;
+          listItem.appendChild(productTitleParagraph);
 
-        const productCodeParagraph = document.createElement('p');
-        productCodeParagraph.innerHTML = `<strong>Código: </strong>${product.productId.code}`;
-        listItem.appendChild(productCodeParagraph);
+          const thumbnailsContainer = document.createElement('div');
+          thumbnailsContainer.innerHTML = `<strong>Thumbnails:</strong><ul class="thumbnails">${product.productId.thumbnails.map(thumbnail => `<li><img class="image" src="${thumbnail}" alt="Thumbnail"></li>`).join('')}</ul>`;
+          listItem.appendChild(thumbnailsContainer);
 
-        const productCategoryParagraph = document.createElement('p');
-        productCategoryParagraph.innerHTML = `<strong>Categoría: </strong>${product.productId.category}`;
-        listItem.appendChild(productCategoryParagraph);
+          const productDescriptionParagraph = document.createElement('p');
+          productDescriptionParagraph.innerHTML = `<strong>Descripción: </strong>${product.productId.description}`;
+          listItem.appendChild(productDescriptionParagraph);
 
-        const productPriceParagraph = document.createElement('p');
-        productPriceParagraph.innerHTML = `<strong>Precio unitario: </strong>$${product.productId.price}`;
-        listItem.appendChild(productPriceParagraph);
+          const productCodeParagraph = document.createElement('p');
+          productCodeParagraph.innerHTML = `<strong>Código: </strong>${product.productId.code}`;
+          listItem.appendChild(productCodeParagraph);
 
-        const quantityParagraph = document.createElement('p');
-        quantityParagraph.innerHTML = `<strong>Cantidad: </strong>${product.quantity}`;
-        listItem.appendChild(quantityParagraph);
+          const productCategoryParagraph = document.createElement('p');
+          productCategoryParagraph.innerHTML = `<strong>Categoría: </strong>${product.productId.category}`;
+          listItem.appendChild(productCategoryParagraph);
 
-        const removeButton = document.createElement('button');
-        removeButton.classList.add('remove-from-cart-btn');
-        removeButton.setAttribute('data-product-id', product.productId._id);
-        removeButton.innerHTML = 'Eliminar del carrito';
-        removeButton.addEventListener('click', function () {
-          const productId = this.getAttribute('data-product-id');
-          removeFromCart(productId);
+          const productPriceParagraph = document.createElement('p');
+          productPriceParagraph.innerHTML = `<strong>Precio unitario: </strong>$${product.productId.price}`;
+          listItem.appendChild(productPriceParagraph);
+
+          const quantityParagraph = document.createElement('p');
+          quantityParagraph.innerHTML = `<strong>Cantidad: </strong>${product.quantity}`;
+          listItem.appendChild(quantityParagraph);
+
+          const removeButton = document.createElement('button');
+          removeButton.classList.add('remove-from-cart-btn');
+          removeButton.setAttribute('data-product-id', product.productId._id);
+          removeButton.innerHTML = 'Eliminar del carrito';
+          removeButton.addEventListener('click', function () {
+            const productId = this.getAttribute('data-product-id');
+            removeFromCart(productId);
+          });
+
+          const productTotalPrice = product.productId.price * product.quantity;
+          totalPrice += productTotalPrice; 
+
+          cartList.appendChild(listItem);
+          listItem.appendChild(removeButton);
         });
-        listItem.appendChild(removeButton);
+      }
 
 
-        cartList.appendChild(listItem);
-      });
+      totalAmountDisplay.textContent = `Total a Pagar: $${totalPrice.toFixed(2)}`;
     }
+
 
     //Elimina un producto del carrito
     function removeFromCart(productId) {
@@ -242,6 +261,39 @@ async function addToCart(productId, cartId, quantity) {
         .catch(error => console.error('Error al eliminar del carrito:', error));
     }
 
+
+    const purchaseButton = document.querySelector('.purchase-btn');
+    if (purchaseButton) {
+      purchaseButton.addEventListener('click', function () {
+        const cartId = document.querySelector('.cart').dataset.cartId;
+        purchaseCart(cartId);
+      });
+    }
+
+    // Función para realizar la compra del carrito
+    function purchaseCart(cartId) {
+      // Función modificada para vaciar el carrito y mostrar el total
+      fetch(`/api/carts/${cartId}/purchase`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+        .then(async response => {
+          if (response.ok) {
+            // Vaciar el carrito
+            renderCart({ products: [] });
+            // Mostrar alerta con el total
+            alert(`Compra realizada con éxito`);
+          } else {
+            const errorData = await response.json();
+            console.error('Error al realizar la compra:', errorData);
+            // Aquí podrías mostrar un mensaje de error al usuario
+          }
+        })
+        .catch(error => {
+          console.error('Error al realizar la compra:', error);
+          // Aquí podrías mostrar un mensaje de error al usuario
+        });
+    }
 
 
   });

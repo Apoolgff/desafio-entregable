@@ -18,14 +18,11 @@ const TicketsSchema = Schema({
         required: true,
     },
     purchaser: {
-        type: Types.ObjectId, ref: 'Users',
+        type: String,
         required: true
     },
 })
 
-TicketsSchema.pre('findOne', function(){
-    this.populate('purchaser')
-  })
 
 const ticketsModel = model(ticketsCollection, TicketsSchema)
 

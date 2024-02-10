@@ -1,7 +1,9 @@
 const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
 const TicketDaoMongo = require('../daos/mongo/ticketManagerMongo')
+const UserDaoMongo = require('../daos/mongo/userManagerMongo')
 const { generateUniqueCode, calculateTotalAmount } = require('../helpers/cartHelper')
+
 
 //const productService = new ProductDaoMongo()
 
@@ -10,6 +12,7 @@ class CartController {
         this.cartService = new CartDaoMongo()
         this.productService = new ProductDaoMongo()
         this.ticketService = new TicketDaoMongo()
+        this.userService = new UserDaoMongo()
     }
 
     createCart = async (req, res) => {
@@ -121,14 +124,15 @@ class CartController {
         try {
             const cartId = req.params.cid;
             const cart = await this.cartService.getCart(cartId);
-
+            const user = await this.userService.getUser({cart: cartId})
+    
             if (!cart) {
                 return res.status(404).json({ message: 'Carrito no encontrado' });
             }
-
+    
             const products = cart.products;
             const failedProducts = [];
-
+    
             for (const productData of products) {
                 const product = await this.productService.getProductById(productData.productId);
                 if (!product) {
@@ -141,7 +145,7 @@ class CartController {
                     failedProducts.push(product._id);
                 }
             }
-
+    
             if (failedProducts.length > 0) {
                 await this.cartService.updateCart(cartId, failedProducts);
                 return res.status(400).json({ message: 'Algunos productos no pudieron ser comprados', failedProducts });
@@ -150,13 +154,14 @@ class CartController {
                     code: generateUniqueCode(),
                     purchase_datetime: new Date(),
                     amount: calculateTotalAmount(cart.products),
-                    purchaser: req.user.email,
-                    products: cart.products
+                    purchaser: user.email,
                 };
                 const ticket = await this.ticketService.createTicket(ticketData);
-
-                await this.cartService.clearCart(cartId);
-
+    
+                // Filtrar los productos que no se pudieron comprar
+                const remainingProducts = cart.products.filter(productData => !failedProducts.includes(productData.productId));
+                await this.cartService.updateCart(cartId, remainingProducts);
+    
                 return res.status(200).json({ message: 'Compra finalizada con éxito', ticket });
             }
         } catch (error) {
@@ -164,6 +169,7 @@ class CartController {
             return res.status(500).json({ message: 'Error en el servidor' });
         }
     }
+    
 }
 
 module.exports = CartController
