@@ -26,16 +26,12 @@ class ViewsController {
     }
 
     realTimeProducts = async (req, res) => {
-        //Obtener el token de la cookie
         const token = req.cookies.token;
 
-        //Verificar si no hay token
         if (!token) {
-            //Maneja el caso en el que el usuario no está autenticado
-            return res.redirect('/login'); // Redirigir al usuario al login
+            return res.redirect('/login');
         }
-
-        //Decodificar el token para obtener la información del usuario
+        
         const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
         const products = await this.productService.getProducts();
         res.render('realTimeProducts', { title: 'Real-Time Products', style: 'realTimeProducts.css', body: 'realTimeProducts', products, user:decodedToken });

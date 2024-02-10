@@ -1,11 +1,15 @@
 const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
+const TicketDaoMongo = require('../daos/mongo/ticketManagerMongo')
+const { generateUniqueCode, calculateTotalAmount } = require('../helpers/cartHelper')
 
-const productService = new ProductDaoMongo()
+//const productService = new ProductDaoMongo()
 
-class CartController{
-    constructor(){
+class CartController {
+    constructor() {
         this.cartService = new CartDaoMongo()
+        this.productService = new ProductDaoMongo()
+        this.ticketService = new TicketDaoMongo()
     }
 
     createCart = async (req, res) => {
@@ -32,32 +36,37 @@ class CartController{
 
     addProductToCart = async (req, res) => {
         try {
-          const cartId = req.params.cid;
-          const productId = req.params.pid;
-          const quantity = req.body.quantity || 1;
-      
-          const cart = await this.cartService.getCart(cartId);
-          if (!cart) {
-            throw new Error('El carrito no fue encontrado.');
-          }
-      
-          const product = await productService.getProductById(productId)
-          if (!product) {
-            throw new Error('El producto no fue encontrado.');
-          }
-      
-          // Llama a addProductToCart sin esperar el resultado
-          this.cartService.addProductToCart(cartId, productId, quantity);
-      
-          // Retorna el carrito actualizado después de la operación
-          const updatedCart = await this.cartService.getCart(cartId);
-          res.json({ cart: updatedCart });
+            const cartId = req.params.cid;
+            const productId = req.params.pid;
+            const quantity = req.body.quantity || 1;
+
+            const cart = await this.cartService.getCart(cartId);
+            if (!cart) {
+                throw new Error('El carrito no fue encontrado.');
+            }
+
+            const product = await this.productService.getProductById(productId)
+            if (!product) {
+                throw new Error('El producto no fue encontrado.');
+            }
+
+            const productInCart = await this.cartService.isProductInCart(cartId, productId)
+
+            if (productInCart) {
+                await this.cartService.updateProductQuantity(cartId, productId, quantity)
+            }
+            else {
+                await this.cartService.addProductToCart(cartId, productId, quantity);
+            }
+
+            const updatedCart = await this.cartService.getCart(cartId);
+            res.json({ cart: updatedCart });
         } catch (error) {
-          console.error(error.message);
-          res.status(400).send('Bad Request');
+            console.error(error.message);
+            res.status(400).send('Bad Request');
         }
-      }
-      
+    }
+
 
     removeProductFromCart = async (req, res) => {
         try {
@@ -105,6 +114,54 @@ class CartController{
         } catch (error) {
             console.error(error.message);
             res.status(400).send('Bad Request');
+        }
+    }
+
+    purchaseCart = async (req, res) => {
+        try {
+            const cartId = req.params.cid;
+            const cart = await this.cartService.getCart(cartId);
+
+            if (!cart) {
+                return res.status(404).json({ message: 'Carrito no encontrado' });
+            }
+
+            const products = cart.products;
+            const failedProducts = [];
+
+            for (const productData of products) {
+                const product = await this.productService.getProductById(productData.productId);
+                if (!product) {
+                    return res.status(404).json({ message: `Producto ${productData.productId} no encontrado` });
+                }
+                if (product.stock >= productData.quantity) {
+                    product.stock -= productData.quantity;
+                    await this.productService.updateProduct(product._id, product);
+                } else {
+                    failedProducts.push(product._id);
+                }
+            }
+
+            if (failedProducts.length > 0) {
+                await this.cartService.updateCart(cartId, failedProducts);
+                return res.status(400).json({ message: 'Algunos productos no pudieron ser comprados', failedProducts });
+            } else {
+                const ticketData = {
+                    code: generateUniqueCode(),
+                    purchase_datetime: new Date(),
+                    amount: calculateTotalAmount(cart.products),
+                    purchaser: req.user.email,
+                    products: cart.products
+                };
+                const ticket = await this.ticketService.createTicket(ticketData);
+
+                await this.cartService.clearCart(cartId);
+
+                return res.status(200).json({ message: 'Compra finalizada con éxito', ticket });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error en el servidor' });
         }
     }
 }

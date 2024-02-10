@@ -27,5 +27,8 @@ cartsRouter.put('/:cid/products/:pid', cartController.updateProductQuantity);
 //Eliminar todos los productos del carrito
 cartsRouter.delete('/:cid', cartController.removeAllProducts);
 
+//Realizar la compra de los productos del carrito
+cartsRouter.post('/:cid/purchase', cartController.purchaseCart);
+
 
 module.exports = cartsRouter;
