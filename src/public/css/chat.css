@@ -13,6 +13,18 @@ li strong{
     font-weight: bold;
 }
 
+p{
+    font-weight: bold;
+    font-size: 25px;
+    color: black;
+}
+
+p strong{
+    font-weight: bold;
+    color: blue;
+    font-size: 20px;
+}
+
 
 #chat-container {
     max-width: 600px;

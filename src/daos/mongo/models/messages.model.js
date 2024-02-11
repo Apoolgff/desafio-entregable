@@ -1,17 +1,28 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, Types } = require('mongoose')
 
 const messagesCollection = 'Messages'
 
 const MessagesSchema = Schema({
     user: {
-        type: String,
+        type: Types.ObjectId, ref: 'Users',
         required: true,
     },
-    message: {
-        type: String
-    }
+    messages: [{
+        message: {
+            type: String,
+            required: true,
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now,
+        }
+    }]
+})
+
+MessagesSchema.pre('findOne', function () {
+    this.populate('user')
 })
 
 const messagesModel = model(messagesCollection, MessagesSchema)
 
-module.exports = messagesModel
+module.exports = {messagesModel}

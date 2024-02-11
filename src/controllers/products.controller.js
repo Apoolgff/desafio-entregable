@@ -5,6 +5,16 @@ class ProductsController {
         this.productService = new ProductDaoMongo();
     }
 
+    async getProducts(req, res) {
+        try {
+          const products = await this.productService.getProducts();
+          res.json(products);
+        } catch (error) {
+          console.error('Error al obtener los productos:', error.message);
+          res.status(500).json({ error: 'Error al obtener los productos' });
+        }
+      }
+
     async getProductsLimited(req, res) {
         try {
             const { limit = 3, page = 1, sort, query } = req.query;

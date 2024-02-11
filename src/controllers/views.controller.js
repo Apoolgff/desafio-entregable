@@ -38,8 +38,15 @@ class ViewsController {
     }
 
     chat = async (req, res) => {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.redirect('/login');
+        }
+        
+        const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
         const messages = await this.messageService.getMessages();
-        res.render('chat', { title: 'Chat', style: 'chat.css', body: 'chat', messages });
+        res.render('chat', { title: 'Chat', style: 'chat.css', body: 'chat', messages, user:decodedToken });
     }
 
     products = async (req, res) => {

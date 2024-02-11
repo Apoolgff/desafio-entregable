@@ -2,18 +2,14 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const { Server } = require('socket.io');
 const path = require('path');
-
 const { connectDB, configObject } = require('./config/index')
 const ProductDaoMongo = require('./daos/mongo/productManagerMongo');
 const MessageDaoMongo = require('./daos/mongo/messageManagerMongo');
-
 const cookieParser = require('cookie-parser');
-
-
 const appRouter = require('./routes/index')
-
 const passport = require('passport')
 const { initializePassport } = require('./config/passport.config')
+const io = require('./helpers/serverIO')
 
 const app = express();
 const port = configObject.PORT;
@@ -49,15 +45,16 @@ const serverHttp = app.listen(port, err => {
   if (err) console.log(err)
   console.log(`Escuchando en el puerto ${port}`)
 })
-const io = new Server(serverHttp);
+io(serverHttp)
+//const io = new Server(serverHttp);
 console.log(`Socket.io server listening on port ${port}`);
 
-const productDao = new ProductDaoMongo();
-const messageDao = new MessageDaoMongo();
+//const productDao = new ProductDaoMongo();
+//const messageDao = new MessageDaoMongo();
 
 //Sockets
 
-io.on('connection', async (socket) => {
+/*io.on('connection', async (socket) => {
 
   console.log('Un cliente se ha conectado');
 
@@ -112,4 +109,4 @@ io.on('connection', async (socket) => {
     }
   });
   
-});
+});*/
