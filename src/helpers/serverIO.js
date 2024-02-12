@@ -45,12 +45,12 @@ function SocketIO(server) {
       // Escucha eventos de mensajes
       socket.on('sendMessage', async (user, message) => {
         try {
-          await messageDao.addMessage(user, message);
+          await messageDao.addOrUpdateMessage(user, message);
           const messages = await messageDao.getMessages();
           io.emit('updateMessages', messages);
-        } catch (error) {
+      } catch (error) {
           console.error('Error al enviar mensaje:', error.message);
-        }
+      }
       });
     });
   }

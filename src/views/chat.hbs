@@ -4,16 +4,21 @@
     <p><strong>Usuario: </strong>{{user.first_name}}</p>
     <p><strong>Email: </strong>{{user.email}}</p>
     <div id="message-form">
-        <!-- No se necesita un input para el email si ya se está pasando desde el servidor -->
         <input type="text" id="message-input" placeholder="Tu mensaje">
         <button id="send-button">Enviar</button>
     </div>
     <ul id="message-list">
         {{#each messages}}
-            <li><strong>{{user.email}}:</strong> {{message}}</li>
+            {{#each this.messages}}
+                <li><strong>{{../user}}:</strong> {{this.message}}</li>
+            {{/each}}
         {{/each}}
     </ul>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chat.js"></script>
+
+
+
+

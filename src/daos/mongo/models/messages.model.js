@@ -4,7 +4,7 @@ const messagesCollection = 'Messages'
 
 const MessagesSchema = Schema({
     user: {
-        type: Types.ObjectId, ref: 'Users',
+        type: String,
         required: true,
     },
     messages: [{
