@@ -124,7 +124,7 @@ class CartController {
         try {
             const cartId = req.params.cid;
             const cart = await this.cartService.getCart(cartId);
-            const user = await this.userService.getUser({cart: cartId})
+            const user = await this.userService.getUser({ cart: cartId });
     
             if (!cart) {
                 return res.status(404).json({ message: 'Carrito no encontrado' });
@@ -142,12 +142,14 @@ class CartController {
                     product.stock -= productData.quantity;
                     await this.productService.updateProduct(product._id, product);
                 } else {
-                    failedProducts.push(product._id);
+                    failedProducts.push(productData); // Almacena el objeto del producto que no pudo ser comprado
                 }
             }
     
             if (failedProducts.length > 0) {
-                await this.cartService.updateCart(cartId, failedProducts);
+                // Filtrar los productos que no se pudieron comprar
+                const remainingProducts = products.filter(productData => failedProducts.find(fp => fp.productId === productData.productId) === undefined);
+                await this.cartService.updateCart(cartId, remainingProducts);
                 return res.status(400).json({ message: 'Algunos productos no pudieron ser comprados', failedProducts });
             } else {
                 const ticketData = {
@@ -157,10 +159,10 @@ class CartController {
                     purchaser: user.email,
                 };
                 const ticket = await this.ticketService.createTicket(ticketData);
+                console.log(ticketData.amount)
     
-                // Filtrar los productos que no se pudieron comprar
-                const remainingProducts = cart.products.filter(productData => !failedProducts.includes(productData.productId));
-                await this.cartService.updateCart(cartId, remainingProducts);
+                // Vaciar el carrito ya que todos los productos fueron comprados
+                await this.cartService.removeAllProducts(cartId);
     
                 return res.status(200).json({ message: 'Compra finalizada con éxito', ticket });
             }
@@ -169,6 +171,7 @@ class CartController {
             return res.status(500).json({ message: 'Error en el servidor' });
         }
     }
+    
     
 }
 

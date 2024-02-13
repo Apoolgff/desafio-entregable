@@ -52,6 +52,22 @@ body {
   #logout-btn:hover {
     background-color: #cc0000;
   }
+
+  #chat-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1310bb; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+  
+
+  #chat-btn:hover {
+    background-color: #0f0d89;
+  }
   
   .products ul {
     list-style-type: none;

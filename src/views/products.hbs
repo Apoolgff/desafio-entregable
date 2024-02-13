@@ -6,7 +6,7 @@
 
     <p><span>Rol:</span> {{user.role}}</p>
     <p><span>ID Carrito:</span> {{user.cart._id}}</p>
-
+    <button id="chat-btn">Ir a Chat</button>
     <button id="logout-btn">Logout</button>
 
     <h2>Lista de Productos</h2>
@@ -31,8 +31,8 @@
         <label for="quantity-input-{{_id}}">Cantidad:</label>
         <input type="number" id="quantity-input-{{_id}}" class="quantity-input" value="1" min="1">
 
-        <button class="add-to-cart-btn" data-product-id="{{_id}}" data-cart-id="{{user.cart.cartId._id}}">Agregar al
-          carrito</button>
+        <button class="add-to-cart-btn" data-product-id="{{_id}}" data-product-stock="{{stock}}" data-cart-id="{{user.cart.cartId._id}}">Agregar al carrito</button>
+
       </li>
       {{/each}}
     </ul>
@@ -69,6 +69,18 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+  // Resto de tu código
+  
+  // Agregar evento al botón de chat
+  const chatButton = document.getElementById('chat-btn');
+  if (chatButton) {
+    chatButton.addEventListener('click', function () {
+      window.location.href = '/chat';
+    });
+  }
+});
+
   document.getElementById('logout-btn').addEventListener('click', function () {
     fetch('/api/session/logout', {
       method: 'GET',
@@ -118,6 +130,14 @@
         // Obtener el valor del campo de entrada de cantidad
         const quantityInput = document.getElementById(`quantity-input-${productId}`);
         const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+          // Obtener el stock del producto
+            const productStock = parseInt(this.getAttribute('data-product-stock'));
+
+            // Verificar si la cantidad ingresada es mayor que el stock disponible
+            if (quantity > productStock) {
+                alert('No hay suficiente stock disponible para agregar esta cantidad al carrito.');
+                return; // Salir de la función si no hay suficiente stock
+            }
 
         addToCart(productId, cartId, quantity);
       });
@@ -132,6 +152,8 @@
     async function addToCart(productId, cartId, quantity) {
       try {
         console.log('Add to cart clicked for product ID:', productId, cartId);
+
+        
 
         const addToCartResponse = await fetch(`/api/carts/${cartId}/product/${productId}`, {
           method: 'POST',
@@ -226,8 +248,14 @@
             removeFromCart(productId);
           });
 
-          const productTotalPrice = product.productId.price * product.quantity;
-          totalPrice += productTotalPrice; 
+          const productPrice = parseFloat(product.productId.price);
+
+      // Calcular el precio total del producto
+      const productTotalPrice = productPrice * product.quantity;
+
+      // Sumar el precio total del producto al precio total del carrito
+      totalPrice += productTotalPrice;
+
 
           cartList.appendChild(listItem);
           listItem.appendChild(removeButton);
@@ -283,6 +311,7 @@
             renderCart({ products: [] });
             // Mostrar alerta con el total
             alert(`Compra realizada con éxito`);
+            
           } else {
             const errorData = await response.json();
             console.error('Error al realizar la compra:', errorData);

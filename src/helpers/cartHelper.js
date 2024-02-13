@@ -9,18 +9,20 @@ function generateUniqueCode() {
 function calculateTotalAmount(products) {
     let total = 0;
     products.forEach(product => {
+        // Acceder al precio y la cantidad dentro de productId
+        const price = product.productId.price;
+        const quantity = product.quantity;
 
-        if (typeof product.price === 'number' && typeof product.quantity === 'number') {
-
-            total += product.price * product.quantity;
+        if (typeof price === 'number' && typeof quantity === 'number') {
+            total += price * quantity;
         } else {
-
             console.error('Producto con precio o cantidad inválidos:', product);
         }
     });
-
+    console.log(total)
     return parseFloat(total.toFixed(2)); 
 }
+
 
 
 module.exports = {
