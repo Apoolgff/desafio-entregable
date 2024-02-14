@@ -7,13 +7,13 @@ class CartDaoMongo {
 
 
   //Crea un carrito
-  async createCart() {
+  async create() {
     return await this.model.create({ products: [] })
 
   }
 
   //Muestra el carrito segun ID
-  async getCart(cartId) {
+  async getById(cartId) {
     return await this.model.findOne({ _id: cartId })
   }
 
@@ -46,7 +46,7 @@ class CartDaoMongo {
 
 
   //Actualiza el carrito
-  async updateCart(cartId, products) {
+  async update(cartId, products) {
     return await this.model.updateOne(
       { _id: cartId },
       { $set: { products: products } }

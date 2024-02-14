@@ -5,26 +5,26 @@ class ProductDaoMongo {
         this.model = productsModel
     }
 
-    async addProduct(product) {
+    async create(product) {
         return await this.model.create(product);
     }
 
     //Muestra todos los productos 
-    async getProducts() {
+    async get() {
         return await this.model.find();
     }
 
-    async getProductsLimited({ filter, options }) {
+    async getLimited({ filter, options }) {
         return await this.model.paginate(filter, options);
     } 
 
     //Mostrar un producto segun ID
-    async getProductById(id) { 
-        return await this.model.findById(id);
+    async getBy(filter) { 
+        return await this.model.findById(filter);
     }
 
     //Actualizar un producto segun ID
-    async updateProduct(pid, updatedFields) {
+    async update(pid, updatedFields) {
         return await this.model.findOneAndUpdate(
             { _id: pid },
             { $set: updatedFields },
@@ -33,7 +33,7 @@ class ProductDaoMongo {
     }
 
     //Eliminar producto segun ID
-    async deleteProduct(pid) { 
+    async delete(pid) { 
         return await this.model.findByIdAndDelete(pid);
     }
 

@@ -6,22 +6,22 @@ class TicketDaoMongo {
     }
 
     //Crea un Ticket
-    async createTicket(ticket) {
+    async create(ticket) {
         return await this.model.create(ticket);
     }
 
     //Muestra todos los Tickets 
-    async getTickets() {
+    async get() {
         return await this.model.find();
     }
 
     //Muestra un ticket segun el filtro
-    async getTicket(filter) {
+    async getBy(filter) {
         return await this.model.findOne(filter);
     }
 
     //Mostrar un ticket segun ID
-    async getTicketById(id) {
+    async getById(id) {
         return await this.model.findById(id);
     }
 

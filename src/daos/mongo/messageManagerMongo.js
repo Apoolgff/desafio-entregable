@@ -7,20 +7,20 @@ class MessageDaoMongo {
     }
 
     //Muestra todos los mensajes
-    async getMessages() {
+    async get() {
         return await this.model.find();
     }
 
-    async getMessage(filter) {
+    async getBy(filter) {
         return await this.model.findOne(filter);
     }
 
     //Agrega un mensaje
-    async addMessage(user, message) {
+    async create(user, message) {
         return await this.model.create({ user, message });
     }
 
-    async getMessagesByUser(userEmail) {
+    async getByUser(userEmail) {
         return await this.model.findOne({ user: userEmail });
     }
 

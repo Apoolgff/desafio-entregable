@@ -4,11 +4,14 @@ const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const jwt = require('jsonwebtoken');
 const { configObject } = require('../config/index')
 
+const { productService, messageService, cartService } = require('../repositories/services')
+
+
 class ViewsController {
     constructor() {
-        this.productService = new ProductDaoMongo()
-        this.messageService = new MessageDaoMongo()
-        this.cartService = new CartDaoMongo()
+        this.productService = productService
+        this.messageService = messageService
+        this.cartService = cartService
     }
 
     login = async (req, res) => {

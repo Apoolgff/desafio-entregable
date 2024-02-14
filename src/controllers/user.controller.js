@@ -1,11 +1,12 @@
-const UserDaoMongo = require('../daos/mongo/userManagerMongo')
+//const UserDaoMongo = require('../daos/mongo/userManagerMongo')
+const { userService } = require('../repositories/services')
 const { createHash, isValidPassword } = require('../utils/hashPassword')
 const { createToken } = require('../utils/jwt');
 
 
 class UserController {
   constructor() {
-    this.userService = new UserDaoMongo()
+    this.userService = userService
   }
 
   getCurrentUser(req, res) {

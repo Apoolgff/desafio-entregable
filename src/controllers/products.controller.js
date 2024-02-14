@@ -1,8 +1,9 @@
-const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
+//const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
+const { productService } = require('../repositories/services')
 
 class ProductsController {
     constructor(){
-        this.productService = new ProductDaoMongo();
+        this.productService = productService
     }
 
     async getProducts(req, res) {
@@ -61,10 +62,10 @@ class ProductsController {
     
 
 
-    getProductById = async (req, res) => {
+    getProductBy = async (req, res) => {
         try {
             const productId = req.params.pid;
-            const product = await this.productService.getProductById(productId);
+            const product = await this.productService.getProductBy(productId);
             res.json({ product });//res.send({status: 'success', payload: product})
         } catch (error) {
             console.error(error.message);
@@ -72,7 +73,7 @@ class ProductsController {
         }
     }
 
-    addProduct = async (req, res) => {
+    createProduct = async (req, res) => {
         try {
             // Realiza las validaciones y manejo de errores aquí antes de llamar a addProduct en el service.
             const { title, description, price, code, stock, category, thumbnails } = req.body;
@@ -82,14 +83,14 @@ class ProductsController {
                 return res.status(400).send('Bad Request');
             }
     
-            const existingProduct = await this.productService.checkExistingProduct(code);
+            const existingProduct = await this.productService.getProductBy(code);
     
             if (existingProduct) {
                 console.error('El campo "code" ya está en uso.');
                 return res.status(400).send('Bad Request');
             }
     
-            const newProduct = await this.productService.addProduct({ 
+            const newProduct = await this.productService.createProduct({ 
                 title, 
                 description, 
                 price, 

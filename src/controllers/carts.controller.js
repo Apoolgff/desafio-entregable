@@ -4,14 +4,14 @@ const TicketDaoMongo = require('../daos/mongo/ticketManagerMongo')
 const UserDaoMongo = require('../daos/mongo/userManagerMongo')
 const { generateUniqueCode, calculateTotalAmount } = require('../helpers/cartHelper')
 
-
+const { cartService, ticketService } = require('../repositories/services')
 //const productService = new ProductDaoMongo()
 
 class CartController {
     constructor() {
-        this.cartService = new CartDaoMongo()
+        this.cartService = cartService
         this.productService = new ProductDaoMongo()
-        this.ticketService = new TicketDaoMongo()
+        this.ticketService = ticketService
         this.userService = new UserDaoMongo()
     }
 
@@ -48,7 +48,7 @@ class CartController {
                 throw new Error('El carrito no fue encontrado.');
             }
 
-            const product = await this.productService.getProductById(productId)
+            const product = await this.productService.getProductBy(productId)
             if (!product) {
                 throw new Error('El producto no fue encontrado.');
             }
@@ -134,7 +134,7 @@ class CartController {
             const failedProducts = [];
     
             for (const productData of products) {
-                const product = await this.productService.getProductById(productData.productId);
+                const product = await this.productService.getProductBy(productData.productId);
                 if (!product) {
                     return res.status(404).json({ message: `Producto ${productData.productId} no encontrado` });
                 }

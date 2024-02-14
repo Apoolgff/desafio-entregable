@@ -14,6 +14,7 @@ exports.configObject = {
   mongo_uri: process.env.MONGO_URI,
   jwt_secret_key: process.env.JWT_SECRET_KEY,
   cookie_secret_key: process.env.COOKIE_SECRET_KEY,
+  persistence: process.env.PERSISTENCE
 }
 
 exports.connectDB = async () => {

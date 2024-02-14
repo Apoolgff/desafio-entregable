@@ -10,10 +10,10 @@ const productsController = new ProductsController()
 productsRouter.get('/', productsController.getProductsLimited);
 
 //Mostrar producto segun ID
-productsRouter.get('/:pid', productsController.getProductById);
+productsRouter.get('/:pid', productsController.getProductBy);
 
 //Agregar producto
-productsRouter.post('/', productsController.addProduct);
+productsRouter.post('/', productsController.createProduct);
 
 //Modificar un producto segun su ID
 productsRouter.put('/:pid', productsController.updateProduct);
