@@ -142,12 +142,12 @@ class CartController {
                     product.stock -= productData.quantity;
                     await this.productService.updateProduct(product._id, product);
                 } else {
-                    failedProducts.push(productData); // Almacena el objeto del producto que no pudo ser comprado
+                    failedProducts.push(productData); 
                 }
             }
     
             if (failedProducts.length > 0) {
-                // Filtrar los productos que no se pudieron comprar
+
                 const remainingProducts = products.filter(productData => failedProducts.find(fp => fp.productId === productData.productId) === undefined);
                 await this.cartService.updateCart(cartId, remainingProducts);
                 return res.status(400).json({ message: 'Algunos productos no pudieron ser comprados', failedProducts });
@@ -161,7 +161,7 @@ class CartController {
                 const ticket = await this.ticketService.createTicket(ticketData);
                 console.log(ticketData.amount)
     
-                // Vaciar el carrito ya que todos los productos fueron comprados
+
                 await this.cartService.removeAllProducts(cartId);
     
                 return res.status(200).json({ message: 'Compra finalizada con éxito', ticket });

@@ -78,14 +78,12 @@ class ViewsController {
 
             //Verificar si no hay token
             if (!token) {
-                //Maneja el caso en el que el usuario no está autenticado
                 return res.redirect('/login'); // Redirigir al usuario al login
             }
 
-            //Decodificar el token para obtener la información del usuario
+            //Decodifica el token para obtener la información del usuario
             const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
 
-            //decodedToken contiene la información del usuario
 
             const result = await this.productService.getProductsLimited({ filter, options });
             const response = {

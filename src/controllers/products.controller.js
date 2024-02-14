@@ -75,7 +75,7 @@ class ProductsController {
 
     createProduct = async (req, res) => {
         try {
-            // Realiza las validaciones y manejo de errores aquí antes de llamar a addProduct en el service.
+            
             const { title, description, price, code, stock, category, thumbnails } = req.body;
     
             if (!title || !description || !price || !code || !stock || !category) {

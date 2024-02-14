@@ -1,7 +1,7 @@
 const socket = io();
 
 function createProduct() {
-  // Recopila datos del formulario
+  //Recopila datos del formulario
   const newProduct = {
     title: document.getElementById('title').value,
     description: document.getElementById('description').value,
@@ -12,10 +12,10 @@ function createProduct() {
     thumbnails: document.getElementById('thumbnails').value.split(','),
   };
 
-  // Emite el evento 'createProduct' con los datos del nuevo producto
+  //Emite el evento 'createProduct' con los datos del nuevo producto
   socket.emit('createProduct', newProduct);
 
-  // Limpia los campos del formulario despues de agregar el producto
+  //Limpia los campos del formulario despues de agregar el producto
   document.getElementById('title').value = '';
   document.getElementById('description').value = '';
   document.getElementById('code').value = '';
