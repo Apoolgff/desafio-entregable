@@ -59,7 +59,7 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            //Redirige a la página de inicio de sesion despues de un registro exitoso
+
             window.location.href = data.redirectUrl;
         } else {
             console.error('Error:', data.error);

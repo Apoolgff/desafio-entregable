@@ -30,7 +30,7 @@ class MessageDaoMongo {
         if (existingMessage) {
             await this.model.updateOne(
                 { user: userEmail },
-                { $push: { messages: { message } } } // Aquí debería ser { $push: { messages: { message: message } } }
+                { $push: { messages: { message } } }
             );
             return existingMessage;
         } else {

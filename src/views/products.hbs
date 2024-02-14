@@ -70,9 +70,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-  // Resto de tu código
   
-  // Agregar evento al botón de chat
   const chatButton = document.getElementById('chat-btn');
   if (chatButton) {
     chatButton.addEventListener('click', function () {
@@ -101,9 +99,9 @@
     const clearCartButton = document.querySelector('.clear-cart-btn');
     const cartElement = document.querySelector('.cart');
     const cartId = cartElement.dataset.cartId;
-    const totalAmountDisplay = document.createElement('p'); // Elemento para mostrar el total
+    const totalAmountDisplay = document.createElement('p'); 
 
-    // Agregar elemento para mostrar el total al carrito
+ 
     cartElement.appendChild(totalAmountDisplay);
 
     //Cargar el carrito al entrar
@@ -127,16 +125,15 @@
         const productId = this.getAttribute('data-product-id');
         const cartId = cartElement.dataset.cartId;
 
-        // Obtener el valor del campo de entrada de cantidad
         const quantityInput = document.getElementById(`quantity-input-${productId}`);
         const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
-          // Obtener el stock del producto
+
             const productStock = parseInt(this.getAttribute('data-product-stock'));
 
-            // Verificar si la cantidad ingresada es mayor que el stock disponible
+            //Verifica si la cantidad ingresada es mayor que el stock disponible
             if (quantity > productStock) {
                 alert('No hay suficiente stock disponible para agregar esta cantidad al carrito.');
-                return; // Salir de la función si no hay suficiente stock
+                return;
             }
 
         addToCart(productId, cartId, quantity);
@@ -148,7 +145,6 @@
     });
 
     //Agrega producto al carrito
-    // Modificar la función addToCart para aceptar la cantidad
     async function addToCart(productId, cartId, quantity) {
       try {
         console.log('Add to cart clicked for product ID:', productId, cartId);
@@ -165,7 +161,6 @@
         });
         const addToCartData = await addToCartResponse.json();
 
-        // Esperar un breve momento
         await new Promise(resolve => setTimeout(resolve, 500));
 
         const updatedCartResponse = await fetch(`/api/carts/${cartId}`);
@@ -250,10 +245,10 @@
 
           const productPrice = parseFloat(product.productId.price);
 
-      // Calcular el precio total del producto
+      //Calcula el precio total del producto
       const productTotalPrice = productPrice * product.quantity;
 
-      // Sumar el precio total del producto al precio total del carrito
+      //Suma el precio total del producto al precio total del carrito
       totalPrice += productTotalPrice;
 
 
@@ -277,11 +272,11 @@
       })
         .then(response => response.json())
         .then(data => {
-          // Después de eliminar, obtener la información actualizada del carrito
+          //Despues de eliminar, obtiene la información actualizada del carrito
           fetch(`/api/carts/${cartId}`)
             .then(response => response.json())
             .then(data => {
-              // Renderizar el carrito con la información actualizada
+
               renderCart(data.cart);
             })
             .catch(error => console.error('Error al obtener el carrito actualizado:', error));
@@ -300,27 +295,27 @@
 
     // Función para realizar la compra del carrito
     function purchaseCart(cartId) {
-      // Función modificada para vaciar el carrito y mostrar el total
+
       fetch(`/api/carts/${cartId}/purchase`, {
         method: 'POST',
         credentials: 'include',
       })
         .then(async response => {
           if (response.ok) {
-            // Vaciar el carrito
+            //Vacia el carrito
             renderCart({ products: [] });
-            // Mostrar alerta con el total
+
             alert(`Compra realizada con éxito`);
             
           } else {
             const errorData = await response.json();
             console.error('Error al realizar la compra:', errorData);
-            // Aquí podrías mostrar un mensaje de error al usuario
+
           }
         })
         .catch(error => {
           console.error('Error al realizar la compra:', error);
-          // Aquí podrías mostrar un mensaje de error al usuario
+
         });
     }
 

@@ -1,4 +1,4 @@
-const { configObject } = require('../config/index.js')
+const { configObject } = require('../config/index')
 
 let UserDao
 let ProductDao
@@ -6,7 +6,6 @@ let CartDao
 let MessageDao
 let TicketDao
 
-//USO FACTORY SOLO PARA DEJAR CONSTANCIA DE QUE SE HACERLO, SOLO USARE MONGO.
 
 switch (configObject.persistence) {
     case 'MONGO':
@@ -29,15 +28,14 @@ switch (configObject.persistence) {
 
     case 'FILE':
         //SOLO ESTAN ESTOS FILES PORQUE SON LOS QUE SE PIDIERON EN SU MOMENTO Y QUE YA NO USAMOS.
-        //EN ESTE CASO NO HARIA FALTA USAR FACTORY YA QUE SOLO USARE MONGO, PERO LO DEJO HECHO PARA QUE QUEDE CONSTANCIA QUE LO SE HACER
-
+        
         //const CartDaoMongo = require('./file/managers/cartManager')
         //CartDao = CartDaoMongo
 
         //const ProductDaoFile = require('./file/managers/productManager')
         //ProductDao = ProductDaoFile
 
-        break
+        break;
 
     default:
         break;

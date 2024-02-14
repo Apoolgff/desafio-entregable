@@ -2,12 +2,14 @@ const passport = require('passport');
 const userDaoMongo = require('../daos/mongo/userManagerMongo');
 const jwt = require('passport-jwt');
 
+
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 const { cookieExtractor, JWT_PRIVATE_KEY } = require('../utils/jwt');
 const { configObject } = require('./index')
 
 const userService = new userDaoMongo();
+
 
 exports.initializePassport = () => {
     const cookieExtractor = req => {
@@ -23,7 +25,7 @@ exports.initializePassport = () => {
         secretOrKey: configObject.jwt_secret_key,
     }, async (jwt_payload, done) => {
         try {
-            const user = await userService.getUser({ _id: jwt_payload.id });
+            const user = await userService.getBy({ _id: jwt_payload.id });
             if (!user) {
                 return done(null, false, { message: 'Usuario no encontrado' });
             }
