@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const messageList = document.getElementById('message-list');
             messageList.innerHTML = "";
 
-            //Unifica todos los mensajes en un solo array
             const allMessages = messages.reduce((accumulator, currentValue) => {
                 return accumulator.concat(currentValue.messages.map(msg => ({ user: currentValue.user, ...msg })));
             }, []);
+
 
             allMessages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 

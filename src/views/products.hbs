@@ -31,7 +31,8 @@
         <label for="quantity-input-{{_id}}">Cantidad:</label>
         <input type="number" id="quantity-input-{{_id}}" class="quantity-input" value="1" min="1">
 
-        <button class="add-to-cart-btn" data-product-id="{{_id}}" data-product-stock="{{stock}}" data-cart-id="{{user.cart.cartId._id}}">Agregar al carrito</button>
+        <button class="add-to-cart-btn" data-product-id="{{_id}}" data-product-stock="{{stock}}"
+          data-cart-id="{{user.cart.cartId._id}}">Agregar al carrito</button>
 
       </li>
       {{/each}}
@@ -70,14 +71,14 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-  
-  const chatButton = document.getElementById('chat-btn');
-  if (chatButton) {
-    chatButton.addEventListener('click', function () {
-      window.location.href = '/chat';
-    });
-  }
-});
+
+    const chatButton = document.getElementById('chat-btn');
+    if (chatButton) {
+      chatButton.addEventListener('click', function () {
+        window.location.href = '/chat';
+      });
+    }
+  });
 
   document.getElementById('logout-btn').addEventListener('click', function () {
     fetch('/api/session/logout', {
@@ -99,9 +100,9 @@
     const clearCartButton = document.querySelector('.clear-cart-btn');
     const cartElement = document.querySelector('.cart');
     const cartId = cartElement.dataset.cartId;
-    const totalAmountDisplay = document.createElement('p'); 
+    const totalAmountDisplay = document.createElement('p');
 
- 
+
     cartElement.appendChild(totalAmountDisplay);
 
     //Cargar el carrito al entrar
@@ -128,13 +129,13 @@
         const quantityInput = document.getElementById(`quantity-input-${productId}`);
         const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
 
-            const productStock = parseInt(this.getAttribute('data-product-stock'));
+        const productStock = parseInt(this.getAttribute('data-product-stock'));
 
-            //Verifica si la cantidad ingresada es mayor que el stock disponible
-            if (quantity > productStock) {
-                alert('No hay suficiente stock disponible para agregar esta cantidad al carrito.');
-                return;
-            }
+        //Verifica si la cantidad ingresada es mayor que el stock disponible
+        //if (quantity > productStock) {
+        //   alert('No hay suficiente stock disponible para agregar esta cantidad al carrito.');
+        //  return;
+        // }
 
         addToCart(productId, cartId, quantity);
       });
@@ -149,7 +150,7 @@
       try {
         console.log('Add to cart clicked for product ID:', productId, cartId);
 
-        
+
 
         const addToCartResponse = await fetch(`/api/carts/${cartId}/product/${productId}`, {
           method: 'POST',
@@ -245,11 +246,11 @@
 
           const productPrice = parseFloat(product.productId.price);
 
-      //Calcula el precio total del producto
-      const productTotalPrice = productPrice * product.quantity;
+          //Calcula el precio total del producto
+          const productTotalPrice = productPrice * product.quantity;
 
-      //Suma el precio total del producto al precio total del carrito
-      totalPrice += productTotalPrice;
+          //Suma el precio total del producto al precio total del carrito
+          totalPrice += productTotalPrice;
 
 
           cartList.appendChild(listItem);
@@ -294,30 +295,30 @@
     }
 
     // Función para realizar la compra del carrito
-    function purchaseCart(cartId) {
-
-      fetch(`/api/carts/${cartId}/purchase`, {
-        method: 'POST',
-        credentials: 'include',
-      })
-        .then(async response => {
-          if (response.ok) {
-            //Vacia el carrito
-            renderCart({ products: [] });
-
-            alert(`Compra realizada con éxito`);
-            
-          } else {
-            const errorData = await response.json();
-            console.error('Error al realizar la compra:', errorData);
-
-          }
-        })
-        .catch(error => {
-          console.error('Error al realizar la compra:', error);
-
+    async function purchaseCart(cartId) {
+    try {
+        const response = await fetch(`/api/carts/${cartId}/purchase`, {
+            method: 'POST',
+            credentials: 'include',
         });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            alert(`Compra realizada con éxito`);
+            setTimeout(() => {
+                location.reload();
+            }, 500); 
+        } else {
+            const errorData = await response.json();
+            alert('Algunos productos no pudieron ser comprados');
+            console.error('Error al realizar la compra:', errorData);
+        }
+    } catch (error) {
+        console.error('Error al realizar la compra:', error);
+        alert('Error al realizar la compra. Por favor, intenta de nuevo.');
     }
+}
+
 
 
   });

@@ -4,15 +4,15 @@ const TicketDaoMongo = require('../daos/mongo/ticketManagerMongo')
 const UserDaoMongo = require('../daos/mongo/userManagerMongo')
 const { generateUniqueCode, calculateTotalAmount } = require('../helpers/cartHelper')
 
-const { cartService, ticketService } = require('../repositories/services')
+const { cartService, ticketService, productService, userService } = require('../repositories/services')
 //const productService = new ProductDaoMongo()
 
 class CartController {
     constructor() {
         this.cartService = cartService
-        this.productService = new ProductDaoMongo()
+        this.productService = productService
         this.ticketService = ticketService
-        this.userService = new UserDaoMongo()
+        this.userService = userService
     }
 
     createCart = async (req, res) => {
@@ -118,8 +118,9 @@ class CartController {
             console.error(error.message);
             res.status(400).send('Bad Request');
         }
-    }
-
+    }  
+    
+    
     purchaseCart = async (req, res) => {
         try {
             const cartId = req.params.cid;
@@ -132,38 +133,41 @@ class CartController {
     
             const products = cart.products;
             const failedProducts = [];
-    
+            let totalAmount = 0;
+
             for (const productData of products) {
                 const product = await this.productService.getProductBy(productData.productId);
                 if (!product) {
                     return res.status(404).json({ message: `Producto ${productData.productId} no encontrado` });
                 }
-                if (product.stock >= productData.quantity) {
-                    product.stock -= productData.quantity;
-                    await this.productService.updateProduct(product._id, product);
-                } else {
-                    failedProducts.push(productData); 
+                if (product.stock === 0) {
+                    return res.status(400).json({ message: `No hay stock disponible para el producto ${product.name}` });
                 }
+                const purchaseQuantity = Math.min(product.stock, productData.quantity);
+                product.stock -= purchaseQuantity;
+                totalAmount += product.price * purchaseQuantity;
+                if (purchaseQuantity < productData.quantity) {
+                    failedProducts.push({ ...productData, quantity: productData.quantity - purchaseQuantity });
+                    productData.quantity -= purchaseQuantity; 
+                }
+                await this.productService.updateProduct(product._id, product);
             }
     
+            const ticketData = {
+                code: generateUniqueCode(),
+                purchase_datetime: new Date(),
+                amount: totalAmount.toFixed(2), 
+                purchaser: user.email,
+            };
+            const ticket = await this.ticketService.createTicket(ticketData);
+    
             if (failedProducts.length > 0) {
-
-                const remainingProducts = products.filter(productData => failedProducts.find(fp => fp.productId === productData.productId) === undefined);
-                await this.cartService.updateCart(cartId, remainingProducts);
-                return res.status(400).json({ message: 'Algunos productos no pudieron ser comprados', failedProducts });
+                
+                await this.cartService.updateCart(cartId, products);
+                return res.status(200).json({ message: 'Algunos productos no pudieron ser comprados', failedProducts });
             } else {
-                const ticketData = {
-                    code: generateUniqueCode(),
-                    purchase_datetime: new Date(),
-                    amount: calculateTotalAmount(cart.products),
-                    purchaser: user.email,
-                };
-                const ticket = await this.ticketService.createTicket(ticketData);
-                console.log(ticketData.amount)
-    
-
+                
                 await this.cartService.removeAllProducts(cartId);
-    
                 return res.status(200).json({ message: 'Compra finalizada con éxito', ticket });
             }
         } catch (error) {
@@ -171,6 +175,7 @@ class CartController {
             return res.status(500).json({ message: 'Error en el servidor' });
         }
     }
+    
     
     
 }

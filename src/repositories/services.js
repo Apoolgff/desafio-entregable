@@ -1,4 +1,4 @@
-const { ProductDao, CartDao, UserDao, TicketDao, MessageDao } = require('../daos/factory.js')
+const { ProductDao, CartDao, UserDao, TicketDao, MessageDao } = require('../daos/factory')
 const { ProductRepository }   = require('./products.repository')
 const { CartRepository } = require('./cart.repository')
 const { UserRepository } = require('./user.repository')

@@ -25,7 +25,7 @@ class MessageDaoMongo {
     }
 
     async addOrUpdateMessage(userEmail, message) {
-        const existingMessage = await this.getMessagesByUser(userEmail);
+        const existingMessage = await this.getByUser(userEmail);
     
         if (existingMessage) {
             await this.model.updateOne(

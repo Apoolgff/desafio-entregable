@@ -1,4 +1,4 @@
-const MessagesDaoMongo = require('../daos/mongo/messageManagerMongo');
+//const MessagesDaoMongo = require('../daos/mongo/messageManagerMongo');
 const { messageService } = require('../repositories/services');
 
 class MessagesController {
@@ -38,7 +38,7 @@ class MessagesController {
                 res.status(400).json({ error: 'El usuario y el mensaje son obligatorios' });
                 return;
             }
-            const newMessage = await this.messagesService.addMessage(user, message);
+            const newMessage = await this.messagesService.createMessage(user, message);
             res.status(201).json(newMessage);
         } catch (error) {
             console.error('Error al crear el mensaje:', error.message);
