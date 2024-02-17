@@ -20,7 +20,7 @@ class UserDaoMongo {
 
     // Crea un usuario
     async create(user) {
-        const cart = await cartService.createCart();
+        const cart = await cartService.create();
         user.cart = cart._id;
         return await this.model.create(user);
     }

@@ -9,7 +9,7 @@ exports.authorizationJwt = role => {
 };
 
 exports.authenticationJwtCurrent = (req, res, next) => {
-    passport.authenticate('current', { session: false }, (err, user) => {
+    passport.authenticate('jwt', { session: false }, (err, user) => {
         if (err || !user) {
             return res.status(401).json({ error: 'No auth token' });
         }

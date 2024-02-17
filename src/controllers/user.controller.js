@@ -9,9 +9,10 @@ class UserController {
     this.userService = userService
   }
 
-  getCurrentUser(req, res) {
+    getCurrentUser = async (req, res) => {
     try {
-      res.send({ message: 'Datos del usuario actual', user: req.user });
+      const userDto = await this.userService.getCurrent(req.user);
+      res.send({ message: 'Datos del usuario actual', user: userDto });
     } catch (error) {
       console.error('Error al obtener datos del usuario actual:', error.message);
       res.status(500).send('Error al obtener datos del usuario actual');
