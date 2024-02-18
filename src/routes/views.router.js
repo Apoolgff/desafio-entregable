@@ -1,6 +1,5 @@
 
 const { Router } = require('express');
-
 const router = Router();
 
 const ViewsController = require('../controllers/views.controller')

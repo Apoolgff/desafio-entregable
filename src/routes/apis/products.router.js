@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const productsRouter = Router();
-
+const { uploader } = require('../../utils/multer')//nuevo
 const ProductsController = require('../../controllers/products.controller')
 
 const productsController = new ProductsController()
@@ -13,7 +13,7 @@ productsRouter.get('/', productsController.getProductsLimited);
 productsRouter.get('/:pid', productsController.getProductBy);
 
 //Agregar producto
-productsRouter.post('/', productsController.createProduct);
+productsRouter.post('/', uploader.array('thumbnails', 5), productsController.createProduct);//cambiado
 
 //Modificar un producto segun su ID
 productsRouter.put('/:pid', productsController.updateProduct);
