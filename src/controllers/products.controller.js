@@ -91,7 +91,7 @@ class ProductsController {
                 return res.status(400).send('Bad Request');
             }
     
-            const existingProduct = await this.productService.getProductBy(code);
+            const existingProduct = await this.productService.getProductBy({code: code});
     
             if (existingProduct) {
                 console.error('El campo "code" ya está en uso.');

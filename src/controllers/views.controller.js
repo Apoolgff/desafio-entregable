@@ -7,6 +7,7 @@ const { configObject } = require('../config/index')
 const { productService, messageService, cartService } = require('../repositories/services')
 
 
+
 class ViewsController {
     constructor() {
         this.productService = productService
@@ -104,6 +105,18 @@ class ViewsController {
             console.error(error.message);
             res.status(500).send('Internal Server Error');
         }
+    }
+
+    manager = async (req, res) => {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.redirect('/login');
+        }
+        
+        const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
+        const products = await this.productService.getProducts();
+        res.render('manager', { title: 'Product Manager', style: 'realTimeProducts.css', body: 'manager', products, user:decodedToken });
     }
 
     cart = async (req, res) => {

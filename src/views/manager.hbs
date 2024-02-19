@@ -1,0 +1,198 @@
+{{#if user}}
+<div class="container">
+    <div class="product-container">
+        <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
+        <p><span>Rol:</span> {{user.role}}</p>
+
+        <button id="logout-btn">Logout</button>
+        {{/if}}
+        <h1>Administrador de Productos</h1>
+        <div class="page-container">
+            <div>
+                <h2>Eliminar producto por ID</h2>
+                <form id="deleteProductForm">
+                    <label for="productId">ID del Producto:</label>
+                    <input type="text" id="productId" name="productId" required>
+                    <button type="button" id="deleteProductBtn">Eliminar Producto</button>
+                </form>
+            </div>
+            <div>
+                <h2>Agregar un producto</h2>
+                <form id="createProductForm">
+                    <label for="title">Nombre del Producto:</label>
+                    <input type="text" id="title" name="title" required><br>
+
+                    <label for="description">Descripcion:</label>
+                    <input type="text" id="description" name="description" required><br>
+
+                    <label for="code">Codigo:</label>
+                    <input type="text" id="code" name="code" required><br>
+
+                    <label for="price">Precio:</label>
+                    <input type="number" id="price" name="price" required><br>
+
+                    <label for="stock">Stock:</label>
+                    <input type="number" id="stock" name="stock" required><br>
+
+                    <label for="category">Categoria:</label>
+                    <input type="text" id="category" name="category" required><br>
+
+                    <label for="thumbnails">Imagenes ("/images/laptop1.webp" para testear):</label>
+                    <input type="text" id="thumbnails" name="thumbnails" required><br>
+
+                    <button type="button" id="createProductBtn">Agregar Producto</button>
+                </form>
+            </div>
+            <div>
+                <h1>Lista de Productos</h1>
+                <ul class="products">
+                    {{#each products}}
+                    <li class="product-card">
+                        <strong>ID:</strong> {{_id}}<br>
+                        <strong>Title:</strong> {{title}}<br>
+                        <strong>Description:</strong> {{description}}<br>
+                        <strong>Code:</strong> {{code}}<br>
+                        <strong>Price:</strong> ${{price}}<br>
+                        <strong>Status:</strong> {{status}}<br>
+                        <strong>Stock:</strong> {{stock}}<br>
+                        <strong>Category:</strong> {{category}}<br>
+                        <strong>Thumbnails:</strong>
+                        <ul class="thumbnails">
+                            {{#each thumbnails}}
+                            <li><img class="image" src="{{this}}" alt="Thumbnail"></li>
+                            {{/each}}
+                        </ul>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+        <script src=""></script>
+        <script>
+            document.getElementById('logout-btn').addEventListener('click', function () {
+                fetch('/api/session/logout', {
+                    method: 'GET',
+                    credentials: 'include',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/login';
+                        } else {
+                            console.error('Error en el logout:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error en el logout:', error));
+            });
+
+            document.getElementById('deleteProductBtn').addEventListener('click', deleteProduct);
+
+            document.getElementById('createProductBtn').addEventListener('click', createProduct);
+
+            // manager-scripts.js
+
+            function deleteProduct() {
+                const productId = document.getElementById('productId').value;
+
+                fetch(`/api/products/${productId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Eliminación exitosa, actualiza la lista de productos
+                            const productElement = document.getElementById(`product_${productId}`);
+                            if (productElement) {
+                                productElement.remove();
+                            }
+                        } else {
+                            console.error('Error al eliminar el producto:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error al eliminar el producto:', error));
+
+                // Limpiar el campo del formulario después de eliminar el producto
+                document.getElementById('productId').value = '';
+            }
+
+            function createProduct() {
+                // Obtener los valores del formulario
+                const newProduct = {
+                    title: document.getElementById('title').value,
+                    description: document.getElementById('description').value,
+                    code: document.getElementById('code').value,
+                    price: parseFloat(document.getElementById('price').value),
+                    stock: parseInt(document.getElementById('stock').value),
+                    category: document.getElementById('category').value,
+                    thumbnails: document.getElementById('thumbnails').value.split(','), // Suponiendo que las URLs de las imágenes están separadas por comas
+                };
+
+                // Realizar la solicitud POST para agregar el producto
+                fetch('/api/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newProduct), // Convertir el objeto a JSON y enviarlo en el cuerpo de la solicitud
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Si la respuesta es exitosa, limpiar los campos del formulario
+                            document.getElementById('title').value = '';
+                            document.getElementById('description').value = '';
+                            document.getElementById('code').value = '';
+                            document.getElementById('price').value = '';
+                            document.getElementById('stock').value = '';
+                            document.getElementById('category').value = '';
+                            document.getElementById('thumbnails').value = '';
+
+                            // Actualizar la lista de productos en el frontend (opcional)
+                            //fetchProducts(); // Suponiendo que tienes una función fetchProducts() para actualizar la lista de productos
+                        } else {
+                            // Si la respuesta no es exitosa, mostrar un mensaje de error
+                            console.error('Error al crear el producto:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error al crear el producto:', error));
+            }
+            /*function fetchProducts() {
+                fetch('/api/products/all')
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); // Convertir la respuesta a formato JSON
+                        } else {
+                            throw new Error('Error al obtener los productos');
+                        }
+                    })
+                    .then(products => {
+                        // Limpiar la lista de productos existente en el frontend
+                        const productsList = document.querySelector('.products');
+                        productsList.innerHTML = '';
+
+                        // Iterar sobre la lista de productos recibida del servidor y agregar cada uno a la lista en el frontend
+                        products.forEach(product => {
+                            const li = document.createElement('li');
+                            li.classList.add('product-card');
+                            li.id = `product_${product._id}`;
+                            li.innerHTML = `
+                                <strong>ID:</strong> ${product._id}<br>
+                                <strong>Title:</strong> ${product.title}<br>
+                                <strong>Description:</strong> ${product.description}<br>
+                                <strong>Code:</strong> ${product.code}<br>
+                                <strong>Price:</strong> $${product.price}<br>
+                                <strong>Status:</strong> ${product.status}<br>
+                                <strong>Stock:</strong> ${product.stock}<br>
+                                <strong>Category:</strong> ${product.category}<br>
+                                <strong>Thumbnails:</strong>
+                                <ul class="thumbnails">
+                                ${product.thumbnails.map(thumbnail => `<li><img class="image" src="${thumbnail}" alt="Thumbnail"></li>`).join('')}
+                                </ul>
+                                `;
+
+                            productsList.appendChild(li);
+                        });
+                    })
+                    .catch(error => console.error('Error al obtener los productos:', error));
+            }*/
+
+
+
+        </script>

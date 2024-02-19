@@ -16,15 +16,17 @@ router.get('/register', handlePolicies(['PUBLIC']), viewsController.register);
 //Ruta para home (cambie la ruta de '/' a '/home' para que al entrar al localhost la primer pagina sea el login)
 router.get('/home', handlePolicies(['PUBLIC']), viewsController.home);
 
-// Ruta para realTimeProducts
+//Ruta para realTimeProducts
 router.get('/realtimeproducts', handlePolicies(['ADMIN']), viewsController.realTimeProducts);
 
 //Ruta para el chat
 router.get('/chat', handlePolicies(['USER']), viewsController.chat);
 
-// Ruta para productos
+//Ruta para productos
 router.get('/products', handlePolicies(['USER']), viewsController.products);
 
+//Ruta Administrador de productos (crud)
+router.get('/manager', handlePolicies(['ADMIN']), viewsController.manager);
 
 //Ruta para el carrito
 router.get('/carts/:cid', handlePolicies(['USER']), viewsController.cart);

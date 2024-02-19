@@ -20,7 +20,7 @@ class ProductDaoMongo {
 
     //Mostrar un producto segun ID
     async getBy(filter) { 
-        return await this.model.findById(filter);
+        return await this.model.findOne(filter);
     }
 
     //Actualizar un producto segun ID

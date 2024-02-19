@@ -45,7 +45,7 @@
                                     if (userData.user.role === 'user') {
                                         window.location.href = '/products'; //Redirige a /products si el usuario es un usuario normal
                                     } else if (userData.user.role === 'admin') {
-                                        window.location.href = '/realtimeproducts'; //Redirige a /realtimeproducts si el usuario es un administrador
+                                        window.location.href = '/manager'; //Redirige a /manager si el usuario es un administrador
                                     }
                                 } else {
                                     console.error('No se pudo obtener la información del usuario actual');
