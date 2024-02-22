@@ -120,7 +120,6 @@
 
             document.getElementById('updateProductBtn').addEventListener('click', updateProduct);
 
-            // manager-scripts.js
 
             function deleteProduct() {
                 const productId = document.getElementById('productId').value;
@@ -130,7 +129,7 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            // Eliminación exitosa, actualiza la lista de productos
+
                             const productElement = document.getElementById(`product_${productId}`);
                             if (productElement) {
                                 productElement.remove();
@@ -141,12 +140,12 @@
                     })
                     .catch(error => console.error('Error al eliminar el producto:', error));
 
-                // Limpiar el campo del formulario después de eliminar el producto
+
                 document.getElementById('productId').value = '';
             }
 
             function createProduct() {
-                // Obtener los valores del formulario
+
                 const title = document.getElementById('title').value;
                 const description = document.getElementById('description').value;
                 const code = document.getElementById('code').value;
@@ -155,10 +154,6 @@
                 const category = document.getElementById('category').value;
                 const thumbnailsInput = document.getElementById('thumbnails');
 
-                // Obtener el archivo seleccionado
-                //const thumbnailFile = thumbnailsInput.files[0];
-
-                // Crear un objeto FormData y agregar los datos del formulario y el archivo
                 const formData = new FormData();
                 formData.append('title', title);
                 formData.append('description', description);
@@ -166,21 +161,18 @@
                 formData.append('price', price);
                 formData.append('stock', stock);
                 formData.append('category', category);
-                //formData.append('thumbnails', thumbnailFile);
 
                 const thumbnailsFiles = thumbnailsInput.files;
                 for (let i = 0; i < thumbnailsFiles.length; i++) {
                     formData.append('thumbnails', thumbnailsFiles[i]);
                 }
 
-                // Realizar la solicitud POST para agregar el producto
                 fetch('/api/products', {
                     method: 'POST',
                     body: formData,
                 })
                     .then(response => {
                         if (response.ok) {
-                            // Si la respuesta es exitosa, limpiar los campos del formulario
                             document.getElementById('title').value = '';
                             document.getElementById('description').value = '';
                             document.getElementById('code').value = '';
@@ -189,10 +181,7 @@
                             document.getElementById('category').value = '';
                             document.getElementById('thumbnails').value = '';
 
-                            // Actualizar la lista de productos en el frontend (opcional)
-                            // fetchProducts(); // Suponiendo que tienes una función fetchProducts() para actualizar la lista de productos
                         } else {
-                            // Si la respuesta no es exitosa, mostrar un mensaje de error
                             console.error('Error al crear el producto:', response.statusText);
                         }
                     })
