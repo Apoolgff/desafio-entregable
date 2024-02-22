@@ -2,6 +2,7 @@
 const { userService } = require('../repositories/services')
 const { createHash, isValidPassword } = require('../utils/hashPassword')
 const { createToken } = require('../utils/jwt');
+const { sendMail } = require('../utils/sendMail')
 
 
 class UserController {
@@ -88,6 +89,19 @@ class UserController {
 
       // Crea un nuevo usuario
       const result = await this.userService.createUser(newUser);
+
+      //Envio del mail 
+      const to      = newUser.email
+      const subject = 'Mail de Registro'
+      const html    = `<div>
+          <h2>Su cuenta fue creada satisfactoriamente ${newUser.first_name} ${newUser.last_name}</h2>
+      </div>` 
+      try {
+        await sendMail(to, subject, html);
+      } catch (error) {
+        console.error('Error al enviar el correo electrónico:', error);
+        return res.status(500).send('Error al enviar el correo electrónico.');
+      }
 
       const token = createToken({ id: result._id })
 
