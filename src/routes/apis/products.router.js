@@ -16,10 +16,10 @@ productsRouter.get('/all', productsController.getProducts);
 productsRouter.get('/:pid', productsController.getProductBy);
 
 //Agregar producto
-productsRouter.post('/',/* uploader.array('thumbnails', 5),*/ productsController.createProduct);//cambiado
+productsRouter.post('/', uploader.array('thumbnails'), productsController.createProduct);//cambiado
 
 //Modificar un producto segun su ID
-productsRouter.put('/:pid', productsController.updateProduct);
+productsRouter.put('/:pid', uploader.array('updateThumbnails'), productsController.updateProduct);
 
 //Eliminar un producto segun su ID
 productsRouter.delete('/:pid', productsController.deleteProduct);

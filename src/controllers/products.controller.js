@@ -83,21 +83,16 @@ class ProductsController {
 
     createProduct = async (req, res) => {
         try {
-            
-            const { title, description, price, code, stock, category, thumbnails } = req.body;
+            const { title, description, price, code, stock, category } = req.body;
     
-            if (!title || !description || !price || !code || !stock || !category) {
-                console.error('Todos los campos son obligatorios.');
+            if (!req.files || !req.files.length) {
+                console.error('No se proporcionó ningún archivo.');
                 return res.status(400).send('Bad Request');
             }
     
-            const existingProduct = await this.productService.getProductBy({code: code});
+            const thumbnails = req.files.map(file => `/images/${file.filename}`);
     
-            if (existingProduct) {
-                console.error('El campo "code" ya está en uso.');
-                return res.status(400).send('Bad Request');
-            }
-    
+            // Crear el producto con la ruta de la imagen
             const newProduct = await this.productService.createProduct({ 
                 title, 
                 description, 
@@ -105,7 +100,8 @@ class ProductsController {
                 code, 
                 stock, 
                 category,
-                thumbnails });
+                thumbnails, // Utilizar la ruta del archivo como thumbnails
+            });
     
             res.json({ product: newProduct });
         } catch (error) {
@@ -113,6 +109,7 @@ class ProductsController {
             res.status(400).send('Bad Request');
         }
     }
+    
     
 
     updateProduct = async (req, res) => {

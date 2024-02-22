@@ -37,10 +37,40 @@
                     <label for="category">Categoria:</label>
                     <input type="text" id="category" name="category" required><br>
 
-                    <label for="thumbnails">Imagenes ("/images/laptop1.webp" para testear):</label>
-                    <input type="text" id="thumbnails" name="thumbnails" required><br>
+
+                    <label for="thumbnails">Imagenes:</label>
+                    <input type="file" id="thumbnails" name="thumbnails" multiple required><br>
+
+                    <!--<label for="thumbnails">Imagenes ("/images/laptop1.webp" para testear):</label>
+                    <input type="text" id="thumbnails" name="thumbnails" required><br>-->
 
                     <button type="button" id="createProductBtn">Agregar Producto</button>
+                </form>
+            </div>
+            <div>
+                <h2>Modificar un producto por ID</h2>
+                <form id="updateProductForm">
+                    <label for="updateProductId">ID del Producto (requerido):</label>
+                    <input type="text" id="updateProductId" name="updateProductId" required><br>
+                    <label for="updateTitle">Nuevo Nombre del Producto:</label>
+                    <input type="text" id="updateTitle" name="updateTitle"><br>
+                    <label for="updateDescription">Nueva Descripción:</label>
+                    <input type="text" id="updateDescription" name="updateDescription"><br>
+                    <label for="updateCode">Nuevo Código:</label>
+                    <input type="text" id="updateCode" name="updateCode"><br>
+                    <label for="updatePrice">Nuevo Precio:</label>
+                    <input type="number" id="updatePrice" name="updatePrice"><br>
+                    <label for="updateStock">Nuevo Stock:</label>
+                    <input type="number" id="updateStock" name="updateStock"><br>
+                    <label for="updateCategory">Nueva Categoría:</label>
+                    <input type="text" id="updateCategory" name="updateCategory"><br>
+                    <!-- <label for="updateThumbnails">Nuevas Imágenes:</label>
+                    <input type="text" id="updateThumbnails" name="updateThumbnails"><br>-->
+                    <label for="updateThumbnails">Nuevas Imágenes:</label>
+                    <input type="file" id="updateThumbnails" name="updateThumbnails" multiple><br>
+
+
+                    <button type="button" id="updateProductBtn">Actualizar Producto</button>
                 </form>
             </div>
             <div>
@@ -88,6 +118,8 @@
 
             document.getElementById('createProductBtn').addEventListener('click', createProduct);
 
+            document.getElementById('updateProductBtn').addEventListener('click', updateProduct);
+
             // manager-scripts.js
 
             function deleteProduct() {
@@ -115,23 +147,36 @@
 
             function createProduct() {
                 // Obtener los valores del formulario
-                const newProduct = {
-                    title: document.getElementById('title').value,
-                    description: document.getElementById('description').value,
-                    code: document.getElementById('code').value,
-                    price: parseFloat(document.getElementById('price').value),
-                    stock: parseInt(document.getElementById('stock').value),
-                    category: document.getElementById('category').value,
-                    thumbnails: document.getElementById('thumbnails').value.split(','), // Suponiendo que las URLs de las imágenes están separadas por comas
-                };
+                const title = document.getElementById('title').value;
+                const description = document.getElementById('description').value;
+                const code = document.getElementById('code').value;
+                const price = parseFloat(document.getElementById('price').value);
+                const stock = parseInt(document.getElementById('stock').value);
+                const category = document.getElementById('category').value;
+                const thumbnailsInput = document.getElementById('thumbnails');
+
+                // Obtener el archivo seleccionado
+                //const thumbnailFile = thumbnailsInput.files[0];
+
+                // Crear un objeto FormData y agregar los datos del formulario y el archivo
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('description', description);
+                formData.append('code', code);
+                formData.append('price', price);
+                formData.append('stock', stock);
+                formData.append('category', category);
+                //formData.append('thumbnails', thumbnailFile);
+
+                const thumbnailsFiles = thumbnailsInput.files;
+                for (let i = 0; i < thumbnailsFiles.length; i++) {
+                    formData.append('thumbnails', thumbnailsFiles[i]);
+                }
 
                 // Realizar la solicitud POST para agregar el producto
                 fetch('/api/products', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newProduct), // Convertir el objeto a JSON y enviarlo en el cuerpo de la solicitud
+                    body: formData,
                 })
                     .then(response => {
                         if (response.ok) {
@@ -145,7 +190,7 @@
                             document.getElementById('thumbnails').value = '';
 
                             // Actualizar la lista de productos en el frontend (opcional)
-                            //fetchProducts(); // Suponiendo que tienes una función fetchProducts() para actualizar la lista de productos
+                            // fetchProducts(); // Suponiendo que tienes una función fetchProducts() para actualizar la lista de productos
                         } else {
                             // Si la respuesta no es exitosa, mostrar un mensaje de error
                             console.error('Error al crear el producto:', response.statusText);
@@ -153,46 +198,65 @@
                     })
                     .catch(error => console.error('Error al crear el producto:', error));
             }
-            /*function fetchProducts() {
-                fetch('/api/products/all')
+
+
+
+            function updateProduct() {
+                const productId = document.getElementById('updateProductId').value;
+
+                const updatedProduct = {};
+
+                const titleInput = document.getElementById('updateTitle');
+                if (titleInput.value.trim() !== '') {
+                    updatedProduct.title = titleInput.value;
+                }
+
+                const descriptionInput = document.getElementById('updateDescription');
+                if (descriptionInput.value.trim() !== '') {
+                    updatedProduct.description = descriptionInput.value;
+                }
+
+                const codeInput = document.getElementById('updateCode');
+                if (codeInput.value.trim() !== '') {
+                    updatedProduct.code = codeInput.value;
+                }
+
+                const priceInput = document.getElementById('updatePrice');
+                if (priceInput.value.trim() !== '') {
+                    updatedProduct.price = parseFloat(priceInput.value);
+                }
+
+                const stockInput = document.getElementById('updateStock');
+                if (stockInput.value.trim() !== '') {
+                    updatedProduct.stock = parseInt(stockInput.value);
+                }
+
+                const categoryInput = document.getElementById('updateCategory');
+                if (categoryInput.value.trim() !== '') {
+                    updatedProduct.category = categoryInput.value;
+                }
+
+                const thumbnailsInput = document.getElementById('updateThumbnails');
+                if (thumbnailsInput.value.trim() !== '') {
+                    updatedProduct.thumbnails = thumbnailsInput.files;
+                }
+
+                fetch(`/api/products/${productId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedProduct),
+                })
                     .then(response => {
                         if (response.ok) {
-                            return response.json(); // Convertir la respuesta a formato JSON
+                            // Actualización exitosa, puedes realizar alguna acción adicional si lo deseas
+                            console.log('Producto actualizado exitosamente');
                         } else {
-                            throw new Error('Error al obtener los productos');
+                            console.error('Error al actualizar el producto:', response.statusText);
                         }
                     })
-                    .then(products => {
-                        // Limpiar la lista de productos existente en el frontend
-                        const productsList = document.querySelector('.products');
-                        productsList.innerHTML = '';
-
-                        // Iterar sobre la lista de productos recibida del servidor y agregar cada uno a la lista en el frontend
-                        products.forEach(product => {
-                            const li = document.createElement('li');
-                            li.classList.add('product-card');
-                            li.id = `product_${product._id}`;
-                            li.innerHTML = `
-                                <strong>ID:</strong> ${product._id}<br>
-                                <strong>Title:</strong> ${product.title}<br>
-                                <strong>Description:</strong> ${product.description}<br>
-                                <strong>Code:</strong> ${product.code}<br>
-                                <strong>Price:</strong> $${product.price}<br>
-                                <strong>Status:</strong> ${product.status}<br>
-                                <strong>Stock:</strong> ${product.stock}<br>
-                                <strong>Category:</strong> ${product.category}<br>
-                                <strong>Thumbnails:</strong>
-                                <ul class="thumbnails">
-                                ${product.thumbnails.map(thumbnail => `<li><img class="image" src="${thumbnail}" alt="Thumbnail"></li>`).join('')}
-                                </ul>
-                                `;
-
-                            productsList.appendChild(li);
-                        });
-                    })
-                    .catch(error => console.error('Error al obtener los productos:', error));
-            }*/
-
-
+                    .catch(error => console.error('Error al actualizar el producto:', error));
+            }
 
         </script>
