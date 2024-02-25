@@ -1,4 +1,4 @@
-const { fakerES } = require('@faker-js/faker');
+const { fakerES } = require('@faker-js/faker'); 
 
 
 const generateMockProducts = () => {
