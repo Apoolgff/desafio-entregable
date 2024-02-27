@@ -5,6 +5,14 @@ const cartsRouter = require ('./apis/cart.router')
 const sessionRouter = require ('./apis/session.router')
 const viewsRouter = require ('./views.router')
 const mockRouter = require('./apis/mock.router')
+const compression = require('express-compression')
+
+router.use(compression({
+    brotli:{
+        enabled: true,
+        zlib: {}
+    }
+}))
 
 router.use('/api/products', productsRouter);
 router.use('/api/carts', cartsRouter);

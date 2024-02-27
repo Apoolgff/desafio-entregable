@@ -11,4 +11,12 @@ mockRouter.get('/mockingproducts', (req, res) =>{
     res.json({Productos: products});
 })
 
+mockRouter.get('/compress', (req, res)=>{
+    let string = 'string ridiculamente largo'
+    for(let i=0; i<5e3;i++){
+        string += 'string ridiculamente largo'
+    }
+    res.send(string)
+})
+
 module.exports = mockRouter

@@ -1,8 +1,11 @@
 //const UserDaoMongo = require('../daos/mongo/userManagerMongo')
-const { userService } = require('../repositories/services')
+const { userService } = require('../repositories/services');
+const { EErrors } = require('../services/errors/enums');
+const { generateUserErrorInfo } = require('../services/errors/generateUserErrorInfo');
 const { createHash, isValidPassword } = require('../utils/hashPassword')
 const { createToken } = require('../utils/jwt');
 const { sendMail } = require('../utils/sendMail')
+const CustomError  = require('../services/errors/CustomError')
 
 
 class UserController {
@@ -10,7 +13,7 @@ class UserController {
     this.userService = userService
   }
 
-    getCurrentUser = async (req, res) => {
+  getCurrentUser = async (req, res) => {
     try {
       const userDto = await this.userService.getCurrent(req.user);
       res.send({ message: 'Datos del usuario actual', user: userDto });
@@ -64,15 +67,24 @@ class UserController {
     })
   }
 
-  userRegister = async (req, res) => {
-    const { first_name, last_name, email, password, confirmPassword, age, role } = req.body;
-
-    const existingUser = await this.userService.getUser({ email });
-    if (existingUser) {
-      console.error('Ese Email ya esta en uso.');
-      return { error: 'Ese Email ya está en uso.' };
-    }
+  userRegister = async (req, res, next) => {
     try {
+      const { first_name, last_name, email, password, confirmPassword, age, role } = req.body;
+
+      if(!first_name || !last_name || !email || !age){
+        CustomError.createError({
+          name: 'User creation error',
+          cause: generateUserErrorInfo({first_name, last_name, email, age}),
+          message: 'Error trying to register user',
+          code: EErrors.INVALID_TYPES_ERROR
+        })
+      }
+      const existingUser = await this.userService.getUser({ email });
+      if (existingUser) {
+        console.error('Ese Email ya esta en uso.');
+        return { error: 'Ese Email ya está en uso.' };
+      }
+
       // Verifica si la contraseña y su confirmación coinciden
       if (password !== confirmPassword) {
         return res.send('Las contraseñas no coinciden');
@@ -91,11 +103,11 @@ class UserController {
       const result = await this.userService.createUser(newUser);
 
       //Envio del mail 
-      const to      = newUser.email
+      const to = newUser.email
       const subject = 'Mail de Registro'
-      const html    = `<div>
+      const html = `<div>
           <h2>Su cuenta fue creada satisfactoriamente ${newUser.first_name} ${newUser.last_name}</h2>
-      </div>` 
+      </div>`
       try {
         await sendMail(to, subject, html);
       } catch (error) {
@@ -120,8 +132,9 @@ class UserController {
       })
 
     } catch (error) {
-      console.error('Error al registrar usuario:', error.message);
-      res.send('Error al registrar usuario. Inténtalo de nuevo.');
+      /*console.error('Error al registrar usuario:', error.message);
+      res.send('Error al registrar usuario. Inténtalo de nuevo.');*/
+      next(error)
     }
   }
 }
