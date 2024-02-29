@@ -112,7 +112,7 @@ class ProductsController {
                 code, 
                 stock, 
                 category,
-                thumbnails, // Utilizar la ruta del archivo como thumbnails
+                thumbnails, 
             });
     
             res.json({ product: newProduct });

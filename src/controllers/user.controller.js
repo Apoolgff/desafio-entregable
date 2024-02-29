@@ -85,7 +85,7 @@ class UserController {
         return { error: 'Ese Email ya está en uso.' };
       }
 
-      // Verifica si la contraseña y su confirmación coinciden
+      //Verifica si la contraseña y si confirmación coinciden
       if (password !== confirmPassword) {
         return res.send('Las contraseñas no coinciden');
       }
@@ -99,10 +99,10 @@ class UserController {
         role
       }
 
-      // Crea un nuevo usuario
+      //Crea un nuevo usuario
       const result = await this.userService.createUser(newUser);
 
-      //Envio del mail 
+      //Envio del mail al registrar el usuario
       const to = newUser.email
       const subject = 'Mail de Registro'
       const html = `<div>
