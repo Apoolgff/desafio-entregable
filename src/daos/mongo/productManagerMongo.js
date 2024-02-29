@@ -23,6 +23,10 @@ class ProductDaoMongo {
         return await this.model.findOne(filter);
     }
 
+    async getById(productId){
+        return await this.model.findById({ _id: productId })
+    }
+
     //Actualizar un producto segun ID
     async update(pid, updatedFields) {
         return await this.model.findOneAndUpdate(

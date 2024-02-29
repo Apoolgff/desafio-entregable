@@ -7,6 +7,10 @@ exports.handleError = (err, req, res, next) => {
             return res.status(400).send({status: 'error', error: err.message})
             break;
 
+        case EErrors.CART_OPERATION_ERROR:
+            return res.status(400).send({status: 'error', error: err.message})
+            break;
+
         default:
             return res.status(500).send({status: 'error', error: 'server error'})
             break;

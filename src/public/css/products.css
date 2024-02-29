@@ -68,6 +68,21 @@ body {
   #chat-btn:hover {
     background-color: #0f0d89;
   }
+
+  .purchase-btn{
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0db34d; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+
+  .purchase-btn:hover{
+    background-color: #12dd60; 
+  }
   
   .products ul {
     list-style-type: none;

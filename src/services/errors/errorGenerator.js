@@ -20,19 +20,17 @@ const generateProductErrorInfo = (product) => {
     `
 }
 
-const generateCartErrorInfo = (product) => {
-    return `Error occurred while adding the product to the cart.
-        Product details:
-        *title: ${product.title}
-        *price: ${product.price}
-        *code: ${product.code}
-        *quantity: ${product.quantity}
-    `
+const generatePurchaseCartErrorInfo = (product, stock, quantity) => {
+    return `Error processing cart purchase. Please check the following:
+        *Product: ${product}
+        *Quantity to purchase: ${quantity}
+        *Stock: ${stock}
+    `;
 }
 
 
 module.exports = {
     generateUserErrorInfo,
     generateProductErrorInfo,
-    generateCartErrorInfo
+    generatePurchaseCartErrorInfo
 }
