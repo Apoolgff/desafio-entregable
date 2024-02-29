@@ -1,7 +1,7 @@
 //const UserDaoMongo = require('../daos/mongo/userManagerMongo')
 const { userService } = require('../repositories/services');
 const { EErrors } = require('../services/errors/enums');
-const { generateUserErrorInfo } = require('../services/errors/generateUserErrorInfo');
+const { generateUserErrorInfo } = require('../services/errors/errorGenerator');
 const { createHash, isValidPassword } = require('../utils/hashPassword')
 const { createToken } = require('../utils/jwt');
 const { sendMail } = require('../utils/sendMail')

@@ -1,5 +1,8 @@
 //const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
 const { productService } = require('../repositories/services')
+const { EErrors } = require('../services/errors/enums');
+const { generateProductErrorInfo } = require('../services/errors/errorGenerator');
+const CustomError  = require('../services/errors/CustomError')
 
 class ProductsController {
     constructor(){
@@ -81,7 +84,7 @@ class ProductsController {
         }
     }
 
-    createProduct = async (req, res) => {
+    createProduct = async (req, res, next) => {
         try {
             const { title, description, price, code, stock, category } = req.body;
     
@@ -89,6 +92,15 @@ class ProductsController {
                 console.error('No se proporcionó ningún archivo.');
                 return res.status(400).send('Bad Request');
             }
+
+            if(!title || !description || !price || !code || !stock || !category){
+                CustomError.createError({
+                  name: 'Product creation error',
+                  cause: generateProductErrorInfo({title, description, price, code, stock, category}),
+                  message: 'Error trying to create product',
+                  code: EErrors.INVALID_TYPES_ERROR
+                })
+              }
     
             const thumbnails = req.files.map(file => `/images/${file.filename}`);
     
@@ -105,8 +117,9 @@ class ProductsController {
     
             res.json({ product: newProduct });
         } catch (error) {
-            console.error(error.message);
-            res.status(400).send('Bad Request');
+            //console.error(error.message);
+            //res.status(400).send('Bad Request');
+            next(error)
         }
     }
     

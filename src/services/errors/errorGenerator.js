@@ -1,0 +1,38 @@
+const generateUserErrorInfo = (user) => {
+    return `One or more properties were incomplete or not valid.
+        list of require properties:
+        *first_name: needs to be a String. recived ${user.first_name}
+        *last_name: needs to be a String. recived ${user.last_name}
+        *email: needs to be a String. recived ${user.email}
+        *age: needs to be a Number. recived ${user.age}
+    `
+}
+
+const generateProductErrorInfo = (product) => {
+    return `One or more properties were incomplete or not valid.
+        list of require properties:
+        *title: needs to be a String. recived ${product.title}
+        *description: needs to be a String. recived ${product.description}
+        *price: needs to be a Number. recived ${product.price}
+        *code: needs to be a String. recived ${product.code}
+        *stock: needs to be a Number. recived ${product.stock}
+        *category: needs to be a String. recived ${product.category}
+    `
+}
+
+const generateCartErrorInfo = (product) => {
+    return `Error occurred while adding the product to the cart.
+        Product details:
+        *title: ${product.title}
+        *price: ${product.price}
+        *code: ${product.code}
+        *quantity: ${product.quantity}
+    `
+}
+
+
+module.exports = {
+    generateUserErrorInfo,
+    generateProductErrorInfo,
+    generateCartErrorInfo
+}
