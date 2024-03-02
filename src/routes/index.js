@@ -4,8 +4,9 @@ const productsRouter = require('./apis/products.router')
 const cartsRouter = require ('./apis/cart.router')
 const sessionRouter = require ('./apis/session.router')
 const viewsRouter = require ('./views.router')
-const mockRouter = require('./apis/mock.router')
+const testRouter = require('./apis/test.router')
 const compression = require('express-compression')
+const { addLogger, logger } = require('../utils/logger');
 
 router.use(compression({
     brotli:{
@@ -14,12 +15,15 @@ router.use(compression({
     }
 }))
 
+router.use(addLogger);
+
 router.use('/api/products', productsRouter);
 router.use('/api/carts', cartsRouter);
 router.use('/api/session', sessionRouter)
 router.use('/', viewsRouter);
 
-router.use('/test', mockRouter)
+router.use('/test', testRouter)
+
 
 //ERROR QUE ME OBLIGA A USAR LA RUTA EXACTA, NO LO NECESITO POR AHORA PORQUE AL IR A LA RUTA 'http://localhost:8080/' ME DA ERROR
 //SI NO LA UTILIZO ME LLEVA AL LOGIN AL COLOCAR DICHA RUTA QUE ES LO QUE QUIERO.
@@ -28,7 +32,7 @@ router.use('/test', mockRouter)
 })*/ 
 
 router.use((err, req, res, next)=>{
-    console.log(err)
+    req.logger.error(err.message)
     res.status(500).send('Error Server')
 })
 

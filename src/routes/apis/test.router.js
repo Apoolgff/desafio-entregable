@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const { generateMockProducts } = require('../../utils/generateProducts')
-const mockRouter = Router();
+const testRouter = Router();
 
-mockRouter.get('/mockingproducts', (req, res) =>{
+testRouter.get('/mockingproducts', (req, res) =>{
     let products = []
 
     for(let i = 0; i < 100; i++){
@@ -11,7 +11,7 @@ mockRouter.get('/mockingproducts', (req, res) =>{
     res.json({Productos: products});
 })
 
-mockRouter.get('/compress', (req, res)=>{
+testRouter.get('/compress', (req, res)=>{
     let string = 'string ridiculamente largo'
     for(let i=0; i<5e3;i++){
         string += 'string ridiculamente largo'
@@ -19,4 +19,10 @@ mockRouter.get('/compress', (req, res)=>{
     res.send(string)
 })
 
-module.exports = mockRouter
+testRouter.get('/loggerTest', (req, res) => {
+    // Ejemplo de uso del logger
+    req.logger.info('Ruta /loggerTest accedida');
+    res.send('Logger test endpoint');
+});
+
+module.exports = testRouter

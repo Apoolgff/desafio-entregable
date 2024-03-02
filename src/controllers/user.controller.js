@@ -6,6 +6,7 @@ const { createHash, isValidPassword } = require('../utils/hashPassword')
 const { createToken } = require('../utils/jwt');
 const { sendMail } = require('../utils/sendMail')
 const CustomError  = require('../services/errors/CustomError')
+const { logger } = require('../utils/logger')
 
 
 class UserController {
@@ -81,7 +82,8 @@ class UserController {
       }
       const existingUser = await this.userService.getUser({ email });
       if (existingUser) {
-        console.error('Ese Email ya esta en uso.');
+        //console.error('Ese Email ya esta en uso.');
+        req.logger.error('Ese Email ya esta en uso.')
         return { error: 'Ese Email ya está en uso.' };
       }
 

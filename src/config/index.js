@@ -23,3 +23,5 @@ exports.connectDB = async () => {
     await connect(process.env.MONGO_URI)
     console.log('Base de datos conectada')
   }
+
+exports.mode = mode;
