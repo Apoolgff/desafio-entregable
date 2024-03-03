@@ -59,7 +59,7 @@ const logger = mode === 'production' ? productionLogger : developmentLogger;
 
 const addLogger = (req, res, next) => {
     req.logger = logger;
-    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`);
+    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`); 
     req.logger.info(`${mode}`)
     next();
 };
