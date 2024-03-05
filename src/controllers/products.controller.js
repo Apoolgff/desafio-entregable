@@ -3,6 +3,7 @@ const { productService } = require('../repositories/services')
 const { EErrors } = require('../services/errors/enums');
 const { generateProductErrorInfo } = require('../services/errors/errorGenerator');
 const CustomError  = require('../services/errors/CustomError')
+const { logger } = require('../utils/logger')
 
 class ProductsController {
     constructor(){
@@ -18,7 +19,7 @@ class ProductsController {
                 return products;
             }
         } catch (error) {
-            console.error('Error al obtener los productos:', error.message);
+            logger.error('Error al obtener los productos:', error.message);
             if (res) {
                 res.status(500).json({ error: 'Error al obtener los productos' });
             } else {
@@ -66,7 +67,7 @@ class ProductsController {
     
             res.json(response);
         } catch (error) {
-            console.error(error.message);
+            logger.error(error.message);
             res.status(500).send('Internal Server Error');
         }
     }
@@ -79,7 +80,7 @@ class ProductsController {
             const product = await this.productService.getProductBy(productId);
             res.json({ product });//res.send({status: 'success', payload: product})
         } catch (error) {
-            console.error(error.message);
+            logger.error(error.message);
             res.status(404).send('Product Not Found');
         }
     }
@@ -89,7 +90,7 @@ class ProductsController {
             const { title, description, price, code, stock, category } = req.body;
     
             if (!req.files || !req.files.length) {
-                console.error('No se proporcionó ningún archivo.');
+                logger.error('No se proporcionó ningún archivo.');
                 return res.status(400).send('Bad Request');
             }
 
@@ -117,7 +118,7 @@ class ProductsController {
     
             res.json({ product: newProduct });
         } catch (error) {
-            //console.error(error.message);
+            //logger.error(error.message);
             //res.status(400).send('Bad Request');
             next(error)
         }
@@ -131,7 +132,7 @@ class ProductsController {
             const updatedProduct = await this.productService.updateProduct(productId, req.body);
             res.json({ product: updatedProduct });//res.send({status: 'success', payload: updatedProduct})
         } catch (error) {
-            console.error(error.message);
+            logger.error(error.message);
             res.status(404).send('Product Not Found');
         }
     }
@@ -147,7 +148,7 @@ class ProductsController {
                 res.status(404).send('Product Not Found');
             }
         } catch (error) {
-            console.error(error.message);
+            logger.error(error.message);
             res.status(500).send('Internal Server Error');
         }
     }

@@ -1,5 +1,6 @@
 //const MessagesDaoMongo = require('../daos/mongo/messageManagerMongo');
 const { messageService } = require('../repositories/services');
+const { logger } = require('../utils/logger')
 
 class MessagesController {
     constructor() {
@@ -11,7 +12,7 @@ class MessagesController {
             const messages = await this.messagesService.getMessages();
             res.json(messages);
         } catch (error) {
-            console.error('Error al obtener los mensajes:', error.message);
+            logger.error('Error al obtener los mensajes:', error.message);
             res.status(500).json({ error: 'Error al obtener los mensajes' });
         }
     }
@@ -26,7 +27,7 @@ class MessagesController {
                 res.json(message);
             }
         } catch (error) {
-            console.error('Error al obtener el mensaje:', error.message);
+            logger.error('Error al obtener el mensaje:', error.message);
             res.status(500).json({ error: 'Error al obtener el mensaje' });
         }
     }
@@ -41,7 +42,7 @@ class MessagesController {
             const newMessage = await this.messagesService.createMessage(user, message);
             res.status(201).json(newMessage);
         } catch (error) {
-            console.error('Error al crear el mensaje:', error.message);
+            logger.error('Error al crear el mensaje:', error.message);
             res.status(500).json({ error: 'Error al crear el mensaje' });
         }
     }
@@ -52,7 +53,7 @@ class MessagesController {
             const messages = await this.messagesService.getMessagesByUser(userEmail);
             res.json(messages);
         } catch (error) {
-            console.error('Error al obtener los mensajes del usuario:', error.message);
+            logger.error('Error al obtener los mensajes del usuario:', error.message);
             res.status(500).json({ error: 'Error al obtener los mensajes del usuario' });
         }
     }
@@ -67,7 +68,7 @@ class MessagesController {
             const updatedMessage = await this.messagesService.addOrUpdateMessage(userEmail, message);
             res.json(updatedMessage);
         } catch (error) {
-            console.error('Error al agregar o actualizar el mensaje:', error.message);
+            logger.error('Error al agregar o actualizar el mensaje:', error.message);
             res.status(500).json({ error: 'Error al agregar o actualizar el mensaje' });
         }
     }

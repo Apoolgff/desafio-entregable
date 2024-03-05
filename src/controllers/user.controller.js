@@ -19,7 +19,7 @@ class UserController {
       const userDto = await this.userService.getCurrent(req.user);
       res.send({ message: 'Datos del usuario actual', user: userDto });
     } catch (error) {
-      console.error('Error al obtener datos del usuario actual:', error.message);
+      logger.error('Error al obtener datos del usuario actual:', error.message);
       res.status(500).send('Error al obtener datos del usuario actual');
     }
   }
@@ -29,7 +29,7 @@ class UserController {
       res.clearCookie('token');
       res.status(200).json({ status: 'success', message: 'Logout successful' });
     } catch (error) {
-      console.error('Error al cerrar sesión:', error.message);
+      logger.error('Error al cerrar sesión:', error.message);
       res.status(500).send('Internal Server Error');
     }
   }
@@ -117,7 +117,7 @@ class UserController {
       try {
         await sendMail(to, subject, html);
       } catch (error) {
-        console.error('Error al enviar el correo electrónico:', error);
+        logger.error('Error al enviar el correo electrónico:', error);
         return res.status(500).send('Error al enviar el correo electrónico.');
       }
 
