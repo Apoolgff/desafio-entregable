@@ -40,6 +40,7 @@ class UserController {
 
     //En el form del login yo puse como que los campos son "required" lo que hace que este error no pueda darse, pero por las dudas...
     if (!email || !password) {
+      logger.error('No ingreso todos los campos necesarios')
       return res.send('Todos los campos son obligatorios')
     }
 
@@ -47,11 +48,13 @@ class UserController {
 
     // Verifica si se encontró el usuario
     if (!user) {
+      logger.error('El usuario no existe')
       return res.status(400).send('El Usuario NO Existe');
     }
 
     // Verifica si la contraseña es válida usando isValidPassword
     if (!(await isValidPassword(password, user.password))) {
+      logger.error('Password incorrecta')
       return res.status(401).send('Contraseña inválida');
     }
 
@@ -83,12 +86,13 @@ class UserController {
       const existingUser = await this.userService.getUser({ email });
       if (existingUser) {
         //console.error('Ese Email ya esta en uso.');
-        req.logger.error('Ese Email ya esta en uso.')
+        logger.error('Ese Email ya esta en uso.')
         return { error: 'Ese Email ya está en uso.' };
       }
 
       //Verifica si la contraseña y si confirmación coinciden
       if (password !== confirmPassword) {
+
         return res.send('Las contraseñas no coinciden');
       }
 
@@ -134,8 +138,8 @@ class UserController {
       })
 
     } catch (error) {
-      /*console.error('Error al registrar usuario:', error.message);
-      res.send('Error al registrar usuario. Inténtalo de nuevo.');*/
+      logger.error('Error al registrar usuario:', error.message);
+      //res.send('Error al registrar usuario. Inténtalo de nuevo.');
       next(error)
     }
   }

@@ -11,6 +11,7 @@ const passport = require('passport')
 const { initializePassport } = require('./config/passport.config')
 const io = require('./helpers/serverIO');
 const { handleError } = require('./middlewares/error/handleError');
+const { addLogger } = require('./utils/logger')
 
 const app = express();
 const port = configObject.PORT;
@@ -38,7 +39,7 @@ app.use(cookieParser(configObject.cookie_secret_key))
 initializePassport()
 app.use(passport.initialize())
 
-
+app.use(addLogger)
 app.use(appRouter)
 app.use(handleError)
 

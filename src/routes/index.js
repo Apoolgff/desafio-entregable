@@ -6,7 +6,9 @@ const sessionRouter = require ('./apis/session.router')
 const viewsRouter = require ('./views.router')
 const testRouter = require('./apis/test.router')
 const compression = require('express-compression')
-const { addLogger, logger } = require('../utils/logger');
+//const { addLogger, logger } = require('../utils/logger');
+const { handleError } = require('../middlewares/error/handleError');
+
 
 router.use(compression({
     brotli:{
@@ -15,7 +17,7 @@ router.use(compression({
     }
 }))
 
-router.use(addLogger);
+//router.use(addLogger);
 
 router.use('/api/products', productsRouter);
 router.use('/api/carts', cartsRouter);
@@ -30,7 +32,7 @@ router.use('/test', testRouter)
 /*router.use('*', (req, res)=>{
     res.status(404).send('Not Found')
 })*/ 
-
+router.use(handleError)
 router.use((err, req, res, next)=>{
     req.logger.error(err.message)
     res.status(500).send('Error Server')
