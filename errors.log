@@ -10,3 +10,6 @@ error: Error trying to register user
 error: Error al registrar usuario:
 error: Error trying to register user
 error: Error trying to create product
+warning: Alerta Warning
+error: Error testeado
+fatal: Fatal Error
