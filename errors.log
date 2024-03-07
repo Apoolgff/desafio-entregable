@@ -13,3 +13,7 @@ error: Error trying to create product
 warning: Alerta Warning
 error: Error testeado
 fatal: Fatal Error
+warning: Alerta Warning
+error: Error testeado
+fatal: Fatal Error
+error: No ingreso todos los campos necesarios

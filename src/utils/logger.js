@@ -70,29 +70,3 @@ const addLogger = (req, res, next) => {
 };
 
 module.exports = { addLogger, logger };
-
-/*const logger = winston.createLogger({
-    levels: customLevelOptions.levels,
-
-    transports: [
-        new winston.transports.Console({
-            level: 'info',
-
-            format: winston.format.combine(
-                winston.format.colorize({ colors: customLevelOptions.colors}),
-                winston.format.simple()
-            )
-        }),
-        new winston.transports.File({
-            filename: './errors.log',
-            level: 'warning',
-            format: winston.format.simple()
-        })
-    ]
-})
-
-export const addLogger = (req, res, next) => {
-    req.logger = logger
-    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString}`)
-    next();
-}*/
