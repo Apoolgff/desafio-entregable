@@ -2,11 +2,11 @@
 const { productService } = require('../repositories/services')
 const { EErrors } = require('../services/errors/enums');
 const { generateProductErrorInfo } = require('../services/errors/errorGenerator');
-const CustomError  = require('../services/errors/CustomError')
+const CustomError = require('../services/errors/CustomError')
 const { logger } = require('../utils/logger')
 
 class ProductsController {
-    constructor(){
+    constructor() {
         this.productService = productService
     }
 
@@ -31,27 +31,27 @@ class ProductsController {
     async getProductsLimited(req, res) {
         try {
             const { limit = 3, page = 1, sort, query } = req.query;
-    
+
             const options = {
                 page: parseInt(page),
                 limit: parseInt(limit),
                 sort: sort ? { price: sort === 'asc' ? 1 : -1 } : undefined,
             };
-    
+
             let filter = {};
-    
+
             if (query) {
                 const isStatus = query.toLowerCase() === 'true' || query.toLowerCase() === 'false';
-    
+
                 if (isStatus) {
                     filter.status = query.toLowerCase() === 'true';
                 } else {
                     filter.category = query;
                 }
             }
-    
+
             const result = await this.productService.getProductsLimited({ filter, options });
-    
+
             const response = {
                 status: 'success',
                 payload: result.docs,
@@ -64,14 +64,14 @@ class ProductsController {
                 prevLink: result.hasPrevPage ? `/products?limit=${limit}&page=${result.prevPage}` : null,
                 nextLink: result.hasNextPage ? `/products?limit=${limit}&page=${result.nextPage}` : null,
             };
-    
+
             res.json(response);
         } catch (error) {
             logger.error(error.message);
             res.status(500).send('Internal Server Error');
         }
     }
-    
+
 
 
     getProductBy = async (req, res) => {
@@ -87,35 +87,43 @@ class ProductsController {
 
     createProduct = async (req, res, next) => {
         try {
-            const { title, description, price, code, stock, category } = req.body;
-    
+            const { title, description, price, code, stock, category, owner } = req.body;
+
             if (!req.files || !req.files.length) {
                 logger.error('No se proporcionó ningún archivo.');
                 return res.status(400).send('Bad Request');
             }
+            let updatedOwner = owner; // Inicialmente, asigna el valor original de owner
 
-            if(!title || !description || !price || !code || !stock || !category){
+            if (owner === 'adminCoder@coder.com') {
+                updatedOwner = 'Admin'; // Cambia el valor de owner si es 'adminCoder@coder.com'
+            }
+
+            logger.info(updatedOwner)
+  
+            if (!title || !description || !price || !code || !stock || !category) {
                 CustomError.createError({
-                  name: 'Product creation error',
-                  cause: generateProductErrorInfo({title, description, price, code, stock, category}),
-                  message: 'Error trying to create product',
-                  code: EErrors.INVALID_TYPES_ERROR
+                    name: 'Product creation error',
+                    cause: generateProductErrorInfo({ title, description, price, code, stock, category }),
+                    message: 'Error trying to create product',
+                    code: EErrors.INVALID_TYPES_ERROR
                 })
-              }
-    
+            }
+
             const thumbnails = req.files.map(file => `/images/${file.filename}`);
-    
+
             // Crear el producto con la ruta de la imagen
-            const newProduct = await this.productService.createProduct({ 
-                title, 
-                description, 
-                price, 
-                code, 
-                stock, 
+            const newProduct = await this.productService.createProduct({
+                title,
+                description,
+                price,
+                code,
+                stock,
                 category,
-                thumbnails, 
+                owner: updatedOwner,
+                thumbnails,
             });
-    
+
             res.json({ product: newProduct });
         } catch (error) {
             //logger.error(error.message);
@@ -123,8 +131,8 @@ class ProductsController {
             next(error)
         }
     }
-    
-    
+
+
 
     updateProduct = async (req, res) => {
         try {

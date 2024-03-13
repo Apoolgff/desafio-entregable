@@ -7,6 +7,7 @@
     <p><span>Rol:</span> {{user.role}}</p>
     <p><span>ID Carrito:</span> {{user.cart._id}}</p>
     <button id="chat-btn">Ir a Chat</button>
+    <button id="role-btn">Cambiar Rol</button>
     <button id="logout-btn">Logout</button>
 
     <h2>Lista de Productos</h2>
@@ -76,6 +77,16 @@
     if (chatButton) {
       chatButton.addEventListener('click', function () {
         window.location.href = '/chat';
+      });
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const roleButton = document.getElementById('role-btn');
+    if (roleButton) {
+      roleButton.addEventListener('click', function () {
+        window.location.href = '/role';
       });
     }
   });

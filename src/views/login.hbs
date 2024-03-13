@@ -42,7 +42,7 @@
                             .then(userData => {
                                 console.log('Información del usuario actual:', userData);
                                 if (userData && userData.user && userData.user.role) {
-                                    if (userData.user.role === 'user') {
+                                    if (userData.user.role === 'user'|| userData.user.role === 'premium') {
                                         window.location.href = '/products'; //Redirige a /products si el usuario es un usuario normal
                                     } else if (userData.user.role === 'admin') {
                                         window.location.href = '/manager'; //Redirige a /manager si el usuario es un administrador

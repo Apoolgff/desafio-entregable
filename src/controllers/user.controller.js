@@ -5,7 +5,7 @@ const { generateUserErrorInfo } = require('../services/errors/errorGenerator');
 const { createHash, isValidPassword } = require('../utils/hashPassword')
 const { createToken } = require('../utils/jwt');
 const { sendMail } = require('../utils/sendMail')
-const CustomError  = require('../services/errors/CustomError')
+const CustomError = require('../services/errors/CustomError')
 const { logger } = require('../utils/logger')
 
 
@@ -75,10 +75,10 @@ class UserController {
     try {
       const { first_name, last_name, email, password, confirmPassword, age, role } = req.body;
 
-      if(!first_name || !last_name || !email || !age){
+      if (!first_name || !last_name || !email || !age) {
         CustomError.createError({
           name: 'User creation error',
-          cause: generateUserErrorInfo({first_name, last_name, email, age}),
+          cause: generateUserErrorInfo({ first_name, last_name, email, age }),
           message: 'Error trying to register user',
           code: EErrors.INVALID_TYPES_ERROR
         })
@@ -143,6 +143,43 @@ class UserController {
       next(error)
     }
   }
+
+  updateUser = async (req, res) => {
+    try {
+      const userId = req.params.uid;
+      const updatedUser = await this.userService.updateUser(userId, req.body);
+      const user = await this.userService.getUserBy(userId)
+
+      const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email: user.email, cart: user.cart, role: user.role })
+      res.cookie('token', token, {
+      maxAge: 60 * 60 * 1000 * 24,
+      httpOnly: true,
+      // secure: true,
+      // sameSite: 'none'
+    }).json({
+      status: 'success',
+      message: 'Role Updated',
+      redirectUrl: '/role',
+    })
+      //const user = await this.userService.getUserBy({id: userId})
+      logger.info(updatedUser)
+      //res.json({ updatedUser });//res.send({status: 'success', payload: updatedUser})
+    } catch (error) {
+      logger.error(error.message);
+      res.status(404).send('User Not Found');
+    }
+  }
+
+  getUserBy = async (req, res) => {
+    try {
+        const userId = req.params.pid;
+        const user = await this.userService.getUser(userId);
+        res.json({ user });//res.send({status: 'success', payload: user})
+    } catch (error) {
+        logger.error(error.message);
+        res.status(404).send('User Not Found');
+    }
+}
 }
 
 module.exports = UserController

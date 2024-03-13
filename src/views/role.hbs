@@ -1,0 +1,76 @@
+{{#if user}}
+<div class="container">
+    <div class="user-container">
+        <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
+        <p><span>Id:</span><span id="userId">{{user.id}}</span></p>
+        <p><span>Rol:</span> {{user.role}}</p>
+
+        <button id="role-btn">Productos</button>
+        <button id="logout-btn">Logout</button>
+
+        <div class="radio-container">
+                <label for="role">Rol:</label>
+                <label class='radio-label' for="userRole">Usuario</label>
+                <input type="radio" id="userRole" name="role" value="user" checked>
+
+                <label class='radio-label' for="premiumRole">Premium</label>
+                <input type="radio" id="premiumRole" name="role" value="premium" checked>
+            </div>
+
+            <button id="update-role-btn" onclick="updateUser()">Actualizar Rol</button>
+        {{/if}}
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+                const roleButton = document.getElementById('role-btn');
+                if (roleButton) {
+                    roleButton.addEventListener('click', function () {
+                        window.location.href = '/products';
+                    });
+                }
+            });
+
+            document.getElementById('logout-btn').addEventListener('click', function () {
+                fetch('/api/session/logout', {
+                    method: 'GET',
+                    credentials: 'include',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/login';
+                        } else {
+                            console.error('Error en el logout:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error en el logout:', error));
+            });
+
+            function updateUser() {
+                const userId = document.getElementById('userId').textContent; 
+
+                const role = document.querySelector('input[name="role"]:checked').value;
+
+                const requestBody = { role };
+
+                fetch(`/api/session/premium/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            
+                            console.log('Usuario actualizado exitosamente');
+                            window.location.reload();
+                            
+                        } else {
+                            console.error('Error al actualizar el Usuario:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error al actualizar el Usuario:', error));
+            }
+
+        </script>

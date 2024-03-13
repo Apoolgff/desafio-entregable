@@ -18,6 +18,10 @@ class UserDaoMongo {
         return await this.model.findOne(filter);
     }
 
+    async getById(userId){
+        return await this.model.findById({ _id: userId })
+    }
+
     // Crea un usuario
     async create(user) {
         const cart = await cartService.create();

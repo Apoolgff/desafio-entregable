@@ -17,19 +17,22 @@ router.get('/register', handlePolicies(['PUBLIC']), viewsController.register);
 router.get('/home', handlePolicies(['PUBLIC']), viewsController.home);
 
 //Ruta para realTimeProducts
-router.get('/realtimeproducts', handlePolicies(['ADMIN']), viewsController.realTimeProducts);
+router.get('/realtimeproducts', handlePolicies(['ADMIN', 'PREMIUM']), viewsController.realTimeProducts);
 
 //Ruta para el chat
-router.get('/chat', handlePolicies(['USER']), viewsController.chat);
+router.get('/chat', handlePolicies(['USER', 'PREMIUM']), viewsController.chat);
 
 //Ruta para productos
-router.get('/products', handlePolicies(['USER']), viewsController.products);
+router.get('/products', handlePolicies(['USER', 'PREMIUM']), viewsController.products);
 
 //Ruta Administrador de productos (crud)
-router.get('/manager', handlePolicies(['ADMIN']), viewsController.manager);
+router.get('/manager', handlePolicies(['ADMIN', 'PREMIUM']), viewsController.manager);
+
+//Ruta Administrador de productos (crud)
+router.get('/role', handlePolicies(['USER','PREMIUM']), viewsController.role);
 
 //Ruta para el carrito
-router.get('/carts/:cid', handlePolicies(['USER']), viewsController.cart);
+router.get('/carts/:cid', handlePolicies(['USER', 'PREMIUM']), viewsController.cart);
 
 
 module.exports = router;

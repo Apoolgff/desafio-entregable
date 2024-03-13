@@ -9,6 +9,8 @@ class UserRepository{
 
     getUser = async (filter) => await this.dao.getBy(filter)
 
+    getUserBy = async (userId) => await this.dao.getById(userId)
+
     createUser = async (user) => await this.dao.create(user)
 
     getCurrent = async (filter) => {
@@ -17,9 +19,9 @@ class UserRepository{
     }
     
 
-    updateProduct = async (uid, updatedFields) => await this.dao.update(uid, updatedFields)
+    updateUser = async (uid, updatedFields) => await this.dao.update(uid, updatedFields)
 
-    deleteProduct = async (uid) => await this.dao.delete(uid)
+    deleteUser = async (uid) => await this.dao.delete(uid)
 
 }
 

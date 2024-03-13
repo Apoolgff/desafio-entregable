@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: aqua;
+  }
+  
+  h1 {
+    color: #bb1010;
+    text-align: center;
+  }
+
+  h2{
+    text-align: center;
+  }
+
+  p{
+    font-weight: bold;
+    font-size: 20px;
+    color: #001ac3;
+  }
+
+
+
+  span{
+    font-weight: bolder;
+    font-size: 25px;
+    color: #001074
+  }
+
+  #logout-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #bb1010; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+  
+
+  #logout-btn:hover {
+    background-color: #cc0000;
+  }
+
+  #role-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #10bb4f; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+  
+
+  #role-btn:hover {
+    background-color: #0a7732;
+  }
+
+  .radio-container {
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .radio-label{
+    margin-left: 5px;
+  }
+  
+  input[type="radio"] {
+    margin-right: 10px; 
+  }

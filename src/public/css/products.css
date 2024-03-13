@@ -69,6 +69,22 @@ body {
     background-color: #0f0d89;
   }
 
+  #role-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #10bb4f; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+  
+
+  #role-btn:hover {
+    background-color: #0a7732;
+  }
+
   .purchase-btn{
     display: inline-block;
     padding: 10px 20px;

@@ -17,3 +17,15 @@ warning: Alerta Warning
 error: Error testeado
 fatal: Fatal Error
 error: No ingreso todos los campos necesarios
+error: Password incorrecta
+error: Password incorrecta
+error: Parameter "filter" to findOne() must be an object, got "65f124dfaed549bfefd727de" (type string)
+error: Cast to ObjectId failed for value "{ _id: { id: '65f124dfaed549bfefd727de' } }" (type Object) at path "_id" for model "Users"
+error: Cast to ObjectId failed for value "{ userId: { id: '65f124dfaed549bfefd727de' } }" (type Object) at path "_id" for model "Users"
+error: Cast to ObjectId failed for value "{ userId: { id: '65f124dfaed549bfefd727de' } }" (type Object) at path "_id" for model "Users"
+error: Cast to ObjectId failed for value "{ _id: { id: '65f124dfaed549bfefd727de' } }" (type Object) at path "_id" for model "Users"
+error: Cast to ObjectId failed for value "{ _id: { id: '65f124dfaed549bfefd727de' } }" (type Object) at path "_id" for model "Users"
+error: user is not defined
+error: user is not defined
+error: Cast to ObjectId failed for value "{ _id: { id: '65f124dfaed549bfefd727de' } }" (type Object) at path "_id" for model "Users"
+error: email is not defined

@@ -129,6 +129,17 @@ class ViewsController {
             res.status(404).send('Cart Not Found');
         }
     }
+
+    role = async (req, res) => {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.redirect('/login');
+        }
+        
+        const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
+        res.render('role', { title: 'Change Role', style: 'role.css', body: 'role', user:decodedToken });
+    }
 }
 
 module.exports = ViewsController

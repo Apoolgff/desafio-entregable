@@ -20,5 +20,8 @@ sessionRouter.post('/login', userController.userLogin);
 
 sessionRouter.post('/register', userController.userRegister);//Aca es donde envio el mail al registrarte
 
+sessionRouter.put('/premium/:uid', userController.updateUser)
+
+sessionRouter.get('/:uid', userController.getUserBy)
 
 module.exports = sessionRouter;

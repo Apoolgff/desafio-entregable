@@ -28,7 +28,12 @@ exports.handlePolicies = policies => (req, res, next) => {
  
         req.user = user;
         return next();
-    } else {
+    } else if (policies.includes('PREMIUM') && user.role.toUpperCase() === 'PREMIUM') {
+ 
+        req.user = user;
+        return next();
+    }
+    else {
 
         return res.status(403).send({ status: 'error', error: 'No permissions' });
     }

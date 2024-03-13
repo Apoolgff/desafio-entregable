@@ -2,7 +2,9 @@
 <div class="container">
     <div class="product-container">
         <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
+        <p><span>Email:</span> <span id="user-email">{{user.email}}</span></p>
         <p><span>Rol:</span> {{user.role}}</p>
+
 
         <button id="logout-btn">Logout</button>
         {{/if}}
@@ -86,6 +88,7 @@
                         <strong>Status:</strong> {{status}}<br>
                         <strong>Stock:</strong> {{stock}}<br>
                         <strong>Category:</strong> {{category}}<br>
+                        <strong>Owner:</strong> {{owner}}<br>
                         <strong>Thumbnails:</strong>
                         <ul class="thumbnails">
                             {{#each thumbnails}}
@@ -152,6 +155,7 @@
                 const price = parseFloat(document.getElementById('price').value);
                 const stock = parseInt(document.getElementById('stock').value);
                 const category = document.getElementById('category').value;
+                const owner = document.getElementById('user-email').textContent;
                 const thumbnailsInput = document.getElementById('thumbnails');
 
                 const formData = new FormData();
@@ -161,6 +165,7 @@
                 formData.append('price', price);
                 formData.append('stock', stock);
                 formData.append('category', category);
+                formData.append('owner', owner);
 
                 const thumbnailsFiles = thumbnailsInput.files;
                 for (let i = 0; i < thumbnailsFiles.length; i++) {
