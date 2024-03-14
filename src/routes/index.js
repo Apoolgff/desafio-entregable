@@ -21,7 +21,7 @@ router.use(compression({
 
 router.use('/api/products', productsRouter);
 router.use('/api/carts', cartsRouter);
-router.use('/api/session', sessionRouter)
+router.use('/api/user', sessionRouter)
 router.use('/', viewsRouter);
 
 router.use('/test', testRouter)

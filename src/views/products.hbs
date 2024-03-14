@@ -8,6 +8,8 @@
     <p><span>ID Carrito:</span> {{user.cart._id}}</p>
     <button id="chat-btn">Ir a Chat</button>
     <button id="role-btn">Cambiar Rol</button>
+    <button id="manager-btn">Manager (premium)</button>
+
     <button id="logout-btn">Logout</button>
 
     <h2>Lista de Productos</h2>
@@ -22,6 +24,7 @@
         <strong>Status:</strong> {{status}}<br>
         <strong>Stock:</strong> {{stock}}<br>
         <strong>Category:</strong> {{category}}<br>
+        <strong>Owner:</strong> {{owner}}<br>
         <strong>Thumbnails:</strong>
         <ul class="thumbnails">
           {{#each thumbnails}}
@@ -91,8 +94,18 @@
     }
   });
 
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const managerButton = document.getElementById('manager-btn');
+    if (managerButton) {
+      managerButton.addEventListener('click', function () {
+        window.location.href = '/manager';
+      });
+    }
+  });
+
   document.getElementById('logout-btn').addEventListener('click', function () {
-    fetch('/api/session/logout', {
+    fetch('/api/user/logout', {
       method: 'GET',
       credentials: 'include',
     })
@@ -307,28 +320,28 @@
 
     //Funcion para realizar la compra del carrito
     async function purchaseCart(cartId) {
-    try {
+      try {
         const response = await fetch(`/api/carts/${cartId}/purchase`, {
-            method: 'POST',
-            credentials: 'include',
+          method: 'POST',
+          credentials: 'include',
         });
 
         if (response.ok) {
-            const responseData = await response.json();
-            alert(`Compra realizada con éxito`);
-            setTimeout(() => {
-                location.reload();
-            }, 500); 
+          const responseData = await response.json();
+          alert(`Compra realizada con éxito`);
+          setTimeout(() => {
+            location.reload();
+          }, 500);
         } else {
-            const errorData = await response.json();
-            alert('Algunos productos no pudieron ser comprados');
-            console.error('Error al realizar la compra:', errorData);
+          const errorData = await response.json();
+          alert('Algunos productos no pudieron ser comprados');
+          console.error('Error al realizar la compra:', errorData);
         }
-    } catch (error) {
+      } catch (error) {
         console.error('Error al realizar la compra:', error);
         alert('Error al realizar la compra. Por favor, intenta de nuevo.');
+      }
     }
-}
 
 
 

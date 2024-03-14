@@ -3,9 +3,10 @@
     <div class="product-container">
         <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
         <p><span>Email:</span> <span id="user-email">{{user.email}}</span></p>
+
         <p><span>Rol:</span> {{user.role}}</p>
 
-
+        <button id="products-btn">Productos</button>
         <button id="logout-btn">Logout</button>
         {{/if}}
         <h1>Administrador de Productos</h1>
@@ -88,7 +89,8 @@
                         <strong>Status:</strong> {{status}}<br>
                         <strong>Stock:</strong> {{stock}}<br>
                         <strong>Category:</strong> {{category}}<br>
-                        <strong>Owner:</strong> {{owner}}<br>
+                        <strong >Owner:</strong> <span class="owner">{{owner}}</span><br>
+
                         <strong>Thumbnails:</strong>
                         <ul class="thumbnails">
                             {{#each thumbnails}}
@@ -102,8 +104,34 @@
         </div>
         <script src=""></script>
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Obtener el correo electrónico del usuario
+                const userEmail = document.getElementById('user-email').textContent;
+
+                // Seleccionar todos los elementos de la lista de productos
+                const productCards = document.querySelectorAll('.product-card');
+
+                // Si el correo electrónico del usuario es 'adminCoder@coder.com', no se aplica ningún filtro
+                if (userEmail === 'adminCoder@coder.com') {
+                    return;
+                }
+
+                // Iterar sobre cada elemento de la lista de productos
+                productCards.forEach(productCard => {
+                    // Obtener el propietario del producto actual
+                    const ownerEmail = productCard.querySelector('.owner').textContent;
+
+                    // Comprobar si el propietario del producto es igual al correo electrónico del usuario
+                    if (ownerEmail !== userEmail) {
+                        // Ocultar el producto si el propietario no coincide con el correo electrónico del usuario
+                        productCard.style.display = 'none';
+                    }
+                });
+            });
+
+
             document.getElementById('logout-btn').addEventListener('click', function () {
-                fetch('/api/session/logout', {
+                fetch('/api/user/logout', {
                     method: 'GET',
                     credentials: 'include',
                 })
@@ -115,6 +143,16 @@
                         }
                     })
                     .catch(error => console.error('Error en el logout:', error));
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+
+                const productButton = document.getElementById('products-btn');
+                if (productButton) {
+                    productButton.addEventListener('click', function () {
+                        window.location.href = '/products';
+                    });
+                }
             });
 
             document.getElementById('deleteProductBtn').addEventListener('click', deleteProduct);
@@ -244,7 +282,7 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            
+
                             console.log('Producto actualizado exitosamente');
                         } else {
                             console.error('Error al actualizar el producto:', response.statusText);

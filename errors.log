@@ -29,3 +29,9 @@ error: user is not defined
 error: user is not defined
 error: Cast to ObjectId failed for value "{ _id: { id: '65f124dfaed549bfefd727de' } }" (type Object) at path "_id" for model "Users"
 error: email is not defined
+error: Parameter "filter" to findOne() must be an object, got "65f124deaed549bfefd727dc" (type string)
+error: Cannot read properties of null (reading 'role')
+error: Cannot read properties of null (reading 'role')
+error: Cannot read properties of null (reading 'role')
+error: No puedes agregar tu propio producto al carrito.
+error: No puedes agregar tu propio producto al carrito.

@@ -2,7 +2,7 @@
     <h1>BIENVENIDO AL E-COMMERCE</h1>
     <div class="auth-container">
         <h1>Register</h1>
-        <form id="registerForm" action="/api/session/register" method="POST">
+        <form id="registerForm" action="/api/user/register" method="POST">
 
             <label for="first_name">Nombre:</label>
             <input type="text" id="first_name" name="first_name" >
@@ -52,7 +52,7 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     const role = document.querySelector('input[name="role"]:checked').value;
 
     //Realiza la solicitud de registro al servidor
-    fetch('/api/session/register', {
+    fetch('/api/user/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -9,12 +9,12 @@
         <button id="logout-btn">Logout</button>
 
         <div class="radio-container">
-                <label for="role">Rol:</label>
+                <label for="role"><span>Nuevo Rol: </span></label>
                 <label class='radio-label' for="userRole">Usuario</label>
-                <input type="radio" id="userRole" name="role" value="user" checked>
+                <input type="radio" id="userRole" name="role" value="user">
 
                 <label class='radio-label' for="premiumRole">Premium</label>
-                <input type="radio" id="premiumRole" name="role" value="premium" checked>
+                <input type="radio" id="premiumRole" name="role" value="premium">
             </div>
 
             <button id="update-role-btn" onclick="updateUser()">Actualizar Rol</button>
@@ -32,7 +32,7 @@
             });
 
             document.getElementById('logout-btn').addEventListener('click', function () {
-                fetch('/api/session/logout', {
+                fetch('/api/user/logout', {
                     method: 'GET',
                     credentials: 'include',
                 })
@@ -53,7 +53,7 @@
 
                 const requestBody = { role };
 
-                fetch(`/api/session/premium/${userId}`, {
+                fetch(`/api/user/premium/${userId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

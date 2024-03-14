@@ -148,6 +148,8 @@ class ProductsController {
     deleteProduct = async (req, res) => {
         try {
             const productId = req.params.pid;
+            
+
             const deletedProduct = await this.productService.deleteProduct(productId);
 
             if (deletedProduct) {

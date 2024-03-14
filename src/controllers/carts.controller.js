@@ -46,9 +46,20 @@ class CartController {
                 throw new Error('El carrito no fue encontrado.');
             }
 
+            const user = await this.userService.getUser({cart: cartId})
+            logger.info(user.email)
+
             const product = await this.productService.getProductById(productId)
             if (!product) {
                 throw new Error('El producto no fue encontrado.');
+            }
+
+            logger.info(product.owner)
+            const productOwner = product.owner; // Suponiendo que tienes una propiedad 'owner' en tu modelo de producto
+
+            // Verificar si el usuario actual es propietario del producto
+            if (user.email === productOwner) {
+                throw new Error('No puedes agregar tu propio producto al carrito.');
             }
 
 

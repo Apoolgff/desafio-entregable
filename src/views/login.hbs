@@ -2,7 +2,7 @@
     <h1>BIENVENIDO AL E-COMMERCE</h1>
     <div class="auth-container">
         <h2>Login</h2>
-        <form id="loginForm" action="/api/session/login" method="POST">
+        <form id="loginForm" action="/api/user/login" method="POST">
             <label for="email">Email:</label>
             <input type="text" id="email" name="email">
 
@@ -21,7 +21,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            fetch('/api/session/login', {
+            fetch('/api/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -34,7 +34,7 @@
                         console.log('Información del usuario actual:', data);
 
 
-                        fetch('http://localhost:8080/api/session/current', {
+                        fetch('http://localhost:8080/api/user/current', {
                             method: 'GET',
                             credentials: 'include',
                         })
