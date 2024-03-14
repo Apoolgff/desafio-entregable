@@ -12,8 +12,9 @@
             <button type="submit" class="auth-button">Iniciar Sesión</button>
         </form>
         <p>¿No tienes una cuenta? <a href="/register">Regístrate</a></p>
+        <p>¿Olvidaste el password? <a href="/recover">Recuperar</a></p>
     </div>
-
+</div>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -60,4 +61,3 @@
                 .catch(error => console.error('Error:', error));
         });
     </script>
-</div>

@@ -1,0 +1,14 @@
+<div class="container">
+    <h1>BIENVENIDO AL E-COMMERCE</h1>
+    <div class="auth-container">
+        <h2>Recuperar Password</h2>
+        <form id="recoverForm" action="/api/user/recover" method="POST">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <button type="submit" class="auth-button">Recuperar</button>
+        </form>
+        <p>¿Ya tienes una cuenta? <a href="/login">Login</a></p>
+        <p>¿No tienes una cuenta? <a href="/register">Regístrate</a></p>
+    </div>
+</div>

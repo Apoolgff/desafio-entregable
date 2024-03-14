@@ -24,4 +24,10 @@ sessionRouter.put('/premium/:uid', userController.updateUser)
 
 sessionRouter.get('/:uid', userController.getUserBy)
 
+sessionRouter.post('/recover', userController.userRecovery);
+
+sessionRouter.post('/resetpass', userController.resetPass)
+
+
+
 module.exports = sessionRouter;

@@ -60,7 +60,7 @@ class UserController {
 
     const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email, cart: user.cart, role: user.role })
     res.cookie('token', token, {
-      maxAge: 60 * 60 * 1000 * 24,
+      maxAge: 3600000,
       httpOnly: true,
       // secure: true,
       // sameSite: 'none'
@@ -127,7 +127,7 @@ class UserController {
         return res.send(result.error);
       }
       res.cookie('token', token, {
-        maxAge: 60 * 60 * 1000 * 24,
+        maxAge: 3600000,
         httpOnly: true,
         // secure: true,
         // sameSite: 'none'
@@ -152,15 +152,15 @@ class UserController {
 
       const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email: user.email, cart: user.cart, role: user.role })
       res.cookie('token', token, {
-      maxAge: 60 * 60 * 1000 * 24,
-      httpOnly: true,
-      // secure: true,
-      // sameSite: 'none'
-    }).json({
-      status: 'success',
-      message: 'Role Updated',
-      redirectUrl: '/role',
-    })
+        maxAge: 3600000,
+        httpOnly: true,
+        // secure: true,
+        // sameSite: 'none'
+      }).json({
+        status: 'success',
+        message: 'Role Updated',
+        redirectUrl: '/role',
+      })
       //const user = await this.userService.getUserBy({id: userId})
       logger.info(updatedUser)
       //res.json({ updatedUser });//res.send({status: 'success', payload: updatedUser})
@@ -172,14 +172,82 @@ class UserController {
 
   getUserBy = async (req, res) => {
     try {
-        const userId = req.params.pid;
-        const user = await this.userService.getUser(userId);
-        res.json({ user });//res.send({status: 'success', payload: user})
+      const userId = req.params.pid;
+      const user = await this.userService.getUser(userId);
+      res.json({ user });//res.send({status: 'success', payload: user})
     } catch (error) {
-        logger.error(error.message);
-        res.status(404).send('User Not Found');
+      logger.error(error.message);
+      res.status(404).send('User Not Found');
+    }
+  }
+
+  userRecovery = async (req, res) => {
+    try {
+      const { email } = req.body
+
+      const user = await this.userService.getUser({ email });
+
+      if (!user) {
+        //console.error('Ese Email ya esta en uso.');
+        logger.error('No existen usuarios con ese mail')
+        return { error: 'No existen usuarios con ese mail' };
+      }
+
+      const token = createToken({ email: user.email, password: user.password })
+      logger.info(user.email, user.password)
+
+      const to = email
+      const subject = 'Recuperacion de Password'
+      const html = `
+      <p>Hemos recibido una solicitud para restablecer tu contraseña. Haz clic en el siguiente enlace para continuar:</p>
+      <p><a href="http://localhost:8080/passrecovery/${token}">Restablecer contraseña</a></p>
+      <p>Este enlace expirará en 1 hora.</p>
+    `
+
+      await sendMail(to, subject, html);
+
+      logger.info('Mail Enviado');
+      return res.status(200).send('Mail Enviado.');
+
+
+    } catch (error) {
+      logger.error(error.message);
+      res.status(400).send('Invalid Email')
+    }
+  }
+
+  resetPass = async (req, res) => {
+    try {
+        const { email, newPass, repPass } = req.body;
+
+        // Verificar si las contraseñas nuevas coinciden
+        if (newPass !== repPass) {
+            return res.status(400).send('Las contraseñas no coinciden.');
+        }
+
+        // Obtener el usuario por su correo electrónico
+        const user = await this.userService.getUser({ email });
+
+        // Verificar si se encontró el usuario
+        if (!user) {
+            return res.status(400).send('Usuario no encontrado.');
+        }
+
+        // Generar el hash de la nueva contraseña
+        const hashedNewPass = await createHash(newPass);
+
+        // Actualizar la contraseña del usuario con el hash generado
+        const updatedUser = await this.userService.updateUser(user._id, { password: hashedNewPass });
+
+        // Mostrar un mensaje de éxito y redirigir a la página de inicio de sesión
+        res.send('Contraseña restablecida con éxito.');
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Error interno del servidor');
     }
 }
+
+
 }
 
 module.exports = UserController

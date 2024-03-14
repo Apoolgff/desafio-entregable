@@ -140,6 +140,28 @@ class ViewsController {
         const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
         res.render('role', { title: 'Change Role', style: 'role.css', body: 'role', user:decodedToken });
     }
+
+    recover = async (req, res) => {
+
+        res.render('recover', { title: 'Password recovery', style: 'login.css', body: 'recover'});
+    }
+
+    passRecovery = async (req, res) => {
+        const token = req.params.token; // Obtener el token de los parámetros de la URL
+    
+        if (!token) {
+            return res.redirect('/login');
+        }
+    
+        try {
+            const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
+            res.render('passRecovery', { title: 'Password recovery', style: 'login.css', body: 'passRecovery', user: decodedToken });
+        } catch (error) {
+            console.error(error.message);
+            res.status(400).send('Invalid token');
+        }
+    }
+    
 }
 
 module.exports = ViewsController
