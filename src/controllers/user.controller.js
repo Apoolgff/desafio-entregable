@@ -191,7 +191,7 @@ class UserController {
         //console.error('Ese Email ya esta en uso.');
         logger.error('No existen usuarios con ese mail')
         return { error: 'No existen usuarios con ese mail' };
-      }
+      } 
 
       const token = createToken({ email: user.email, password: user.password })
       logger.info(user.email, user.password)
