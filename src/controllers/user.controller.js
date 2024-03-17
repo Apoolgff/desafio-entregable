@@ -218,7 +218,7 @@ class UserController {
 
   resetPass = async (req, res) => {
     try {
-        const { email, newPass, repPass } = req.body; 
+        const { email, newPass, repPass } = req.body;
 
         // Verificar si las contraseñas nuevas coinciden
         if (newPass !== repPass) {
