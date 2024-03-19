@@ -102,7 +102,7 @@ class ViewsController {
 
             res.render('products', { title: 'Products', style: 'products.css', body: 'products', products: response.payload, pagination: response, user: decodedToken });
         } catch (error) {
-            console.error(error.message);
+            logger.error(error.message);
             res.status(500).send('Internal Server Error');
         }
     }
