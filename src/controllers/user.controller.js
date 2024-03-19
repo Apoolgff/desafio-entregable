@@ -242,7 +242,7 @@ class UserController {
         // Mostrar un mensaje de éxito y redirigir a la página de inicio de sesión
         res.send('Contraseña restablecida con éxito.');
     } catch (error) {
-        console.error(error.message);
+        logger.error(error.message);
         res.status(500).send('Error interno del servidor');
     }
 }
