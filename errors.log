@@ -50,3 +50,7 @@ error: Password incorrecta
 error: Password incorrecta
 error: Password incorrecta
 error: Password incorrecta
+error: Cast to ObjectId failed for value " 65fd144349202bcf4586df31" (type string) at path "_id" for model "Products"
+error: ENOENT: no such file or directory, unlink 'images/1711085969072-mouse.webp'
+error: No puedes agregar tu propio producto al carrito.
+error: Password incorrecta

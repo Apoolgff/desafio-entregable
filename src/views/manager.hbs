@@ -89,7 +89,7 @@
                         <strong>Status:</strong> {{status}}<br>
                         <strong>Stock:</strong> {{stock}}<br>
                         <strong>Category:</strong> {{category}}<br>
-                        <strong >Owner:</strong> <span class="owner">{{owner}}</span><br>
+                        <strong>Owner:</strong> <span class="owner">{{owner}}</span><br>
 
                         <strong>Thumbnails:</strong>
                         <ul class="thumbnails">
@@ -105,47 +105,36 @@
         <script src=""></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Obtener el correo electrónico del usuario
                 const userEmail = document.getElementById('user-email').textContent;
-
-                // Seleccionar todos los elementos de la lista de productos
                 const productCards = document.querySelectorAll('.product-card');
 
-                // Si el correo electrónico del usuario es 'adminCoder@coder.com', no se aplica ningún filtro
-                if (userEmail === 'adminCoder@coder.com') {
-                    return;
+                document.getElementById('deleteProductBtn').addEventListener('click', deleteProduct);
+                document.getElementById('createProductBtn').addEventListener('click', createProduct);
+                document.getElementById('updateProductBtn').addEventListener('click', updateProduct);
+
+                if (userEmail !== 'adminCoder@coder.com') {
+                    productCards.forEach(productCard => {
+                        const ownerEmail = productCard.querySelector('.owner').textContent;
+                        if (ownerEmail !== userEmail) {
+                            productCard.style.display = 'none';
+                        }
+                    });
                 }
 
-                // Iterar sobre cada elemento de la lista de productos
-                productCards.forEach(productCard => {
-                    // Obtener el propietario del producto actual
-                    const ownerEmail = productCard.querySelector('.owner').textContent;
-
-                    // Comprobar si el propietario del producto es igual al correo electrónico del usuario
-                    if (ownerEmail !== userEmail) {
-                        // Ocultar el producto si el propietario no coincide con el correo electrónico del usuario
-                        productCard.style.display = 'none';
-                    }
-                });
-            });
-
-
-            document.getElementById('logout-btn').addEventListener('click', function () {
-                fetch('/api/user/logout', {
-                    method: 'GET',
-                    credentials: 'include',
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = '/login';
-                        } else {
-                            console.error('Error en el logout:', response.statusText);
-                        }
+                document.getElementById('logout-btn').addEventListener('click', function () {
+                    fetch('/api/user/logout', {
+                        method: 'GET',
+                        credentials: 'include',
                     })
-                    .catch(error => console.error('Error en el logout:', error));
-            });
-
-            document.addEventListener('DOMContentLoaded', function () {
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/login';
+                            } else {
+                                console.error('Error en el logout:', response.statusText);
+                            }
+                        })
+                        .catch(error => console.error('Error en el logout:', error));
+                });
 
                 const productButton = document.getElementById('products-btn');
                 if (productButton) {
@@ -155,25 +144,19 @@
                 }
             });
 
-            document.getElementById('deleteProductBtn').addEventListener('click', deleteProduct);
-
-            document.getElementById('createProductBtn').addEventListener('click', createProduct);
-
-            document.getElementById('updateProductBtn').addEventListener('click', updateProduct);
-
-
             function deleteProduct() {
-                const productId = document.getElementById('productId').value;
-
+                const productId = document.getElementById('productId').value.trim();
                 fetch(`/api/products/${productId}`, {
                     method: 'DELETE',
                 })
                     .then(response => {
                         if (response.ok) {
-
                             const productElement = document.getElementById(`product_${productId}`);
                             if (productElement) {
                                 productElement.remove();
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1500);
                             }
                         } else {
                             console.error('Error al eliminar el producto:', response.statusText);
@@ -181,12 +164,10 @@
                     })
                     .catch(error => console.error('Error al eliminar el producto:', error));
 
-
                 document.getElementById('productId').value = '';
             }
 
             function createProduct() {
-
                 const title = document.getElementById('title').value;
                 const description = document.getElementById('description').value;
                 const code = document.getElementById('code').value;
@@ -224,6 +205,9 @@
                             document.getElementById('category').value = '';
                             document.getElementById('thumbnails').value = '';
 
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
                         } else {
                             console.error('Error al crear el producto:', response.statusText);
                         }
@@ -231,11 +215,8 @@
                     .catch(error => console.error('Error al crear el producto:', error));
             }
 
-
-
             function updateProduct() {
                 const productId = document.getElementById('updateProductId').value;
-
                 const updatedProduct = {};
 
                 const titleInput = document.getElementById('updateTitle');
@@ -282,7 +263,9 @@
                 })
                     .then(response => {
                         if (response.ok) {
-
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
                             console.log('Producto actualizado exitosamente');
                         } else {
                             console.error('Error al actualizar el producto:', response.statusText);

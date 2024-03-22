@@ -4,6 +4,7 @@ const { EErrors } = require('../services/errors/enums');
 const { generateProductErrorInfo } = require('../services/errors/errorGenerator');
 const CustomError = require('../services/errors/CustomError')
 const { logger } = require('../utils/logger')
+const fs = require('fs');
 
 class ProductsController {
     constructor() {
@@ -100,7 +101,7 @@ class ProductsController {
             }
 
             logger.info(updatedOwner)
-  
+
             if (!title || !description || !price || !code || !stock || !category) {
                 CustomError.createError({
                     name: 'Product creation error',
@@ -128,6 +129,9 @@ class ProductsController {
         } catch (error) {
             //logger.error(error.message);
             //res.status(400).send('Bad Request');
+            req.files.forEach(file => {
+                fs.unlinkSync(file.path); // Eliminar archivo
+            });
             next(error)
         }
     }
@@ -148,7 +152,7 @@ class ProductsController {
     deleteProduct = async (req, res) => {
         try {
             const productId = req.params.pid;
-            
+
 
             const deletedProduct = await this.productService.deleteProduct(productId);
 
