@@ -1,0 +1,134 @@
+
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Lista de productos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Error interno del servidor
+    post:
+      summary: Crea un nuevo producto
+      tags: 
+        - Products
+      requestBody: 
+        required: true
+        content:
+          multipart/form-data:
+            schema: 
+              $ref: "#/components/requestBodies/CreateProduct"
+      responses: 
+        '201': 
+          description: El producto fue creado correctamente  
+  /api/products/all:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Lista de todos los productos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Error interno del servidor
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto según su ID
+      tags: 
+        - Products
+      parameters: 
+        - name: pid
+          in: path
+          required: true
+          description: El ID del producto que desea obtener
+          schema: 
+            type: string
+      responses: 
+        '200':
+          description: El producto fue obtenido correctamente
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Product"
+    put:
+      summary: Actualiza un producto según su ID
+      tags: 
+        - Products
+      parameters: 
+        - name: pid
+          in: path
+          required: true
+          description: El ID del producto que desea actualizar
+          schema: 
+            type: string
+      requestBody: 
+        required: true
+        content:
+          multipart/form-data:
+            schema: 
+              $ref: "#/components/requestBodies/UpdateProduct"
+      responses: 
+        '200': 
+          description: El producto fue actualizado correctamente  
+    delete:
+      summary: Elimina un producto según su ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: El ID del producto que desea eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto fue eliminado correctamente
+components:
+  schemas: 
+    Product: 
+      type: object
+      properties: 
+        _id: 
+          type: string
+          description: Identificador único del producto
+        title: 
+          type: string
+          description: Nombre del producto
+        description: 
+          type: string
+          description: Descripción del producto
+        code: 
+          type: string
+          description: Código del producto
+        price: 
+          type: number
+          description: Precio del producto
+        stock: 
+          type: integer
+          description: Stock del producto
+        category: 
+          type: string
+          description: Categoría del producto
+        owner: 
+          type: string
+          description: Propietario del producto
+        thumbnails: 
+          type: array
+          items: 
+            type: string
+          description: Lista de imágenes del producto

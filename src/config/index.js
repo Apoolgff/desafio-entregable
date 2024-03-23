@@ -24,4 +24,15 @@ exports.connectDB = async () => {
     console.log('Base de datos conectada')
   }
 
+exports.swaggerOptions = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'Documentacion E-Commerce',
+      description: 'Api Docs para E-Commerce'
+    }
+  },
+  apis: [`${__dirname}/../docs/**/*.yaml`]
+}
+
 exports.mode = mode;

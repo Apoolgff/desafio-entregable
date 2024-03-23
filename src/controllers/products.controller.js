@@ -11,7 +11,7 @@ class ProductsController {
         this.productService = productService
     }
 
-    async getProducts(req, res) {
+    getProducts = async (req, res) => {
         try {
             const products = await this.productService.getProducts();
             if (res) {
@@ -29,7 +29,7 @@ class ProductsController {
         }
     }
 
-    async getProductsLimited(req, res) {
+    getProductsLimited = async (req, res) => {
         try {
             const { limit = 3, page = 1, sort, query } = req.query;
 
@@ -78,7 +78,7 @@ class ProductsController {
     getProductBy = async (req, res) => {
         try {
             const productId = req.params.pid;
-            const product = await this.productService.getProductBy(productId);
+            const product = await this.productService.getProductBy({_id: productId});
             res.json({ product });//res.send({status: 'success', payload: product})
         } catch (error) {
             logger.error(error.message);

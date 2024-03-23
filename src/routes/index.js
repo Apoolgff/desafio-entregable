@@ -8,6 +8,9 @@ const testRouter = require('./apis/test.router')
 const compression = require('express-compression')
 //const { addLogger, logger } = require('../utils/logger');
 const { handleError } = require('../middlewares/error/handleError');
+const swaggerJsDoc = require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
+const { swaggerOptions } = require('../config')
 
 
 router.use(compression({
@@ -16,6 +19,10 @@ router.use(compression({
         zlib: {}
     }
 }))
+
+const specs = swaggerJsDoc(swaggerOptions)
+
+router.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 //router.use(addLogger);
 
