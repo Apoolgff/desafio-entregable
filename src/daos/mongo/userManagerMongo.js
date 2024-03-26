@@ -40,7 +40,7 @@ class UserDaoMongo {
 
     //Eliminar usuario segun ID
     async delete(uid) { 
-        return await this.model.findByIdAndDelete(uid);
+        return await this.model.findByIdAndDelete(uid); 
     }
       
       
