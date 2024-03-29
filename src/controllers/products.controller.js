@@ -127,7 +127,7 @@ class ProductsController {
 
             res.json({ product: newProduct });
         } catch (error) {
-            //logger.error(error.message);
+            logger.error(error.message);
             //res.status(400).send('Bad Request');
             req.files.forEach(file => {
                 fs.unlinkSync(file.path); // Eliminar archivo
