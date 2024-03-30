@@ -4,7 +4,7 @@ const supertest = require('supertest')
 const expect = chai.expect
 const requester = supertest('http://localhost:8080')
 
-
+//TESTING COMENTADO PARA CONTROLAR QUE QUIERO TESTEAR. POR AHORA TODO FUNCIONAL.
 describe('Testing Ecommerce', ()=>{
     describe('Test de Productos', ()=>{
         beforeEach(function () {
