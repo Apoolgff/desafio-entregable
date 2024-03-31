@@ -4,13 +4,13 @@ const supertest = require('supertest')
 const expect = chai.expect
 const requester = supertest('http://localhost:8080')
 
-//TESTING COMENTADO PARA CONTROLAR QUE QUIERO TESTEAR. POR AHORA TODO FUNCIONAL.
-describe('Testing Ecommerce', ()=>{
-    describe('Test de Productos', ()=>{
+
+describe('Testing Ecommerce', () => {
+    describe('Test de Productos', () => {
         beforeEach(function () {
             this.timeout(5000)
         })
-        /*it('Prueba del endpoint para crear producto GET /api/products. Debe obtener todos los productos correctamente', async function () {
+        it('Prueba del endpoint para crear producto GET /api/products. Debe obtener todos los productos correctamente', async function () {
             const res = await requester.get('/api/products/all');
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('array');
@@ -47,55 +47,75 @@ describe('Testing Ecommerce', ()=>{
 
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
-        })*/
+        })
     })
-    describe('Test de carts', ()=>{
-       /* it('Prueba del endpoint para crear un carrito POST /api/carts. Debe crear un carrito correctamente', async function () {
-            const res = await requester.post('/api/carts');
-            expect(res.status).to.equal(200);
-            expect(res.body).to.be.an('object');
-        });
-
-        it('Prueba del endpoint para obtener un carrito GET /api/carts/:cid. Debe obtener un carrito correctamente', async function () {
-
-            const res = await requester.get('/api/carts/65f124deaed549bfefd727dc');
-            expect(res.status).to.equal(200);
-            expect(res.body).to.be.an('object');
-        });
-
-
-        it('Prueba del endpoint para agregar un producto al carrito POST /api/carts/:cid/product/:pid. Debe agregar un producto al carrito correctamente', async function () {
-            const res = await requester
-                .post('/api/carts/65f124deaed549bfefd727dc/product/65fd1dcd160af1b292008db8')
-                .send({ quantity: 1 }); // Puedes ajustar la cantidad según sea necesario
-            expect(res.status).to.equal(200);
-            expect(res.body).to.be.an('object');
-        });*/
+    describe('Test de carts', () => {
+         it('Prueba del endpoint para crear un carrito POST /api/carts. Debe crear un carrito correctamente', async function () {
+             const res = await requester.post('/api/carts');
+             expect(res.status).to.equal(200);
+             expect(res.body).to.be.an('object');
+         });
+ 
+         it('Prueba del endpoint para obtener un carrito GET /api/carts/:cid. Debe obtener un carrito correctamente', async function () {
+ 
+             const res = await requester.get('/api/carts/65f124deaed549bfefd727dc');
+             expect(res.status).to.equal(200);
+             expect(res.body).to.be.an('object');
+         });
+ 
+ 
+         it('Prueba del endpoint para agregar un producto al carrito POST /api/carts/:cid/product/:pid. Debe agregar un producto al carrito correctamente', async function () {
+             const res = await requester
+                 .post('/api/carts/65f124deaed549bfefd727dc/product/65fd1dcd160af1b292008db8')
+                 .send({ quantity: 1 });
+             expect(res.status).to.equal(200);
+             expect(res.body).to.be.an('object');
+         });
     })
-    describe('Test de Session', ()=>{
-        /*it('Prueba del endpoint para obtener el usuario actual GET /api/session/current. Debe obtener el usuario actual correctamente', async () => {
+    describe('Test de Session', () => {
+        it('Prueba del endpoint para registrar un nuevo usuario POST /api/user/register. Debe registrar un nuevo usuario correctamente', async function () {
+            this.timeout(25000)
+            const newUser = {
+                first_name: 'John',
+                last_name: 'Doe',
+                email: 'johndoe@example.com',
+                password: 'password123',
+                confirmPassword: 'password123',
+                age: 30,
+                role: 'user'
+            };
+
             const res = await requester
-                .get('/api/session/current')
-                .set('Cookie', ['token=YOUR_TOKEN_HERE']);
+                .post('/api/user/register')
+                .send(newUser);
+
+            
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
+            expect(res.body.status).to.equal('success');
+            expect(res.body.message).to.equal('logged in');
+            expect(res.body.redirectUrl).to.equal('/login');
 
+            
+            expect(res.header['set-cookie']).to.be.an('array').that.is.not.empty;
+            expect(res.header['set-cookie'][0]).to.include('token=');
         });
+        it('Prueba del endpoint para obtener un usuario GET /api/user/:uid. Debe obtener un usuario correctamente', async function () {
+            const userId = '65f124dfaed549bfefd727de';
 
-        it('Prueba del endpoint para cerrar sesión GET /api/session/logout. Debe cerrar sesión correctamente', async () => {
             const res = await requester
-                .get('/api/session/logout')
-                .set('Cookie', ['token=YOUR_TOKEN_HERE']);
-            expect(res.status).to.equal(200);
-            expect(res.header['set-cookie'][0]).to.include('token=; Path=/; Expires=');
-        });
+                .get(`/api/user/${userId}`);
 
-        it('Prueba del endpoint para iniciar sesión POST /api/session/login. Debe iniciar sesión correctamente', async () => {
-            const res = await requester
-                .post('/api/session/login')
-                .send({ email: 'test@example.com', password: 'password' }); // Agrega credenciales válidas aquí
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
-        });*/
+        });
+
+        it('Prueba del endpoint para iniciar sesión POST /api/session/login. Debe iniciar sesión correctamente', async function () {
+            const res = await requester
+                .post('/api/user/login')
+                .send({ email: 'johndoe@example.com', password: 'password123' });
+            expect(res.status).to.equal(200);
+            expect(res.body).to.be.an('object');
+        });
     })
 })
