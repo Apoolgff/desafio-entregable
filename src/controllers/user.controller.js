@@ -24,8 +24,10 @@ class UserController {
     }
   }
 
-  userLogout(req, res) {
+  userLogout = async (req, res) => {
     try {
+      const userId = req.user._id; // Asumiendo que el id del usuario está en req.user
+      await this.userService.updateUser(userId, { last_connection: new Date() });
       res.clearCookie('token');
       res.status(200).json({ status: 'success', message: 'Logout successful' });
     } catch (error) {
@@ -102,7 +104,8 @@ class UserController {
         email,
         password: await createHash(password),
         age,
-        role
+        role,
+        documents: []
       }
 
       //Crea un nuevo usuario
@@ -147,10 +150,34 @@ class UserController {
   updateUser = async (req, res) => {
     try {
       const userId = req.params.uid;
-      const updatedUser = await this.userService.updateUser(userId, req.body);
-      const user = await this.userService.getUserBy(userId)
+      const { identificacion, domicilio, cuenta } = req.files; // Obtenemos los archivos subidos
 
-      const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email: user.email, cart: user.cart, role: user.role })
+      // Verificar si se han subido los archivos requeridos
+      //if (!identificacion || !domicilio || !cuenta) {
+      //    return res.status(400).send('Por favor, sube los tres archivos requeridos.');
+      //}
+
+      // Obtener el usuario a actualizar
+      const user = await this.userService.getUserBy(userId);
+
+      if (user.role === 'premium' && (!identificacion || !domicilio || !cuenta)) {
+        // Actualizar el rol sin modificar los documentos
+       await this.userService.updateUser(userId, { role: 'user', documents: [] });
+
+      }
+      else{
+              // Construir los documentos actualizados
+      const updatedDocuments = [
+        { name: 'Identificación', reference: identificacion[0].path },
+        { name: 'Comprobante de domicilio', reference: domicilio[0].path },
+        { name: 'Comprobante de estado de cuenta', reference: cuenta[0].path }
+      ];
+
+      // Actualizar el usuario con los documentos actualizados
+      await this.userService.updateUser(userId, {role: 'premium', documents: updatedDocuments });
+      }
+      const userUpdated = await this.userService.getUserBy(userId);
+      const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role })
       res.cookie('token', token, {
         maxAge: 3600000,
         httpOnly: true,
@@ -162,7 +189,7 @@ class UserController {
         redirectUrl: '/role',
       })
       //const user = await this.userService.getUserBy({id: userId})
-      logger.info(updatedUser)
+      logger.info(user)
       //res.json({ updatedUser });//res.send({status: 'success', payload: updatedUser})
     } catch (error) {
       logger.error(error.message);
@@ -191,7 +218,7 @@ class UserController {
         //console.error('Ese Email ya esta en uso.');
         logger.error('No existen usuarios con ese mail')
         return { error: 'No existen usuarios con ese mail' };
-      } 
+      }
 
       const token = createToken({ email: user.email, password: user.password })
       logger.info(user.email, user.password)
@@ -218,34 +245,34 @@ class UserController {
 
   resetPass = async (req, res) => {
     try {
-        const { email, newPass, repPass } = req.body;
+      const { email, newPass, repPass } = req.body;
 
-        // Verificar si las contraseñas nuevas coinciden
-        if (newPass !== repPass) {
-            return res.status(400).send('Las contraseñas no coinciden.');
-        }
+      // Verificar si las contraseñas nuevas coinciden
+      if (newPass !== repPass) {
+        return res.status(400).send('Las contraseñas no coinciden.');
+      }
 
-        // Obtener el usuario por su correo electrónico
-        const user = await this.userService.getUser({ email });
+      // Obtener el usuario por su correo electrónico
+      const user = await this.userService.getUser({ email });
 
-        // Verificar si se encontró el usuario
-        if (!user) {
-            return res.status(400).send('Usuario no encontrado.');
-        }
+      // Verificar si se encontró el usuario
+      if (!user) {
+        return res.status(400).send('Usuario no encontrado.');
+      }
 
-        // Generar el hash de la nueva contraseña
-        const hashedNewPass = await createHash(newPass);
+      // Generar el hash de la nueva contraseña
+      const hashedNewPass = await createHash(newPass);
 
-        // Actualizar la contraseña del usuario con el hash generado
-        const updatedUser = await this.userService.updateUser(user._id, { password: hashedNewPass });
+      // Actualizar la contraseña del usuario con el hash generado
+      const updatedUser = await this.userService.updateUser(user._id, { password: hashedNewPass });
 
-        // Mostrar un mensaje de éxito y redirigir a la página de inicio de sesión
-        res.send('Contraseña restablecida con éxito.');
+      // Mostrar un mensaje de éxito y redirigir a la página de inicio de sesión
+      res.send('Contraseña restablecida con éxito.');
     } catch (error) {
-        logger.error(error.message);
-        res.status(500).send('Error interno del servidor');
+      logger.error(error.message);
+      res.status(500).send('Error interno del servidor');
     }
-}
+  }
 
 
 }

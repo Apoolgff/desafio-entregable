@@ -8,7 +8,15 @@
         <button id="role-btn">Productos</button>
         <button id="logout-btn">Logout</button>
 
-        <div class="radio-container">
+        <form id="file-upload-form">
+            <label for="identificacion">Identificacion:</label>
+            <input type="file" id="identificacion" name="identificacion"><br>
+            <label for="domicilio">Comprobante de domicilio:</label>
+            <input type="file" id="domicilio" name="domicilio"><br>
+            <label for="cuenta">Comprobante de estado de cuenta:</label>
+            <input type="file" id="cuenta" name="cuenta"><br>
+
+            <div class="radio-container">
                 <label for="role"><span>Nuevo Rol: </span></label>
                 <label class='radio-label' for="userRole">Usuario</label>
                 <input type="radio" id="userRole" name="role" value="user">
@@ -17,60 +25,77 @@
                 <input type="radio" id="premiumRole" name="role" value="premium">
             </div>
 
-            <button id="update-role-btn" onclick="updateUser()">Actualizar Rol</button>
-        {{/if}}
+            <button type="submit" id="update-role-btn">Actualizar Rol</button>
+        </form>
+    </div>
+</div>
+{{/if}}
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
 
-                const roleButton = document.getElementById('role-btn');
-                if (roleButton) {
-                    roleButton.addEventListener('click', function () {
-                        window.location.href = '/products';
-                    });
+        const roleButton = document.getElementById('role-btn');
+        if (roleButton) {
+            roleButton.addEventListener('click', function () {
+                window.location.href = '/products';
+            });
+        }
+
+        document.getElementById('logout-btn').addEventListener('click', function () {
+            fetch('/api/user/logout', {
+                method: 'GET',
+                credentials: 'include',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/login';
+                    } else {
+                        console.error('Error en el logout:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error en el logout:', error));
+        });
+
+        document.getElementById('file-upload-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            updateUser();
+        });
+
+        function updateUser() {
+            const userId = document.getElementById('userId').textContent; 
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            if (role === 'premium') {
+                // Verificar si se han subido los tres archivos requeridos
+                const identificacion = document.getElementById('identificacion').files[0];
+                const domicilio = document.getElementById('domicilio').files[0];
+                const cuenta = document.getElementById('cuenta').files[0];
+
+                if (!identificacion || !domicilio || !cuenta) {
+                    alert('Por favor, sube los tres archivos requeridos.');
+                    return;
                 }
-            });
-
-            document.getElementById('logout-btn').addEventListener('click', function () {
-                fetch('/api/user/logout', {
-                    method: 'GET',
-                    credentials: 'include',
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = '/login';
-                        } else {
-                            console.error('Error en el logout:', response.statusText);
-                        }
-                    })
-                    .catch(error => console.error('Error en el logout:', error));
-            });
-
-            function updateUser() {
-                const userId = document.getElementById('userId').textContent; 
-
-                const role = document.querySelector('input[name="role"]:checked').value;
-
-                const requestBody = { role };
-
-                fetch(`/api/user/premium/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestBody),
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            
-                            console.log('Usuario actualizado exitosamente');
-                            window.location.reload();
-                            
-                        } else {
-                            console.error('Error al actualizar el Usuario:', response.statusText);
-                        }
-                    })
-                    .catch(error => console.error('Error al actualizar el Usuario:', error));
             }
 
-        </script>
+            const formData = new FormData();
+            formData.append('role', role);
+            formData.append('identificacion', document.getElementById('identificacion').files[0]);
+            formData.append('domicilio', document.getElementById('domicilio').files[0]);
+            formData.append('cuenta', document.getElementById('cuenta').files[0]);
+
+            fetch(`/api/user/premium/${userId}`, {
+                method: 'PUT',
+                body: formData,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Usuario actualizado exitosamente');
+                        window.location.reload();
+                    } else {
+                        console.error('Error al actualizar el Usuario:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error al actualizar el Usuario:', error));
+        }
+    });
+</script>

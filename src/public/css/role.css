@@ -88,3 +88,22 @@ body {
   input[type="radio"] {
     margin-right: 10px; 
   }
+
+  /* Estilo para los labels */
+label {
+  display: block; /* Para que cada label ocupe una línea completa */
+  margin-bottom: 5px; /* Espacio entre cada label y el siguiente elemento */
+  font-weight: bold; /* Texto en negrita */
+  font-size: 25px;
+}
+
+/* Estilo para los inputs de tipo file */
+input[type="file"] {
+  display: block; /* Para que cada input ocupe una línea completa */
+  margin-bottom: 10px; /* Espacio entre cada input y el siguiente */
+}
+
+/* Opcional: Estilo para resaltar los inputs de tipo file cuando están enfocados */
+input[type="file"]:focus {
+  outline: 2px solid #007bff; /* Borde azul alrededor del input cuando está enfocado */
+}

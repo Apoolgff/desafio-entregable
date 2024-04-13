@@ -13,3 +13,10 @@ error: No puedes agregar tu propio producto al carrito.
 error: Ese Email ya esta en uso.
 error: Ese Email ya esta en uso.
 error: Ese Email ya esta en uso.
+error: Cast to ObjectId failed for value "{ _id: { id: '6619bfeb79446a513bae0702' } }" (type Object) at path "_id" for model "Users"
+error: Cast to ObjectId failed for value "{ _id: { id: '6619bfeb79446a513bae0702' } }" (type Object) at path "_id" for model "Users"
+error: Cast to ObjectId failed for value "{ _id: { _id: '6619bfeb79446a513bae0702' } }" (type Object) at path "_id" for model "Users"
+error: Cannot read properties of undefined (reading '0')
+error: Cannot read properties of undefined (reading '0')
+error: updatedUser is not defined
+error: updatedUser is not defined
