@@ -15,10 +15,9 @@ exports.uploader = multer({ storage });
 const multer = require('multer');
 const { dirname, join } = require('node:path');*/
 
-// Función para determinar la carpeta de destino basada en algún criterio
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Determina la carpeta de destino basada en el tipo de archivo
     let folder = '';
     switch (file.fieldname) {
       case 'profile':
@@ -43,12 +42,11 @@ const storage = multer.diskStorage({
         folder = 'documents';
         break;
       default:
-        folder = 'others'; // Carpeta por defecto si no se cumple ninguna de las anteriores
+        folder = 'others';
     }
     cb(null, `${dirname(__dirname)}/public/files/${folder}`);
   },
   filename: function (req, file, cb) {
-    // Genera un nombre de archivo único
     cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
