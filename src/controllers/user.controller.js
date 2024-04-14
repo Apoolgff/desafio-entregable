@@ -1,5 +1,5 @@
 //const UserDaoMongo = require('../daos/mongo/userManagerMongo')
-const { userService } = require('../repositories/services');
+const { userService, cartService } = require('../repositories/services');
 const { EErrors } = require('../services/errors/enums');
 const { generateUserErrorInfo } = require('../services/errors/errorGenerator');
 const { createHash, isValidPassword } = require('../utils/hashPassword')
@@ -12,6 +12,7 @@ const { logger } = require('../utils/logger')
 class UserController {
   constructor() {
     this.userService = userService
+    this.cartService = cartService
   }
 
   getCurrentUser = async (req, res) => {
@@ -76,6 +77,7 @@ class UserController {
   userRegister = async (req, res, next) => {
     try {
       const { first_name, last_name, email, password, confirmPassword, age, role } = req.body;
+      const cart = await this.cartService.createCart()
 
       if (!first_name || !last_name || !email || !age) {
         CustomError.createError({
@@ -97,6 +99,7 @@ class UserController {
 
         return res.send('Las contraseñas no coinciden');
       }
+      //const cartId = await this.cartService.getCart({_id : cart._id})
 
       const newUser = {
         first_name,
@@ -104,6 +107,7 @@ class UserController {
         email,
         password: await createHash(password),
         age,
+        cart: cart._id,
         role,
         documents: []
       }
@@ -162,19 +166,22 @@ class UserController {
 
       if (user.role === 'premium' && (!identificacion || !domicilio || !cuenta)) {
         // Actualizar el rol sin modificar los documentos
-       await this.userService.updateUser(userId, { role: 'user', documents: [] });
+        await this.userService.updateUser(userId, { role: 'user', documents: [] });
 
       }
-      else{
-              // Construir los documentos actualizados
-      const updatedDocuments = [
-        { name: 'Identificación', reference: identificacion[0].path },
-        { name: 'Comprobante de domicilio', reference: domicilio[0].path },
-        { name: 'Comprobante de estado de cuenta', reference: cuenta[0].path }
-      ];
+      else if (user.role === 'user' && (!identificacion || !domicilio || !cuenta)) {
+        const updatedDocuments = [
+          { name: 'Identificación', reference: identificacion[0].path },
+          { name: 'Comprobante de domicilio', reference: domicilio[0].path },
+          { name: 'Comprobante de estado de cuenta', reference: cuenta[0].path }
+        ];
 
-      // Actualizar el usuario con los documentos actualizados
-      await this.userService.updateUser(userId, {role: 'premium', documents: updatedDocuments });
+        // Actualizar el usuario con los documentos actualizados
+        await this.userService.updateUser(userId, { documents: updatedDocuments, status: true });
+      }
+      else if (user.role === 'user' && user.status === true) {
+
+        await this.userService.updateUser(userId, { role: 'premium' });
       }
       const userUpdated = await this.userService.getUserBy(userId);
       const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role })

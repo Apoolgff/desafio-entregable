@@ -43,6 +43,10 @@ const UsersSchema = Schema({
   last_connection: {
     type: Date,
     default: Date.now
+  },
+  status: {
+    type: Boolean,
+    default: false
   }
 })
 

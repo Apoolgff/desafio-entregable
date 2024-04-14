@@ -1,7 +1,7 @@
 const { usersModel } = require('./models/user.model');
-const CartDaoMongo = require('./cartManagerMongo')
+//const CartDaoMongo = require('./cartManagerMongo')
 
-const cartService = new CartDaoMongo()
+//const cartService = new CartDaoMongo()
 
 class UserDaoMongo {
     constructor() {
@@ -24,8 +24,8 @@ class UserDaoMongo {
 
     // Crea un usuario
     async create(user) {
-        const cart = await cartService.create();
-        user.cart = cart._id;
+        //const cart = await cartService.create();
+        //user.cart = cart._id;
         return await this.model.create(user);
     }
     

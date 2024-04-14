@@ -21,9 +21,9 @@ sessionRouter.post('/login', userController.userLogin);
 
 sessionRouter.post('/register', userController.userRegister);//Aca es donde envio el mail al registrarte
 
-sessionRouter.put('/premium/:uid',uploader.fields([{ name: 'identificacion', maxCount: 1 }, { name: 'domicilio', maxCount: 1 }, { name: 'cuenta', maxCount: 1 }]),userController.updateUser)
+sessionRouter.put('/premium/:uid',userController.updateUser)
 
-sessionRouter.post('/:uid/documents', userController.updateUser)
+sessionRouter.post('/:uid/documents', uploader.fields([{ name: 'identificacion', maxCount: 1 }, { name: 'domicilio', maxCount: 1 }, { name: 'cuenta', maxCount: 1 }]), userController.updateUser)
 
 sessionRouter.get('/:uid', userController.getUserBy)
 
