@@ -111,9 +111,9 @@ class ProductsController {
                 })
             }
 
-            const thumbnails = req.files.map(file => `/images/${file.filename}`);
+            const thumbnails = req.files.map(file => `/files/products/${file.filename}`);
 
-            // Crear el producto con la ruta de la imagen
+            
             const newProduct = await this.productService.createProduct({
                 title,
                 description,
