@@ -1,32 +1,47 @@
 {{#if user}}
 <div class="container">
     <div class="user-container">
-        <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
-        <p><span>Id:</span><span id="userId">{{user.id}}</span></p>
-        <p><span>Rol:</span> {{user.role}}</p>
-
-        <button id="role-btn">Productos</button>
-        <button id="logout-btn">Logout</button>
-
-        <form id="file-upload-form">
-            <label for="identificacion">Identificacion:</label>
-            <input type="file" id="identificacion" name="identificacion"><br>
-            <label for="domicilio">Comprobante de domicilio:</label>
-            <input type="file" id="domicilio" name="domicilio"><br>
-            <label for="cuenta">Comprobante de estado de cuenta:</label>
-            <input type="file" id="cuenta" name="cuenta"><br>
-
-            <div class="radio-container">
-                <label for="role"><span>Nuevo Rol: </span></label>
-                <label class='radio-label' for="userRole">Usuario</label>
-                <input type="radio" id="userRole" name="role" value="user">
-
-                <label class='radio-label' for="premiumRole">Premium</label>
-                <input type="radio" id="premiumRole" name="role" value="premium">
+        <div class="user-info">
+            <div class="user-avatar">
+                <img src="{{user.profile}}" alt="profile" class="avatar-img">
             </div>
+            <div class="user-details">
+                <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
+                <p><span>Id:</span> <span id="userId">{{user.id}}</span></p>
+                <p><span>Rol:</span> {{user.role}}</p>
+                <p><span>Aprobado para ser PREMIUM:</span> <span id="status">{{user.status}}</span></p>
+            </div>
+            <button id="role-btn">Productos</button>
+            <button id="logout-btn">Logout</button>
+        </div>
+        <div class="forms-container">
+            <form id="upload-documents-form">
+                <label for="identificacion">Identificacion:</label>
+                <input type="file" id="identificacion" name="identificacion"><br>
+                <label for="domicilio">Comprobante de domicilio:</label>
+                <input type="file" id="domicilio" name="domicilio"><br>
+                <label for="cuenta">Comprobante de estado de cuenta:</label>
+                <input type="file" id="cuenta" name="cuenta"><br>
+                <button type="submit" id="upload-documents-btn">Subir Documentos</button>
+            </form>
 
-            <button type="submit" id="update-role-btn">Actualizar Rol</button>
-        </form>
+            <form id="upload-profile-form">
+                <label for="profile">Foto de Perfil:</label>
+                <input type="file" id="profile" name="profile"><br>
+                <button type="submit" id="upload-profile-btn">Subir Perfil</button>
+            </form>
+
+            <form id="update-role-form">
+                <div class="radio-container">
+                    <label><span>Nuevo Rol: </span></label>
+                    <label class='radio-label' for="userRole">Usuario</label>
+                    <input type="radio" id="userRole" name="role" value="user">
+                    <label class='radio-label' for="premiumRole">Premium</label>
+                    <input type="radio" id="premiumRole" name="role" value="premium">
+                </div>
+                <button type="submit" id="update-role-btn">Actualizar Rol</button>
+            </form>
+        </div>
     </div>
 </div>
 {{/if}}
@@ -56,46 +71,83 @@
                 .catch(error => console.error('Error en el logout:', error));
         });
 
-        document.getElementById('file-upload-form').addEventListener('submit', function (event) {
+        document.getElementById('upload-documents-form').addEventListener('submit', function (event) {
             event.preventDefault();
-            updateUser();
+            uploadDocuments();
         });
 
-        function updateUser() {
-            const userId = document.getElementById('userId').textContent; 
-            const role = document.querySelector('input[name="role"]:checked').value;
+        document.getElementById('upload-profile-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            uploadProfile();
+        });
 
-            if (role === 'premium') {
-                // Verificar si se han subido los tres archivos requeridos
-                const identificacion = document.getElementById('identificacion').files[0];
-                const domicilio = document.getElementById('domicilio').files[0];
-                const cuenta = document.getElementById('cuenta').files[0];
+        document.getElementById('update-role-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            updateUserRole();
+        });
 
-                if (!identificacion || !domicilio || !cuenta) {
-                    alert('Por favor, sube los tres archivos requeridos.');
-                    return;
-                }
-            }
-
+        function uploadDocuments() {
+            const userId = document.getElementById('userId').textContent;
             const formData = new FormData();
-            formData.append('role', role);
             formData.append('identificacion', document.getElementById('identificacion').files[0]);
             formData.append('domicilio', document.getElementById('domicilio').files[0]);
             formData.append('cuenta', document.getElementById('cuenta').files[0]);
 
-            fetch(`/api/user/premium/${userId}`, {
-                method: 'PUT',
+            fetch(`/api/user/${userId}/documents`, {
+                method: 'POST',
                 body: formData,
             })
                 .then(response => {
                     if (response.ok) {
-                        console.log('Usuario actualizado exitosamente');
+                        console.log('Documentos subidos exitosamente');
                         window.location.reload();
                     } else {
-                        console.error('Error al actualizar el Usuario:', response.statusText);
+                        console.error('Error al subir documentos:', response.statusText);
                     }
                 })
-                .catch(error => console.error('Error al actualizar el Usuario:', error));
+                .catch(error => console.error('Error al subir documentos:', error));
+        }
+
+        function uploadProfile() {
+            const userId = document.getElementById('userId').textContent;
+            const formData = new FormData();
+            formData.append('profile', document.getElementById('profile').files[0]);
+
+            fetch(`/api/user/${userId}/documents`, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Perfil subido exitosamente');
+                        window.location.reload();
+                    } else {
+                        console.error('Error al subir perfil:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error al subir perfil:', error));
+        }
+
+        function updateUserRole() {
+            const userId = document.getElementById('userId').textContent;
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            fetch(`/api/user/premium/${userId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ role }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Rol de usuario actualizado exitosamente');
+                        window.location.reload();
+                    } else {
+                        console.error('Error al actualizar el rol del usuario:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error al actualizar el rol del usuario:', error));
         }
     });
 </script>

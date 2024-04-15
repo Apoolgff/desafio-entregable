@@ -60,8 +60,8 @@ class UserController {
       logger.error('Password incorrecta')
       return res.status(401).send('Contraseña inválida');
     }
-
-    const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email, cart: user.cart, role: user.role })
+    //const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role, profile: updatedUser.profile, status: userUpdated.status})
+    const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email, cart: user.cart, role: user.role, profile: user.profile, status: user.status })
     res.cookie('token', token, {
       maxAge: 3600000,
       httpOnly: true,
@@ -154,37 +154,50 @@ class UserController {
   updateUser = async (req, res) => {
     try {
       const userId = req.params.uid;
-      const { identificacion, domicilio, cuenta } = req.files; // Obtenemos los archivos subidos
-
-      // Verificar si se han subido los archivos requeridos
-      //if (!identificacion || !domicilio || !cuenta) {
-      //    return res.status(400).send('Por favor, sube los tres archivos requeridos.');
-      //}
-
-      // Obtener el usuario a actualizar
       const user = await this.userService.getUserBy(userId);
+      if (req.files && req.files.identificacion && req.files.domicilio && req.files.cuenta && req.files.profile) {
+        const { identificacion, domicilio, cuenta, profile } = req.files; // Obtenemos los archivos subidos
 
-      if (user.role === 'premium' && (!identificacion || !domicilio || !cuenta)) {
-        // Actualizar el rol sin modificar los documentos
-        await this.userService.updateUser(userId, { role: 'user', documents: [] });
+        // Verificar si se han subido los archivos requeridos
+        //if (!identificacion || !domicilio || !cuenta) {
+        //    return res.status(400).send('Por favor, sube los tres archivos requeridos.');
+        //}
 
-      }
-      else if (user.role === 'user' && (!identificacion || !domicilio || !cuenta)) {
-        const updatedDocuments = [
-          { name: 'Identificación', reference: identificacion[0].path },
-          { name: 'Comprobante de domicilio', reference: domicilio[0].path },
-          { name: 'Comprobante de estado de cuenta', reference: cuenta[0].path }
-        ];
+        // Obtener el usuario a actualizar
+        //const user = await this.userService.getUserBy(userId);
 
-        // Actualizar el usuario con los documentos actualizados
-        await this.userService.updateUser(userId, { documents: updatedDocuments, status: true });
+
+        if (user.role === 'user' && (identificacion && domicilio && cuenta) && !profile && user.status === false) {
+          console.log('aqui en documents')
+          const updatedDocuments = [
+            { name: 'Identificación', reference: `/files/documents/${identificacion[0].filename}` },
+            { name: 'Comprobante de domicilio', reference: `/files/documents/${domicilio[0].filename}` },
+            { name: 'Comprobante de estado de cuenta', reference: `/files/documents/${cuenta[0].filename}` }
+          ];
+
+          // Actualizar el usuario con los documentos actualizados
+          await this.userService.updateUser(userId, { documents: updatedDocuments, status: true });
+        }
+        else if (profile && (!identificacion || !domicilio || !cuenta)) {
+          console.log('aqui en profile')
+          const updatedProfile = `/files/profiles/${profile[0].filename}`;
+
+          // Actualizar el usuario con los documentos actualizados
+          await this.userService.updateUser(userId, { profile: updatedProfile });
+        }
       }
       else if (user.role === 'user' && user.status === true) {
-
+        console.log('aqui en premium')
         await this.userService.updateUser(userId, { role: 'premium' });
       }
+      else if (user.role === 'premium') {
+        console.log('rol a user')
+        // Actualizar el rol sin modificar los documentos
+        await this.userService.updateUser(userId, { role: 'user' });
+
+      }
       const userUpdated = await this.userService.getUserBy(userId);
-      const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role })
+      const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role, profile: userUpdated.profile, status: userUpdated.status })
       res.cookie('token', token, {
         maxAge: 3600000,
         httpOnly: true,

@@ -44,6 +44,11 @@ const UsersSchema = Schema({
     type: Date,
     default: Date.now
   },
+  profile: {
+    type: String,
+    trim: true,
+    default: ''
+  },
   status: {
     type: Boolean,
     default: false

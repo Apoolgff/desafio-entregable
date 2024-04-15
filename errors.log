@@ -31,3 +31,20 @@ error: Error al obtener datos del usuario actual:
 error: Error al obtener datos del usuario actual:
 error: Error al obtener datos del usuario actual:
 error: Error al obtener datos del usuario actual:
+error: updatedUser is not defined
+error: Cast to string failed for value "[
+  {
+    profile: 'C:\\Users\\Pgff_\\Desktop\\DesafioEntregable\\src\\public\\files\\profiles\\1713200994643-helmet.png'
+  }
+]" (type Array) at path "profile"
+error: updatedUser is not defined
+error: Cannot destructure property 'identificacion' of 'req.files' as it is undefined.
+error: Cannot read properties of undefined (reading '0')
+error: Cannot read properties of undefined (reading 'filename')
+error: Cannot read properties of undefined (reading '0')
+error: Cannot read properties of undefined (reading '0')
+error: Cannot destructure property 'identificacion' of 'req.files' as it is undefined.
+error: Cannot destructure property 'identificacion' of 'req.files' as it is undefined.
+error: Cannot destructure property 'identificacion' of 'req.files' as it is undefined.
+error: Cannot read properties of undefined (reading 'profile')
+error: user is not defined

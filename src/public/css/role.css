@@ -27,6 +27,11 @@ body {
     color: #001074
   }
 
+  .forms-container{
+    display: flex;
+    justify-content: space-between;
+  }
+
   #logout-btn {
     display: inline-block;
     padding: 10px 20px;
@@ -37,13 +42,18 @@ body {
     border: solid 3px black;
     transition: background-color 0.3s ease; 
   }
+
+  #status {
+    color: blue;
+    font-size: 25px;
+  }
   
 
   #logout-btn:hover {
     background-color: #cc0000;
   }
 
-  #update-role-btn {
+  #update-role-btn, #upload-documents-btn, #upload-profile-btn {
     display: inline-block;
     padding: 10px 20px;
     background-color: #3e10bb; 
@@ -54,6 +64,17 @@ body {
     transition: background-color 0.3s ease; 
   }
   
+  #update-role-form, #upload-documents-form, #upload-profile-form{
+    display: block;
+    max-width: 500px;
+    padding: 10px 20px;
+    background-color: #1ac584; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    margin: 10px;
+  }
 
   #update-role-btn:hover {
     background-color: #280c74;
@@ -91,19 +112,37 @@ body {
 
   /* Estilo para los labels */
 label {
-  display: block; /* Para que cada label ocupe una línea completa */
-  margin-bottom: 5px; /* Espacio entre cada label y el siguiente elemento */
-  font-weight: bold; /* Texto en negrita */
+  display: block; 
+  margin-bottom: 5px; 
+  font-weight: bold; 
   font-size: 25px;
 }
 
-/* Estilo para los inputs de tipo file */
+
 input[type="file"] {
-  display: block; /* Para que cada input ocupe una línea completa */
-  margin-bottom: 10px; /* Espacio entre cada input y el siguiente */
+  display: block; 
+  margin-bottom: 10px; 
 }
 
-/* Opcional: Estilo para resaltar los inputs de tipo file cuando están enfocados */
+
 input[type="file"]:focus {
-  outline: 2px solid #007bff; /* Borde azul alrededor del input cuando está enfocado */
+  outline: 2px solid #007bff;
 }
+
+.avatar-img {
+  border-radius: 50%;
+  max-width: 150px;
+  height: auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  margin-right: 20px;
+}
+
+
+

@@ -138,7 +138,7 @@ class ViewsController {
         }
         
         const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
-        res.render('role', { title: 'Change Role', style: 'role.css', body: 'role', user:decodedToken });
+        res.render('role', { title: 'Profile', style: 'role.css', body: 'role', user:decodedToken });
     }
 
     recover = async (req, res) => {
