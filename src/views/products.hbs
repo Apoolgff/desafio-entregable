@@ -1,4 +1,14 @@
 {{#if user}}
+<nav class="navbar">
+    <p class="logo">E-Commerce</p>
+    <div class="nav-links">
+    <button id="chat-btn">Ir a Chat</button>
+    <button id="role-btn">Cambiar Rol</button>
+    <button id="manager-btn">Manager (premium)</button>
+
+    <button id="logout-btn">Logout</button>
+    </div>
+</nav>
 <div class="container">
   <div class="product-container">
     <h1>Bienvenido {{user.first_name}} {{user.last_name}}!</h1>
@@ -6,11 +16,7 @@
 
     <p><span>Rol:</span> {{user.role}}</p>
     <p><span>ID Carrito:</span> {{user.cart._id}}</p>
-    <button id="chat-btn">Ir a Chat</button>
-    <button id="role-btn">Cambiar Rol</button>
-    <button id="manager-btn">Manager (premium)</button>
 
-    <button id="logout-btn">Logout</button>
 
     <h2>Lista de Productos</h2>
     <ul class="products">

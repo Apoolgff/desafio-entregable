@@ -1,6 +1,9 @@
+*{
+  margin: 0;
+}
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+
     background-color: aqua;
   }
   
@@ -50,7 +53,7 @@ body {
   
 
   #logout-btn:hover {
-    background-color: #cc0000;
+    background-color: #a10000;
   }
 
   #update-role-btn, #upload-documents-btn, #upload-profile-btn {
@@ -133,6 +136,7 @@ input[type="file"]:focus {
   border-radius: 50%;
   max-width: 150px;
   height: auto;
+  margin: 10px;
 }
 
 .user-info {
@@ -143,6 +147,38 @@ input[type="file"]:focus {
 .user-avatar {
   margin-right: 20px;
 }
+
+.navbar {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links button {
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.nav-links button:hover {
+  background-color: #003580;
+}
+
+.logo{
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+
 
 
 

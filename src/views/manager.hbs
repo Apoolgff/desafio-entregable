@@ -1,4 +1,11 @@
 {{#if user}}
+<nav class="navbar">
+    <p class="logo">E-Commerce</p>
+    <div class="nav-links">
+        <button id="products-btn">Productos</button>
+        <button id="logout-btn">Logout</button>
+    </div>
+</nav>
 <div class="container">
     <div class="product-container">
         <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
@@ -6,8 +13,6 @@
 
         <p><span>Rol:</span> {{user.role}}</p>
 
-        <button id="products-btn">Productos</button>
-        <button id="logout-btn">Logout</button>
         {{/if}}
         <h1>Administrador de Productos</h1>
         <div class="page-container">

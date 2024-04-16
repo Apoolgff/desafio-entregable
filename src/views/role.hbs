@@ -1,4 +1,11 @@
 {{#if user}}
+<nav class="navbar">
+    <p class="logo">E-Commerce</p>
+    <div class="nav-links">
+        <button id="role-btn">Productos</button>
+        <button id="logout-btn">Logout</button>
+    </div>
+</nav>
 <div class="container">
     <div class="user-container">
         <div class="user-info">
@@ -11,8 +18,6 @@
                 <p><span>Rol:</span> {{user.role}}</p>
                 <p><span>Aprobado para ser PREMIUM:</span> <span id="status">{{user.status}}</span></p>
             </div>
-            <button id="role-btn">Productos</button>
-            <button id="logout-btn">Logout</button>
         </div>
         <div class="forms-container">
             <form id="upload-documents-form">

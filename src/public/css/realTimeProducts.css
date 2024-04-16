@@ -1,6 +1,10 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
     background-color: aqua;
   }
   
@@ -40,7 +44,7 @@ body {
   
 
   #logout-btn:hover {
-    background-color: #cc0000;
+    background-color: #a10000;
   }
 
   #products-btn {
@@ -107,7 +111,7 @@ body {
 /* FORMULARIOS */
 form {
     max-width: 400px;
-    margin: 20px auto;
+    margin: 20px 5px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -153,5 +157,42 @@ form {
   #updateProductForm{
     background-color: #d9f7e7;
   }
+
+  .navbar {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .nav-links button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-links button:hover {
+    background-color: #003580;
+  }
+  
+  .logo{
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+  }
+  
+  .container{
+    padding: 10px;
+  }
+  
+  
   
   
