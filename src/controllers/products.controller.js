@@ -94,10 +94,10 @@ class ProductsController {
                 logger.error('No se proporcionó ningún archivo.');
                 return res.status(400).send('Bad Request');
             }
-            let updatedOwner = owner; // Inicialmente, asigna el valor original de owner
+            let updatedOwner = owner;
 
             if (owner === 'adminCoder@coder.com') {
-                updatedOwner = 'Admin'; // Cambia el valor de owner si es 'adminCoder@coder.com'
+                updatedOwner = 'Admin'; //Cambia el valor de owner si es 'adminCoder@coder.com'
             }
 
             logger.info(updatedOwner)
@@ -130,7 +130,7 @@ class ProductsController {
             logger.error(error.message);
             //res.status(400).send('Bad Request');
             req.files.forEach(file => {
-                fs.unlinkSync(file.path); // Eliminar archivo
+                fs.unlinkSync(file.path); //Elimina archivo
             });
             next(error)
         }
