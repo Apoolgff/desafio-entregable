@@ -55,9 +55,9 @@ class CartController {
             }
 
             logger.info(product.owner)
-            const productOwner = product.owner; // Suponiendo que tienes una propiedad 'owner' en tu modelo de producto
+            const productOwner = product.owner;
 
-            // Verificar si el usuario actual es propietario del producto
+          
             if (user.email === productOwner) {
                 throw new Error('No puedes agregar tu propio producto al carrito.');
             }
@@ -150,9 +150,6 @@ class CartController {
                 if (!product) {
                     return res.status(404).json({ message: `Producto ${productData.productId} no encontrado` });
                 }
-                /*if (product.stock === 0) {
-                    return res.status(400).json({ message: `No hay stock disponible para el producto ${product.name}` });
-                }*/
             
                 if (product.stock === 0) {
                     CustomError.createError({

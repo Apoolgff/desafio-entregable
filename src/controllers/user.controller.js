@@ -156,15 +156,7 @@ class UserController {
       const userId = req.params.uid;
       const user = await this.userService.getUserBy(userId);
       if (req.files && req.files.identificacion && req.files.domicilio && req.files.cuenta && req.files.profile) {
-        const { identificacion, domicilio, cuenta, profile } = req.files; // Obtenemos los archivos subidos
-
-        // Verificar si se han subido los archivos requeridos
-        //if (!identificacion || !domicilio || !cuenta) {
-        //    return res.status(400).send('Por favor, sube los tres archivos requeridos.');
-        //}
-
-        // Obtener el usuario a actualizar
-        //const user = await this.userService.getUserBy(userId);
+        const { identificacion, domicilio, cuenta, profile } = req.files;
 
 
         if (user.role === 'user' && (identificacion && domicilio && cuenta) && !profile && user.status === false) {
@@ -192,7 +184,7 @@ class UserController {
       }
       else if (user.role === 'premium') {
         console.log('rol a user')
-        // Actualizar el rol sin modificar los documentos
+
         await this.userService.updateUser(userId, { role: 'user' });
 
       }
