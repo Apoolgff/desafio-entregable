@@ -23,7 +23,7 @@ sessionRouter.post('/register', userController.userRegister);//Aca es donde envi
 
 sessionRouter.put('/premium/:uid',userController.updateUser)
 
-sessionRouter.post('/:uid/documents', uploader.fields([{ name: 'identificacion', maxCount: 1 }, { name: 'domicilio', maxCount: 1 }, { name: 'cuenta', maxCount: 1 }, { name: 'profile', maxCount: 1 }]), userController.updateUser)
+sessionRouter.post('/:uid/documents', uploader.fields([{ name: 'identificacion', maxCount: 1 }, { name: 'domicilio', maxCount: 1 }, { name: 'cuenta', maxCount: 1 }, { name: 'profile', maxCount: 1 }]), userController.uploadFiles)
 
 sessionRouter.get('/:uid', userController.getUserBy)
 
