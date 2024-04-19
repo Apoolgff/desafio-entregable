@@ -22,6 +22,17 @@ body {
     color: #001ac3;
   }
 
+  a{
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+
+  a:hover{
+    color: black;
+  }
 
 
   span{
@@ -46,14 +57,13 @@ body {
     transition: background-color 0.3s ease; 
   }
 
+  #logout-btn:hover {
+    background-color: #a10000;
+  }
+
   #status {
     color: blue;
     font-size: 25px;
-  }
-  
-
-  #logout-btn:hover {
-    background-color: #a10000;
   }
 
   #update-role-btn, #upload-documents-btn, #upload-profile-btn {
@@ -65,13 +75,14 @@ body {
     border-radius: 5px; 
     border: solid 3px black;
     transition: background-color 0.3s ease; 
+    cursor: pointer;
   }
   
   #update-role-form, #upload-documents-form, #upload-profile-form{
     display: block;
     max-width: 500px;
     padding: 10px 20px;
-    background-color: #1ac584; 
+    background-color: rgb(255, 232, 127); 
     color: #ffffff;
     text-decoration: none; 
     border-radius: 5px; 
@@ -79,7 +90,7 @@ body {
     margin: 10px;
   }
 
-  #update-role-btn:hover {
+  #update-role-btn:hover, #upload-documents-btn:hover, #upload-profile-btn:hover {
     background-color: #280c74;
   }
   
@@ -111,6 +122,7 @@ body {
   
   input[type="radio"] {
     margin-right: 10px; 
+    color: black;
   }
 
   /* Estilo para los labels */
@@ -119,12 +131,14 @@ label {
   margin-bottom: 5px; 
   font-weight: bold; 
   font-size: 25px;
+  color: black;
 }
 
 
 input[type="file"] {
   display: block; 
   margin-bottom: 10px; 
+  color: black;
 }
 
 
@@ -142,6 +156,7 @@ input[type="file"]:focus {
 .user-info {
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
 }
 
 .user-avatar {

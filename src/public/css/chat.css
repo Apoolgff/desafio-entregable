@@ -1,6 +1,12 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    background-color: rgb(149, 255, 255);
     margin: 0;
     padding: 0;
 }
@@ -10,7 +16,7 @@ h1{
 }
 
 li strong{
-    font-weight: bold;
+    font-weight: bold
 }
 
 p{
@@ -26,11 +32,27 @@ p strong{
 }
 
 
+#logout-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #bb1010; 
+    color: #ffffff;
+    text-decoration: none; 
+    border-radius: 5px; 
+    border: solid 3px black;
+    transition: background-color 0.3s ease; 
+  }
+
+  #logout-btn:hover {
+    background-color: #a10000;
+  }
+
+
 #chat-container {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: rgb(255, 232, 127); 
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -51,6 +73,7 @@ p strong{
 
 #message-form {
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #user-input,
@@ -90,3 +113,51 @@ p strong{
   #products-btn:hover {
     background-color: #0f0d89;
   }
+
+  .navbar {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .nav-links button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-links button:hover {
+    background-color: #003580;
+  }
+  
+  .logo{
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+  }
+
+  a{
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+
+  a:hover{
+    color: black;
+  }
+  
+  
+  
+  
+  

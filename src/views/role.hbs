@@ -2,25 +2,30 @@
 <nav class="navbar">
     <p class="logo">E-Commerce</p>
     <div class="nav-links">
-        <button id="role-btn">Productos</button>
+        <!-- <button id="role-btn">Productos</button>-->
+
+        <a href="/products">Productos</a>
+        <a href="/manager">Manager</a>
+        <a href="/chat">Chat</a>
         <button id="logout-btn">Logout</button>
     </div>
 </nav>
 <div class="container">
     <div class="user-container">
+        <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
         <div class="user-info">
-            <div class="user-avatar">
-                <img src="{{user.profile}}" alt="profile" class="avatar-img">
-            </div>
             <div class="user-details">
-                <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
                 <p><span>Id:</span> <span id="userId">{{user.id}}</span></p>
                 <p><span>Rol:</span> {{user.role}}</p>
                 <p><span>Aprobado para ser PREMIUM:</span> <span id="status">{{user.status}}</span></p>
             </div>
+            <div class="user-avatar">
+                <img src="{{user.profile}}" alt="Foto" class="avatar-img">
+            </div>
         </div>
         <div class="forms-container">
             <form id="upload-documents-form">
+                <p>Archivos necesarios para ser Premium</p>
                 <label for="identificacion">Identificacion:</label>
                 <input type="file" id="identificacion" name="identificacion"><br>
                 <label for="domicilio">Comprobante de domicilio:</label>

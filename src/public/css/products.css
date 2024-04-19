@@ -32,6 +32,18 @@ body {
   strong{
     color: black;
   }
+
+  a{
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+
+  a:hover{
+    color: black;
+  }
   
   .container{
     display: flex;
@@ -115,6 +127,7 @@ body {
     border-radius: 5px; 
     border: solid 3px black;
     transition: background-color 0.3s ease; 
+    cursor: pointer;
   }
 
   .purchase-btn:hover{
