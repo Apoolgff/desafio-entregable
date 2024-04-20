@@ -6,6 +6,7 @@
         <a href="/products">Productos</a>
         <a href="/chat">Chat</a>
         <a href="/role">Perfil</a>
+        <a href="/admin">Admin</a>
         <button id="logout-btn">Logout</button>
     </div>
 </nav>
@@ -159,13 +160,9 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            const productElement = document.getElementById(`product_${productId}`);
-                            if (productElement) {
-                                productElement.remove();
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            }
+                            
+                                window.location.reload();
+                            
                         } else {
                             console.error('Error al eliminar el producto:', response.statusText);
                         }

@@ -104,7 +104,7 @@ body {
     background-color: white;
   }
 
-  .product-card {
+  .product-card, .user-card {
     border: 3px solid #000000;
     background-color: rgb(255, 232, 127);
     margin: 10px;
@@ -115,7 +115,7 @@ body {
     transition: box-shadow 0.3s ease-in-out;
   }
   
-  .product-card:hover {
+  .product-card:hover, .user-card:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
 
@@ -169,6 +169,14 @@ form {
   #updateProductForm{
     background-color: #d9f7e7;
   }
+  #update-role-form{
+    background-color: rgb(255, 232, 127);
+    border: 3px solid #000000;
+  }
+  #deleteUserForm{
+    background-color: rgb(255, 232, 127);
+    border: 3px solid #000000;
+  }
 
   .navbar {
     background-color: #007bff;
@@ -204,6 +212,20 @@ form {
   .container{
     padding: 10px;
   }
+
+  /* Estilo para los labels */
+.radio-label {
+  display: block; 
+  margin-bottom: 5px; 
+  font-weight: bold; 
+  font-size: 25px;
+  color: black;
+  text-align: center;
+}
+
+input[type="radio"] {
+  color: black;
+}
   
   
   

@@ -31,6 +31,10 @@ sessionRouter.post('/recover', userController.userRecovery);
 
 sessionRouter.post('/resetpass', userController.resetPass)
 
+sessionRouter.put('/admin/:uid',userController.updateUserAdmin)
+
+sessionRouter.delete('/:uid',userController.deleteUser)
+
 
 
 module.exports = sessionRouter;

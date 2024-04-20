@@ -4,7 +4,7 @@ const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const jwt = require('jsonwebtoken');
 const { configObject } = require('../config/index')
 
-const { productService, messageService, cartService } = require('../repositories/services')
+const { productService, messageService, cartService, userService } = require('../repositories/services')
 
 
 
@@ -13,6 +13,7 @@ class ViewsController {
         this.productService = productService
         this.messageService = messageService
         this.cartService = cartService
+        this.userService = userService
     }
 
     login = async (req, res) => {
@@ -160,6 +161,18 @@ class ViewsController {
             console.error(error.message);
             res.status(400).send('Invalid token');
         }
+    }
+
+    admin = async (req, res) => {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.redirect('/login');
+        }
+        
+        const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
+        const users = await this.userService.getUsers();
+        res.render('admin', { title: 'Admin Manager', style: 'realTimeProducts.css', body: 'admin', users, user:decodedToken });
     }
     
 }

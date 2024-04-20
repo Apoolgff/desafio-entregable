@@ -1,0 +1,129 @@
+{{#if user}}
+<nav class="navbar">
+    <p class="logo">E-Commerce</p>
+    <div class="nav-links">
+        <!--<button id="products-btn">Productos</button>-->
+        <a href="/manager">Manager</a>
+        <button id="logout-btn">Logout</button>
+    </div>
+</nav>
+<div class="container">
+    <div class="product-container">
+        <h1><span>Bienvenido</span> {{user.first_name}} {{user.last_name}}!</h1>
+        <p><span>Email:</span> <span id="user-email">{{user.email}}</span></p>
+
+        <p><span>Rol:</span> {{user.role}}</p>
+
+        {{/if}}
+        <h1>Administrador de Productos</h1>
+        <div class="page-container">
+            <div>
+                <h2>Eliminar Usuario por ID</h2>
+                <form id="deleteUserForm">
+                    <label for="userId">ID del Usuario:</label>
+                    <input type="text" id="userId" name="userId" placeholder="Id del usuario" required>
+                    <button type="submit" id="deleteUserBtn">Eliminar Producto</button>
+                </form>
+            </div>
+            <div>
+                <h2>Cambio de rol de un usuario</h2>
+                <form id="update-role-form">
+                    <div class="radio-container">
+                        <label class='radio-label' for="idUser">Id del Usuario</label>
+                        <input type="text" id="idUser" name="id" placeholder="Id del Usuario">
+                        <label><span>Nuevo Rol: </span></label><br>
+                        <label class='radio-label' for="userRole">Usuario</label>
+                        <input type="radio" id="userRole" name="role" value="user">
+                        <label class='radio-label' for="premiumRole">Premium</label>
+                        <input type="radio" id="premiumRole" name="role" value="premium">
+                    </div>
+                    <button type="submit" id="update-role-btn">Actualizar Rol</button>
+                </form>
+            </div>
+            <div>
+                <h1>Lista de Productos</h1>
+                <ul class="users">
+                    {{#each users}}
+                    <li class="user-card">
+                        <strong>ID:</strong> {{_id}}<br>
+                        <strong>Nombre:</strong> {{first_name}}<br>
+                        <strong>Apellido:</strong> {{last_name}}<br>
+                        <strong>Email:</strong> {{email}}<br>
+                        <strong>Rol:</strong> {{role}}<br>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+
+                document.getElementById('deleteUserForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    deleteUser();
+                });
+                document.getElementById('update-role-form').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    updateUserRole();
+                });
+
+
+
+                document.getElementById('logout-btn').addEventListener('click', function () {
+                    fetch('/api/user/logout', {
+                        method: 'GET',
+                        credentials: 'include',
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/login';
+                            } else {
+                                console.error('Error en el logout:', response.statusText);
+                            }
+                        })
+                        .catch(error => console.error('Error en el logout:', error));
+                });
+
+                function deleteUser() {
+                    const userId = document.getElementById('userId').value;
+                    fetch(`/api/user/${userId}`, {
+                        method: 'DELETE',
+                    })
+                        .then(response => {
+                            if (response.ok) {
+
+                                window.location.reload();
+
+                            } else {
+                                console.error('Error al eliminar el producto:', response.statusText);
+                            }
+                        })
+                        .catch(error => console.error('Error al eliminar el producto:', error));
+
+                    document.getElementById('productId').value = '';
+                }
+
+                function updateUserRole() {
+                    const userId = document.getElementById('idUser').value;
+                    const role = document.querySelector('input[name="role"]:checked').value;
+
+                    fetch(`/api/user/admin/${userId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ role }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                console.log('Rol de usuario actualizado exitosamente');
+                                window.location.reload();
+                            } else {
+                                console.error('Error al actualizar el rol del usuario:', response.statusText);
+                            }
+                        })
+                        .catch(error => console.error('Error al actualizar el rol del usuario:', error));
+                }
+            });
+        </script>

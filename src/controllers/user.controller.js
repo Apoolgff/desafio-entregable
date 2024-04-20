@@ -152,30 +152,30 @@ class UserController {
   }
 
   uploadFiles = async (req, res) => {
-    try{
-    const userId = req.params.uid;
-    const { identificacion, domicilio, cuenta, profile } = req.files;
-    const user = await this.userService.getUserBy(userId);
+    try {
+      const userId = req.params.uid;
+      const { identificacion, domicilio, cuenta, profile } = req.files;
+      const user = await this.userService.getUserBy(userId);
 
-    if (user.role === 'user' && (identificacion && domicilio && cuenta) && !profile && user.status === false) {
-      console.log('aqui en documents')
-      const updatedDocuments = [
-        { name: 'Identificación', reference: `/files/documents/${identificacion[0].filename}` },
-        { name: 'Comprobante de domicilio', reference: `/files/documents/${domicilio[0].filename}` },
-        { name: 'Comprobante de estado de cuenta', reference: `/files/documents/${cuenta[0].filename}` }
-      ];
+      if (user.role === 'user' && (identificacion && domicilio && cuenta) && !profile && user.status === false) {
+        console.log('aqui en documents')
+        const updatedDocuments = [
+          { name: 'Identificación', reference: `/files/documents/${identificacion[0].filename}` },
+          { name: 'Comprobante de domicilio', reference: `/files/documents/${domicilio[0].filename}` },
+          { name: 'Comprobante de estado de cuenta', reference: `/files/documents/${cuenta[0].filename}` }
+        ];
 
-      // Actualizar el usuario con los documentos actualizados
-      await this.userService.updateUser(userId, { documents: updatedDocuments, status: true });
-    }
-    else if (profile && (!identificacion || !domicilio || !cuenta)) {
-      console.log('aqui en profile')
-      const updatedProfile = `/files/profiles/${profile[0].filename}`;
+        // Actualizar el usuario con los documentos actualizados
+        await this.userService.updateUser(userId, { documents: updatedDocuments, status: true });
+      }
+      else if (profile && (!identificacion || !domicilio || !cuenta)) {
+        console.log('aqui en profile')
+        const updatedProfile = `/files/profiles/${profile[0].filename}`;
 
-      // Actualizar el usuario con los documentos actualizados
-      await this.userService.updateUser(userId, { profile: updatedProfile });
-    }
-    const userUpdated = await this.userService.getUserBy(userId);
+        // Actualizar el usuario con los documentos actualizados
+        await this.userService.updateUser(userId, { profile: updatedProfile });
+      }
+      const userUpdated = await this.userService.getUserBy(userId);
       const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role, profile: userUpdated.profile, status: userUpdated.status })
       res.cookie('token', token, {
         maxAge: 3600000,
@@ -195,14 +195,14 @@ class UserController {
       res.status(404).send('User Not Found');
     }
   }
-  
+
   updateUser = async (req, res) => {
     try {
       const userId = req.params.uid;
       const user = await this.userService.getUserBy(userId);
 
 
-      
+
       if (user.role === 'user' && user.status === true) {
         console.log('aqui en premium')
         await this.userService.updateUser(userId, { role: 'premium' });
@@ -311,6 +311,59 @@ class UserController {
     }
   }
 
+  updateUserAdmin = async (req, res) => {
+    try {
+      const userId = req.params.uid;
+      const user = await this.userService.getUserBy(userId);
+      logger.info(userId, user.role)
+
+
+      if (user.role === 'user') {
+        console.log('aqui en premium')
+        await this.userService.updateUser(userId, { role: 'premium', status: true });
+      }
+      else if (user.role === 'premium') {
+        console.log('rol a user')
+
+        await this.userService.updateUser(userId, { role: 'user' });
+
+      }
+      const userUpdated = await this.userService.getUserBy(userId);
+      /*const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role, profile: userUpdated.profile, status: userUpdated.status })
+      res.cookie('token', token, {
+        maxAge: 3600000,
+        httpOnly: true,
+        // secure: true,
+        // sameSite: 'none'
+      }).json({
+        status: 'success',
+        message: 'Role Updated',
+        redirectUrl: '/role',
+      })
+      //const user = await this.userService.getUserBy({id: userId})
+      logger.info(user)*/
+      res.json({ userUpdated });//res.send({status: 'success', payload: updatedUser})
+    } catch (error) {
+      logger.error(error.message);
+      res.status(404).send('User Not Found');
+    }
+  }
+
+  deleteUser = async (req, res) => {
+    try {
+      const userId = req.params.uid;
+      const user = await this.userService.getUserBy(userId);
+
+      if (!user) {
+        return res.status(400).send('Usuario no encontrado.');
+      }
+
+      await this.userService.deleteUser(userId)
+    } catch (error) {
+      logger.error(error.message);
+      res.status(404).send('User Not Found');
+    }
+  }
 
 }
 

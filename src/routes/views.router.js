@@ -40,5 +40,7 @@ router.get('/recover', handlePolicies(['PUBLIC']), viewsController.recover);
 //Ruta para el carrito
 router.get('/passrecovery/:token', handlePolicies(['PUBLIC']), viewsController.passRecovery);
 
+//Ruta para el manejo de usuarios del admin
+router.get('/admin', handlePolicies(['ADMIN']), viewsController.admin);
 
 module.exports = router;

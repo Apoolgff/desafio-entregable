@@ -1,14 +1,16 @@
 //const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
-const { productService } = require('../repositories/services')
+const { productService, userService } = require('../repositories/services')
 const { EErrors } = require('../services/errors/enums');
 const { generateProductErrorInfo } = require('../services/errors/errorGenerator');
 const CustomError = require('../services/errors/CustomError')
 const { logger } = require('../utils/logger')
 const fs = require('fs');
+const { sendMail } = require('../utils/sendMail')
 
 class ProductsController {
     constructor() {
         this.productService = productService
+        this.userService = userService
     }
 
     getProducts = async (req, res) => {
@@ -152,13 +154,35 @@ class ProductsController {
     deleteProduct = async (req, res) => {
         try {
             const productId = req.params.pid;
-
+            const product = await this.productService.getProductById(productId)
+            const user = await this.userService.getUser({email: product.owner})
 
             const deletedProduct = await this.productService.deleteProduct(productId);
 
-            if (deletedProduct) {
-                res.json({ product: deletedProduct });//res.send({status: 'success', payload: deletedProduct})
-            } else {
+            
+            if (deletedProduct && user.role === 'premium') {
+                const to = user.email
+                const subject = 'Producto Eliminado'
+                const html = `
+                <p>Usuario ${user.first_name} ${user.last_name} su producto ${product.title} ha sido eliminado del E-Commerce.</p>
+              `
+          
+                await sendMail(to, subject, html);
+          
+                logger.info('Mail Enviado');
+                logger.debug(user.email, user.first_name, user.last_name, product)
+                return res.status(200).send('Producto eliminado y Mail Enviado al usuario premium.');
+                //res.json({ product: deletedProduct });//res.send({status: 'success', payload: deletedProduct})
+            } 
+            else if(deletedProduct && user.role === 'user'){
+            
+                res.json({ product: deletedProduct });
+            }
+            else if(deletedProduct && user.role === 'admin'){
+            
+                res.json({ product: deletedProduct });
+            }
+            else {
                 res.status(404).send('Product Not Found');
             }
         } catch (error) {
