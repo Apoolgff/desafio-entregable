@@ -18,6 +18,15 @@ class ViewsController {
 
     login = async (req, res) => {
 
+        //ELIMINA A LOS USUARIOS CON 2 O MAS DIAS SIN CONECTARSE
+        const now = new Date(); 
+        const twoDaysAgo = new Date(now - 2 * 24 * 60 * 60 * 1000);
+        const filter = {
+            last_connection: { $lt: twoDaysAgo },
+            role: { $ne: 'admin' }
+        };
+    
+        await this.userService.deleteBy(filter);
         res.render('login', { title: 'Login', style: 'login.css', body: 'login'});
     }
 

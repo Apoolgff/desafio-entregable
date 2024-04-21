@@ -43,6 +43,9 @@ class UserDaoMongo {
         return await this.model.findByIdAndDelete(uid); 
     }
       
+    async deleteBy(filter) {
+        return await this.model.deleteMany(filter);
+    }
       
       
 }

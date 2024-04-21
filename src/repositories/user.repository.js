@@ -18,10 +18,11 @@ class UserRepository{
         return new UserDto(user); 
     }
     
-
     updateUser = async (uid, updatedFields) => await this.dao.update(uid, updatedFields)
 
     deleteUser = async (uid) => await this.dao.delete(uid)
+
+    deleteBy = async (filter) => await this.dao.deleteBy(filter)
 
 }
 
