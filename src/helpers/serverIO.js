@@ -5,11 +5,6 @@ const MessagesManagerMongo =require('../daos/mongo/messageManagerMongo')
 const productDao = new ProductsManagerMongo()
 const messageDao = new MessagesManagerMongo()
 
-//const ProductsController = require('../controllers/products.controller')
-//const MessagesController = require('../controllers/messages.controller')
-
-//const productsController = new ProductsController()
-//const messagesController = new MessagesController()
 
 function SocketIO(server) {
     const io = new Server(server);

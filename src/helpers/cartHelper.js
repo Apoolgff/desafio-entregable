@@ -1,15 +1,14 @@
-// Función para generar un código único
+//Funcion para generar un codigo unico
 function generateUniqueCode() {
     const timestamp = Date.now().toString(36);
     const randomString = Math.random().toString(36).substring(2, 7);
     return timestamp + randomString; 
 }
 
-// Función para calcular el monto total de una lista de productos
+//Funcion para calcular el monto total de una lista de productos
 function calculateTotalAmount(products) {
     let total = 0;
     products.forEach(product => {
-        // Acceder al precio y la cantidad dentro de productId
         const price = product.productId.price;
         const quantity = product.quantity;
 
