@@ -1,4 +1,3 @@
-//const MessagesDaoMongo = require('../daos/mongo/messageManagerMongo');
 const { messageService } = require('../repositories/services');
 const { logger } = require('../utils/logger')
 

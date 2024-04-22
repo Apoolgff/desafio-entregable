@@ -1,7 +1,4 @@
 const { usersModel } = require('./models/user.model');
-//const CartDaoMongo = require('./cartManagerMongo')
-
-//const cartService = new CartDaoMongo()
 
 class UserDaoMongo {
     constructor() {
@@ -18,6 +15,7 @@ class UserDaoMongo {
         return await this.model.findOne(filter);
     }
 
+    //Obtiene producto por Id
     async getById(userId){
         return await this.model.findById({ _id: userId })
     }
@@ -43,6 +41,7 @@ class UserDaoMongo {
         return await this.model.findByIdAndDelete(uid); 
     }
       
+    //Elimina varios usuario por filtro
     async deleteBy(filter) {
         return await this.model.deleteMany(filter);
     }

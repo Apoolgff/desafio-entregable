@@ -1,6 +1,3 @@
-const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
-const MessageDaoMongo = require('../daos/mongo/messageManagerMongo')
-const CartDaoMongo = require('../daos/mongo/cartManagerMongo')
 const jwt = require('jsonwebtoken');
 const { configObject } = require('../config/index')
 
@@ -84,15 +81,12 @@ class ViewsController {
                 }
             }
 
-            //Obtener el token de la cookie
             const token = req.cookies.token;
 
-            //Verificar si no hay token
             if (!token) {
-                return res.redirect('/login'); // Redirigir al usuario al login
+                return res.redirect('/login');
             }
 
-            //Decodifica el token para obtener la información del usuario
             const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
 
 
@@ -157,7 +151,7 @@ class ViewsController {
     }
 
     passRecovery = async (req, res) => {
-        const token = req.params.token; // Obtener el token de los parámetros de la URL
+        const token = req.params.token;
     
         if (!token) {
             return res.redirect('/login');

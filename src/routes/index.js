@@ -6,7 +6,6 @@ const sessionRouter = require ('./apis/session.router')
 const viewsRouter = require ('./views.router')
 const testRouter = require('./apis/test.router')
 const compression = require('express-compression')
-//const { addLogger, logger } = require('../utils/logger');
 const { handleError } = require('../middlewares/error/handleError');
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUiExpress = require('swagger-ui-express')

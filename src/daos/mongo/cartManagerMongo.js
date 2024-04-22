@@ -36,6 +36,7 @@ class CartDaoMongo {
     );
   }
 
+  //Encuentra un producto en el carrito
   async isProductInCart(cartId, productId) {
     return await this.model.findOne({
       _id: cartId,

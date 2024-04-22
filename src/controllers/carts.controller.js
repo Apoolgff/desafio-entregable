@@ -25,7 +25,6 @@ class CartController {
 
     getCart = async (req, res) => {
         try {
-            //const cartId = req.params.cid;(anterior)
             const { cid } = req.params
             const cart = await this.cartService.getCart({ _id: cid });
             res.json({ cart });//res.send({status: 'success', payload: cart})
@@ -188,8 +187,7 @@ class CartController {
                 return res.status(200).json({ message: 'Compra finalizada con éxito', ticket });
             }
         } catch (error) {
-            //logger.error(error);
-            //return res.status(500).json({ message: 'Error en el servidor' });
+            logger.error(error);
             next(error)
         }
     }

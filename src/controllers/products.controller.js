@@ -1,4 +1,3 @@
-//const ProductDaoMongo = require('../daos/mongo/productManagerMongo')
 const { productService, userService } = require('../repositories/services')
 const { EErrors } = require('../services/errors/enums');
 const { generateProductErrorInfo } = require('../services/errors/errorGenerator');

@@ -5,6 +5,7 @@ class ProductDaoMongo {
         this.model = productsModel
     }
 
+    //Crea un producto
     async create(product) {
         return await this.model.create(product);
     }
@@ -14,6 +15,7 @@ class ProductDaoMongo {
         return await this.model.find();
     }
 
+    //Obtiene los productos con sus limites
     async getLimited({ filter, options }) {
         return await this.model.paginate(filter, options);
     } 

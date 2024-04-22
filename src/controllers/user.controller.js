@@ -1,4 +1,3 @@
-//const UserDaoMongo = require('../daos/mongo/userManagerMongo')
 const { userService, cartService } = require('../repositories/services');
 const { EErrors } = require('../services/errors/enums');
 const { generateUserErrorInfo } = require('../services/errors/errorGenerator');
@@ -27,7 +26,7 @@ class UserController {
 
   userLogout = async (req, res) => {
     try {
-      const userId = req.user._id; // Asumiendo que el id del usuario está en req.user
+      const userId = req.user._id;
       await this.userService.updateUser(userId, { last_connection: new Date() });
       res.clearCookie('token');
       res.status(200).json({ status: 'success', message: 'Logout successful' });
@@ -49,18 +48,16 @@ class UserController {
 
     const user = await this.userService.getUser({ email });
 
-    // Verifica si se encontró el usuario
     if (!user) {
       logger.error('El usuario no existe')
       return res.status(400).send('El Usuario NO Existe');
     }
 
-    // Verifica si la contraseña es válida usando isValidPassword
     if (!(await isValidPassword(password, user.password))) {
       logger.error('Password incorrecta')
       return res.status(401).send('Contraseña inválida');
     }
-    //const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role, profile: updatedUser.profile, status: userUpdated.status})
+    
     const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email, cart: user.cart, role: user.role, profile: user.profile, status: user.status })
     res.cookie('token', token, {
       maxAge: 3600000,
@@ -89,17 +86,14 @@ class UserController {
       }
       const existingUser = await this.userService.getUser({ email });
       if (existingUser) {
-        //console.error('Ese Email ya esta en uso.');
         logger.error('Ese Email ya esta en uso.')
         return { error: 'Ese Email ya está en uso.' };
       }
 
-      //Verifica si la contraseña y si confirmación coinciden
       if (password !== confirmPassword) {
 
         return res.send('Las contraseñas no coinciden');
       }
-      //const cartId = await this.cartService.getCart({_id : cart._id})
 
       const newUser = {
         first_name,
@@ -112,7 +106,6 @@ class UserController {
         documents: []
       }
 
-      //Crea un nuevo usuario
       const result = await this.userService.createUser(newUser);
 
       //Envio del mail al registrar el usuario
@@ -146,7 +139,6 @@ class UserController {
 
     } catch (error) {
       logger.error('Error al registrar usuario:', error.message);
-      //res.send('Error al registrar usuario. Inténtalo de nuevo.');
       next(error)
     }
   }
@@ -165,14 +157,12 @@ class UserController {
           { name: 'Comprobante de estado de cuenta', reference: `/files/documents/${cuenta[0].filename}` }
         ];
 
-        // Actualizar el usuario con los documentos actualizados
         await this.userService.updateUser(userId, { documents: updatedDocuments, status: true });
       }
       else if (profile && (!identificacion || !domicilio || !cuenta)) {
         console.log('aqui en profile')
         const updatedProfile = `/files/profiles/${profile[0].filename}`;
 
-        // Actualizar el usuario con los documentos actualizados
         await this.userService.updateUser(userId, { profile: updatedProfile });
       }
       const userUpdated = await this.userService.getUserBy(userId);
@@ -187,9 +177,9 @@ class UserController {
         message: 'Role Updated',
         redirectUrl: '/role',
       })
-      //const user = await this.userService.getUserBy({id: userId})
+
       logger.info(user)
-      //res.json({ updatedUser });//res.send({status: 'success', payload: updatedUser})
+      res.json({ updatedUser });//res.send({status: 'success', payload: updatedUser})
     } catch (error) {
       logger.error(error.message);
       res.status(404).send('User Not Found');
@@ -225,7 +215,6 @@ class UserController {
         message: 'Role Updated',
         redirectUrl: '/role',
       })
-      //const user = await this.userService.getUserBy({id: userId})
       logger.info(user)
       //res.json({ updatedUser });//res.send({status: 'success', payload: updatedUser})
     } catch (error) {
@@ -252,7 +241,6 @@ class UserController {
       const user = await this.userService.getUser({ email });
 
       if (!user) {
-        //console.error('Ese Email ya esta en uso.');
         logger.error('No existen usuarios con ese mail')
         return { error: 'No existen usuarios con ese mail' };
       }
@@ -284,26 +272,20 @@ class UserController {
     try {
       const { email, newPass, repPass } = req.body;
 
-      // Verificar si las contraseñas nuevas coinciden
       if (newPass !== repPass) {
         return res.status(400).send('Las contraseñas no coinciden.');
       }
 
-      // Obtener el usuario por su correo electrónico
       const user = await this.userService.getUser({ email });
 
-      // Verificar si se encontró el usuario
       if (!user) {
         return res.status(400).send('Usuario no encontrado.');
       }
 
-      // Generar el hash de la nueva contraseña
       const hashedNewPass = await createHash(newPass);
 
-      // Actualizar la contraseña del usuario con el hash generado
-      const updatedUser = await this.userService.updateUser(user._id, { password: hashedNewPass });
+      await this.userService.updateUser(user._id, { password: hashedNewPass });
 
-      // Mostrar un mensaje de éxito y redirigir a la página de inicio de sesión
       res.send('Contraseña restablecida con éxito.');
     } catch (error) {
       logger.error(error.message);
@@ -329,19 +311,7 @@ class UserController {
 
       }
       const userUpdated = await this.userService.getUserBy(userId);
-      /*const token = createToken({ id: userUpdated._id, first_name: userUpdated.first_name, last_name: userUpdated.last_name, email: userUpdated.email, cart: userUpdated.cart, role: userUpdated.role, profile: userUpdated.profile, status: userUpdated.status })
-      res.cookie('token', token, {
-        maxAge: 3600000,
-        httpOnly: true,
-        // secure: true,
-        // sameSite: 'none'
-      }).json({
-        status: 'success',
-        message: 'Role Updated',
-        redirectUrl: '/role',
-      })
-      //const user = await this.userService.getUserBy({id: userId})
-      logger.info(user)*/
+
       res.json({ userUpdated });//res.send({status: 'success', payload: updatedUser})
     } catch (error) {
       logger.error(error.message);
