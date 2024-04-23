@@ -3,7 +3,7 @@ const { cartService, ticketService, productService, userService } = require('../
 const { EErrors } = require('../services/errors/enums');
 const { generatePurchaseCartErrorInfo } = require('../services/errors/errorGenerator');
 const CustomError = require('../services/errors/CustomError')
-const { logger } = require('../utils/logger')
+const { logger } = require('../utils/logger') 
 
 class CartController {
     constructor() {

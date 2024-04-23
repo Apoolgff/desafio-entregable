@@ -3,7 +3,7 @@ const { logger } = require('../utils/logger')
 
 class MessagesController {
     constructor() {
-        this.messagesService = messageService;
+        this.messagesService = messageService; 
     }
 
     async getMessages(req, res) {

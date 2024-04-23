@@ -141,7 +141,7 @@ class ProductsController {
 
     updateProduct = async (req, res) => {
         try {
-            const productId = req.params.pid;
+            const productId = req.params.pid; 
             let productData = req.body;
 
             if (req.files && req.files.length > 0) {

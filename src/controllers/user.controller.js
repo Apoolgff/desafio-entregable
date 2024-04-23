@@ -107,7 +107,7 @@ class UserController {
         documents: []
       }
 
-      const result = await this.userService.createUser(newUser);
+      const result = await this.userService.createUser(newUser); 
 
       //Envio del mail al registrar el usuario
       const to = newUser.email
