@@ -10,7 +10,7 @@ dotenv.config({
 })
 
 exports.configObject = {
-  PORT: process.env.PORT || 4040,
+  PORT: process.env.PORT || 8080,
   mongo_uri: process.env.MONGO_URI,
   jwt_secret_key: process.env.JWT_SECRET_KEY,
   cookie_secret_key: process.env.COOKIE_SECRET_KEY,
