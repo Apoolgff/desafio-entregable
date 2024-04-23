@@ -16,7 +16,7 @@ const { addLogger } = require('./utils/logger')
 
 
 const app = express();
-const port = configObject.PORT;
+const port = configObject.PORT||8080;
 
 connectDB()
 
@@ -54,65 +54,3 @@ const serverHttp = app.listen(port, err => {
 io(serverHttp)
 //const io = new Server(serverHttp);
 console.log(`Socket.io server listening on port ${port}`);
-
-//const productDao = new ProductDaoMongo();
-//const messageDao = new MessageDaoMongo();
-
-//Sockets
-
-/*io.on('connection', async (socket) => {
-
-  console.log('Un cliente se ha conectado');
-
-
-  try {
-    const initialProducts = await productDao.getProducts();
-    socket.emit('updateProducts', initialProducts);
-  } catch (error) {
-    console.error('Error al obtener los productos:', error.message);
-  }
-
-
-  socket.on('createProduct', async (newProduct) => {
-    await productDao.addProduct(newProduct);
-    io.emit('updateProducts', await productDao.getProducts());
-  });
-
-
-  socket.on('deleteProduct', async (productId) => {
-    try {
-      await productDao.deleteProduct(productId);
-
-      io.emit('deleteProduct', productId.toString());
-    } catch (error) {
-      console.error(error.message);
-
-      socket.emit('deleteProductError', { productId, error: error.message });
-    }
-  });
-
-  console.log('Nuevo cliente conectado');
-
-  try {
-
-    const messages = await messageDao.getMessages();
-    socket.emit('updateMessages', messages);
-  } catch (error) {
-    console.error('Error al obtener mensajes:', error.message);
-  }
-
-  //Escucha eventos de mensajes
-  socket.on('sendMessage', async (user, message) => {
-    try {
-
-      await messageDao.addMessage(user, message);
-
-      const messages = await messageDao.getMessages();
-
-      io.emit('updateMessages', messages);
-    } catch (error) {
-      console.error('Error al enviar mensaje:', error.message);
-    }
-  });
-  
-});*/
