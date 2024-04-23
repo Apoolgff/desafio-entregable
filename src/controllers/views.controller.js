@@ -26,16 +26,21 @@ class ViewsController {
         };
     
         const inactiveUsers = await this.userService.getUsers(filter);
-
+    
         if (inactiveUsers.length > 0) {
             await Promise.all(inactiveUsers.map(async (inactiveUser) => {
-                const to = inactiveUser.email;
-                const subject = 'Cuenta Eliminada por Inactividad';
-                const html = `<div>
-                                <h1>Su cuenta ha sido eliminada por inactividad de 2 días o más.</h1>
-                                <p>Si desea seguir utilizando nuestros servicios, por favor regístrese nuevamente.</p>
-                             </div>`;
-                await sendMail(to, subject, html);
+                const lastConnection = new Date(inactiveUser.last_connection);
+                const daysSinceLastConnection = Math.floor((now - lastConnection) / (1000 * 60 * 60 * 24));
+    
+                if (daysSinceLastConnection >= 2) {
+                    const to = inactiveUser.email;
+                    const subject = 'Cuenta Eliminada por Inactividad';
+                    const html = `<div>
+                                    <h1>Su cuenta ha sido eliminada por inactividad de 2 días o más.</h1>
+                                    <p>Si desea seguir utilizando nuestros servicios, por favor regístrese nuevamente.</p>
+                                </div>`;
+                    await sendMail(to, subject, html);
+                }
             }));
     
             await this.userService.deleteBy(filter);
@@ -43,6 +48,7 @@ class ViewsController {
     
         res.render('login', { title: 'Login', style: 'login.css', body: 'login'});
     }
+    
     
 
     register = async (req, res) => {
