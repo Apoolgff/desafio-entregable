@@ -79,7 +79,7 @@ class ProductsController {
     getProductBy = async (req, res) => {
         try {
             const productId = req.params.pid;
-            const product = await this.productService.getProductBy({_id: productId});
+            const product = await this.productService.getProductBy({ _id: productId });
             res.json({ product });//res.send({status: 'success', payload: product})
         } catch (error) {
             logger.error(error.message);
@@ -114,7 +114,7 @@ class ProductsController {
 
             const thumbnails = req.files.map(file => `/files/products/${file.filename}`);
 
-            
+
             const newProduct = await this.productService.createProduct({
                 title,
                 description,
@@ -142,18 +142,15 @@ class ProductsController {
     updateProduct = async (req, res) => {
         try {
             const productId = req.params.pid;
-        
             let productData = req.body;
-        
-        // Verificar si hay un archivo thumbnail cargado y actualizar la ruta del thumbnail en productData
-        if (req.files && req.files.length > 0) {
-            productData.thumbnails = req.files.map(file => `/files/products/${file.filename}`); // Agregar la ruta del archivo al objeto del producto
-        }
 
-        const updatedProduct = await this.productService.updateProduct(productId, productData);
-        res.json({ status: 'success', payload: updatedProduct });
-           //const updatedProduct = await this.productService.updateProduct(productId, req.body);
-            //res.json({ product: updatedProduct });//res.send({status: 'success', payload: updatedProduct})
+            if (req.files && req.files.length > 0) {
+                productData.thumbnails = req.files.map(file => `/files/products/${file.filename}`);
+            }
+
+            const updatedProduct = await this.productService.updateProduct(productId, productData);
+            res.json({ status: 'success', payload: updatedProduct });
+
         } catch (error) {
             logger.error(error.message);
             res.status(404).send('Product Not Found');
@@ -164,31 +161,31 @@ class ProductsController {
         try {
             const productId = req.params.pid;
             const product = await this.productService.getProductById(productId)
-            const user = await this.userService.getUser({email: product.owner})
+            const user = await this.userService.getUser({ email: product.owner })
 
             const deletedProduct = await this.productService.deleteProduct(productId);
 
-            
+
             if (deletedProduct && user.role === 'premium') {
                 const to = user.email
                 const subject = 'Producto Eliminado'
                 const html = `
                 <p>Usuario ${user.first_name} ${user.last_name} su producto ${product.title} ha sido eliminado del E-Commerce.</p>
               `
-          
+
                 await sendMail(to, subject, html);
-          
+
                 logger.info('Mail Enviado');
                 logger.debug(user.email, user.first_name, user.last_name, product)
                 return res.status(200).send('Producto eliminado y Mail Enviado al usuario premium.');
                 //res.json({ product: deletedProduct });//res.send({status: 'success', payload: deletedProduct})
-            } 
-            else if(deletedProduct && user.role === 'user'){
-            
+            }
+            else if (deletedProduct && user.role === 'user') {
+
                 res.json({ product: deletedProduct });
             }
-            else if(deletedProduct && user.role === 'admin'){
-            
+            else if (deletedProduct && user.role === 'admin') {
+
                 res.json({ product: deletedProduct });
             }
             else {
