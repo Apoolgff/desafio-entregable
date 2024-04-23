@@ -1,3 +1,4 @@
+
 const { userService, cartService } = require('../repositories/services');
 const { EErrors } = require('../services/errors/enums');
 const { generateUserErrorInfo } = require('../services/errors/errorGenerator');
@@ -174,12 +175,9 @@ class UserController {
         // sameSite: 'none'
       }).json({
         status: 'success',
-        message: 'Role Updated',
+        message: 'Updated',
         redirectUrl: '/role',
       })
-
-      logger.info(user)
-      res.json({ updatedUser });//res.send({status: 'success', payload: updatedUser})
     } catch (error) {
       logger.error(error.message);
       res.status(404).send('User Not Found');

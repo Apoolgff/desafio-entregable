@@ -2,7 +2,6 @@
 <nav class="navbar">
     <p class="logo">E-Commerce</p>
     <div class="nav-links">
-        <!--<button id="products-btn">Productos</button>-->
         <a href="/manager">Manager</a>
         <button id="logout-btn">Logout</button>
     </div>
@@ -15,14 +14,14 @@
         <p><span>Rol:</span> {{user.role}}</p>
 
         {{/if}}
-        <h1>Administrador de Productos</h1>
+        <h1>Administrador de Usuarios</h1>
         <div class="page-container">
             <div>
                 <h2>Eliminar Usuario por ID</h2>
                 <form id="deleteUserForm">
                     <label for="userId">ID del Usuario:</label>
                     <input type="text" id="userId" name="userId" placeholder="Id del usuario" required>
-                    <button type="submit" id="deleteUserBtn">Eliminar Producto</button>
+                    <button type="submit" id="deleteUserBtn">Eliminar Usuario</button>
                 </form>
             </div>
             <div>
@@ -41,7 +40,7 @@
                 </form>
             </div>
             <div>
-                <h1>Lista de Productos</h1>
+                <h1>Lista de Usuarios</h1>
                 <ul class="users">
                     {{#each users}}
                     <li class="user-card">

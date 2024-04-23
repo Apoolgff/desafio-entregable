@@ -2,7 +2,6 @@
 <nav class="navbar">
     <p class="logo">E-Commerce</p>
     <div class="nav-links">
-        <!--<button id="products-btn">Productos</button>-->
         <a href="/products">Productos</a>
         <a href="/chat">Chat</a>
         <a href="/role">Perfil</a>
@@ -53,9 +52,6 @@
                     <label for="thumbnails">Imagenes:</label>
                     <input type="file" id="thumbnails" name="thumbnails" multiple required><br>
 
-                    <!--<label for="thumbnails">Imagenes ("/images/laptop1.webp" para testear):</label>
-                    <input type="text" id="thumbnails" name="thumbnails" required><br>-->
-
                     <button type="button" id="createProductBtn">Agregar Producto</button>
                 </form>
             </div>
@@ -76,8 +72,6 @@
                     <input type="number" id="updateStock" name="updateStock"><br>
                     <label for="updateCategory">Nueva Categoría:</label>
                     <input type="text" id="updateCategory" name="updateCategory"><br>
-                    <!-- <label for="updateThumbnails">Nuevas Imágenes:</label>
-                    <input type="text" id="updateThumbnails" name="updateThumbnails"><br>-->
                     <label for="updateThumbnails">Nuevas Imágenes:</label>
                     <input type="file" id="updateThumbnails" name="updateThumbnails" multiple><br>
 
@@ -144,13 +138,6 @@
                         })
                         .catch(error => console.error('Error en el logout:', error));
                 });
-
-                const productButton = document.getElementById('products-btn');
-                if (productButton) {
-                    productButton.addEventListener('click', function () {
-                        window.location.href = '/products';
-                    });
-                }
             });
 
             function deleteProduct() {
@@ -221,62 +208,63 @@
             }
 
             function updateProduct() {
-                const productId = document.getElementById('updateProductId').value;
-                const updatedProduct = {};
+    const productId = document.getElementById('updateProductId').value;
+    const formData = new FormData();
 
-                const titleInput = document.getElementById('updateTitle');
-                if (titleInput.value.trim() !== '') {
-                    updatedProduct.title = titleInput.value;
-                }
+    const titleInput = document.getElementById('updateTitle');
+    if (titleInput.value.trim() !== '') {
+        formData.append('title', titleInput.value);
+    }
 
-                const descriptionInput = document.getElementById('updateDescription');
-                if (descriptionInput.value.trim() !== '') {
-                    updatedProduct.description = descriptionInput.value;
-                }
+    const descriptionInput = document.getElementById('updateDescription');
+    if (descriptionInput.value.trim() !== '') {
+        formData.append('description', descriptionInput.value);
+    }
 
-                const codeInput = document.getElementById('updateCode');
-                if (codeInput.value.trim() !== '') {
-                    updatedProduct.code = codeInput.value;
-                }
+    const codeInput = document.getElementById('updateCode');
+    if (codeInput.value.trim() !== '') {
+        formData.append('code', codeInput.value);
+    }
 
-                const priceInput = document.getElementById('updatePrice');
-                if (priceInput.value.trim() !== '') {
-                    updatedProduct.price = parseFloat(priceInput.value);
-                }
+    const priceInput = document.getElementById('updatePrice');
+    if (priceInput.value.trim() !== '') {
+        formData.append('price', parseFloat(priceInput.value));
+    }
 
-                const stockInput = document.getElementById('updateStock');
-                if (stockInput.value.trim() !== '') {
-                    updatedProduct.stock = parseInt(stockInput.value);
-                }
+    const stockInput = document.getElementById('updateStock');
+    if (stockInput.value.trim() !== '') {
+        formData.append('stock', parseInt(stockInput.value));
+    }
 
-                const categoryInput = document.getElementById('updateCategory');
-                if (categoryInput.value.trim() !== '') {
-                    updatedProduct.category = categoryInput.value;
-                }
+    const categoryInput = document.getElementById('updateCategory');
+    if (categoryInput.value.trim() !== '') {
+        formData.append('category', categoryInput.value);
+    }
 
-                const thumbnailsInput = document.getElementById('updateThumbnails');
-                if (thumbnailsInput.value.trim() !== '') {
-                    updatedProduct.thumbnails = thumbnailsInput.files;
-                }
+    const thumbnailsInput = document.getElementById('updateThumbnails');
+    if (thumbnailsInput.files.length > 0) {
+        // Si hay múltiples archivos, se pueden enviar todos
+        for (let i = 0; i < thumbnailsInput.files.length; i++) {
+            formData.append('updateThumbnails', thumbnailsInput.files[i]);
+        }
+    }
 
-                fetch(`/api/products/${productId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updatedProduct),
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            setTimeout(() => {
-                                location.reload();
-                            }, 500);
-                            console.log('Producto actualizado exitosamente');
-                        } else {
-                            console.error('Error al actualizar el producto:', response.statusText);
-                        }
-                    })
-                    .catch(error => console.error('Error al actualizar el producto:', error));
-            }
+    fetch(`/api/products/${productId}`, {
+        method: 'PUT',
+        body: formData // Enviar FormData en lugar de JSON
+    })
+    .then(response => {
+        if (response.ok) {
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+            console.log('Producto actualizado exitosamente');
+        } else {
+            console.error('Error al actualizar el producto:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error al actualizar el producto:', error));
+}
+
 
         </script>

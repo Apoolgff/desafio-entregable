@@ -2,9 +2,6 @@
 <nav class="navbar">
     <p class="logo">E-Commerce</p>
     <div class="nav-links">
-    <!--<button id="chat-btn">Ir a Chat</button>
-    <button id="role-btn">Cambiar Rol</button>
-    <button id="manager-btn">Manager (premium)</button>-->
     <a href="/manager">Manager</a>
     <a href="/chat">Chat</a>
     <a href="/role">Perfil</a>
@@ -67,7 +64,7 @@
   <p>Usuario no autenticado. Por favor, inicie sesión.</p>
   {{/if}}
 </div>
-<!-- Paginación -->
+<!-- Paginacion -->
 <div class="pagination">
   {{#if pagination.hasPrevPage}}
   <a href="{{pagination.prevLink}}">Anterior</a>
@@ -94,16 +91,7 @@
     const cartElement = document.querySelector('.cart');
     const totalAmountDisplay = document.getElementById('total');
 
-    // Event listeners
-    if (chatButton) {
-      chatButton.addEventListener('click', () => goToPage('/chat'));
-    }
-    if (roleButton) {
-      roleButton.addEventListener('click', () => goToPage('/role'));
-    }
-    if (managerButton) {
-      managerButton.addEventListener('click', () => goToPage('/manager'));
-    }
+    //Event listeners
     if (logoutButton) {
       logoutButton.addEventListener('click', logout);
     }
@@ -117,7 +105,7 @@
       purchaseButton.addEventListener('click', purchaseCart);
     }
 
-    // Funciones de utilidad
+    //Funciones de utilidad
     function goToPage(url) {
       window.location.href = url;
     }
@@ -144,12 +132,6 @@
       const quantityInput = document.getElementById(`quantity-input-${productId}`);
       const quantity = parseInt(quantityInput.value) || 1;
       const productStock = parseInt(button.getAttribute('data-product-stock'));
-
-      // Verifica si la cantidad ingresada es mayor que el stock disponible
-      // if (quantity > productStock) {
-      //   alert('No hay suficiente stock disponible para agregar esta cantidad al carrito.');
-      //   return;
-      // }
 
       try {
         const addToCartResponse = await fetch(`/api/carts/${cartId}/product/${productId}`, {
@@ -212,7 +194,6 @@
       }
     }
 
-    // Elimina un producto del carrito
     function removeFromCart(productId) {
       const cartId = cartElement.dataset.cartId;
 
@@ -232,7 +213,6 @@
         .catch(error => console.error('Error al eliminar del carrito:', error));
     }
 
-    // Renderizado del carrito
     function renderCart(cart) {
       let totalPrice = 0;
       const cartList = document.querySelector('.cart ul');
@@ -270,7 +250,6 @@
       totalAmountDisplay.textContent = `Total a Pagar: $${totalPrice.toFixed(2)}`;
     }
 
-    // Cargar el carrito al cargar la página
     const cartId = cartElement.dataset.cartId;
     fetch(`/api/carts/${cartId}`)
       .then(response => {

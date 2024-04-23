@@ -142,8 +142,18 @@ class ProductsController {
     updateProduct = async (req, res) => {
         try {
             const productId = req.params.pid;
-            const updatedProduct = await this.productService.updateProduct(productId, req.body);
-            res.json({ product: updatedProduct });//res.send({status: 'success', payload: updatedProduct})
+        
+            let productData = req.body;
+        
+        // Verificar si hay un archivo thumbnail cargado y actualizar la ruta del thumbnail en productData
+        if (req.files && req.files.length > 0) {
+            productData.thumbnails = req.files.map(file => `/files/products/${file.filename}`); // Agregar la ruta del archivo al objeto del producto
+        }
+
+        const updatedProduct = await this.productService.updateProduct(productId, productData);
+        res.json({ status: 'success', payload: updatedProduct });
+           //const updatedProduct = await this.productService.updateProduct(productId, req.body);
+            //res.json({ product: updatedProduct });//res.send({status: 'success', payload: updatedProduct})
         } catch (error) {
             logger.error(error.message);
             res.status(404).send('Product Not Found');

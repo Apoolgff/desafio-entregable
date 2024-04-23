@@ -51,7 +51,6 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     const confirmPassword = document.getElementById('confirmPassword').value;
     const role = document.querySelector('input[name="role"]:checked').value;
 
-    //Realiza la solicitud de registro al servidor
     fetch('/api/user/register', {
         method: 'POST',
         headers: {

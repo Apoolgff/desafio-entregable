@@ -165,18 +165,23 @@ class ViewsController {
             res.status(400).send('Invalid token');
         }
     }
-
+    
     admin = async (req, res) => {
         const token = req.cookies.token;
-
+    
         if (!token) {
             return res.redirect('/login');
         }
         
         const decodedToken = jwt.verify(token, configObject.jwt_secret_key);
         const users = await this.userService.getUsers();
-        res.render('admin', { title: 'Admin Manager', style: 'realTimeProducts.css', body: 'admin', users, user:decodedToken });
+    
+        //Filtra los usuarios para excluir al "admin"
+        const filteredUsers = users.filter(user => user.role !== 'admin');
+    
+        res.render('admin', { title: 'Admin Manager', style: 'realTimeProducts.css', body: 'admin', users: filteredUsers, user: decodedToken });
     }
+    
     
 }
 

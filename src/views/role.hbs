@@ -2,8 +2,6 @@
 <nav class="navbar">
     <p class="logo">E-Commerce</p>
     <div class="nav-links">
-        <!-- <button id="role-btn">Productos</button>-->
-
         <a href="/products">Productos</a>
         <a href="/manager">Manager</a>
         <a href="/chat">Chat</a>
@@ -59,13 +57,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-
-        const roleButton = document.getElementById('role-btn');
-        if (roleButton) {
-            roleButton.addEventListener('click', function () {
-                window.location.href = '/products';
-            });
-        }
 
         document.getElementById('logout-btn').addEventListener('click', function () {
             fetch('/api/user/logout', {

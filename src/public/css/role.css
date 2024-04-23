@@ -148,8 +148,8 @@ input[type="file"]:focus {
 
 .avatar-img {
   border-radius: 50%;
-  max-width: 150px;
-  height: auto;
+  width: 150px;
+  height: 150px;
   margin: 10px;
 }
 
