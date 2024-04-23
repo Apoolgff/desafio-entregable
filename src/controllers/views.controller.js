@@ -39,7 +39,7 @@ class ViewsController {
                                     <h1>Su cuenta ha sido eliminada por inactividad de 2 días o más.</h1>
                                     <p>Si desea seguir utilizando nuestros servicios, por favor regístrese nuevamente.</p>
                                 </div>`;
-                    await sendMail(to, subject, html);
+                    await sendMail(to, subject, html); 
                 }
             }));
     
