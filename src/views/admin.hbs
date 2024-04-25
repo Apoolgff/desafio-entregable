@@ -40,7 +40,11 @@
                 </form>
             </div>
             <div>
-                <h1>Lista de Usuarios</h1>
+                <h2>Eliminar usuarios con 2 o mas dias sin conexion</h2>
+                <button type="button" id="delete-users-btn">Eliminar</button>
+            </div>
+            <div>
+                <h2>Lista de Usuarios</h2>
                 <ul class="users">
                     {{#each users}}
                     <li class="user-card">
@@ -66,6 +70,10 @@
                     event.preventDefault();
                     updateUserRole();
                 });
+                document.getElementById('delete-users-btn').addEventListener('click', function (event) {
+                    event.preventDefault();
+                    deleteUsers();
+                });
 
 
 
@@ -83,6 +91,22 @@
                         })
                         .catch(error => console.error('Error en el logout:', error));
                 });
+
+                function deleteUsers(){
+                    fetch(`/api/user/admin/clear`, {
+                        method: 'DELETE',
+                    })
+                        .then(response => {
+                            if (response.ok) {
+
+                                window.location.reload();
+
+                            } else {
+                                console.error('Error al eliminar el producto:', response.statusText);
+                            }
+                        })
+                        .catch(error => console.error('Error al eliminar el producto:', error));
+                }
 
                 function deleteUser() {
                     const userId = document.getElementById('userId').value;

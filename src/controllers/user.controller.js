@@ -58,7 +58,7 @@ class UserController {
       logger.error('Password incorrecta')
       return res.status(401).send('Contraseña inválida');
     }
-    
+
     const token = createToken({ id: user._id, first_name: user.first_name, last_name: user.last_name, email, cart: user.cart, role: user.role, profile: user.profile, status: user.status })
     res.cookie('token', token, {
       maxAge: 3600000,
@@ -107,7 +107,7 @@ class UserController {
         documents: []
       }
 
-      const result = await this.userService.createUser(newUser); 
+      const result = await this.userService.createUser(newUser);
 
       //Envio del mail al registrar el usuario
       const to = newUser.email
@@ -330,6 +330,42 @@ class UserController {
     } catch (error) {
       logger.error(error.message);
       res.status(404).send('User Not Found');
+    }
+  }
+
+  deleteUsers = async (req, res) => {
+    try {
+      const now = new Date();
+      const twoDaysAgo = new Date(now - 2 * 24 * 60 * 60 * 1000);
+      const filter = {
+        last_connection: { $lt: twoDaysAgo },
+        role: { $ne: 'admin' }
+      };
+
+      const inactiveUsers = await this.userService.getUsers(filter);
+
+      if (inactiveUsers.length > 0) {
+        await Promise.all(inactiveUsers.map(async (inactiveUser) => {
+          const lastConnection = new Date(inactiveUser.last_connection);
+          const daysSinceLastConnection = Math.floor((now - lastConnection) / (1000 * 60 * 60 * 24));
+
+          if (daysSinceLastConnection >= 2) {
+            const to = inactiveUser.email;
+            const subject = 'Cuenta Eliminada por Inactividad';
+            const html = `<div>
+                                    <h1>Su cuenta ha sido eliminada por inactividad de 2 días o más.</h1>
+                                    <p>Si desea seguir utilizando nuestros servicios, por favor regístrese nuevamente.</p>
+                                </div>`;
+            await sendMail(to, subject, html);
+          }
+        }));
+
+        await this.userService.deleteBy(filter);
+      }
+    }
+    catch (error) {
+      logger.error(error.message);
+      res.status(404).send('Users Not Found');
     }
   }
 

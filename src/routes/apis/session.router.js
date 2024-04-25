@@ -42,6 +42,9 @@ sessionRouter.put('/admin/:uid',userController.updateUserAdmin)
 //Eliminacion de usuarios
 sessionRouter.delete('/:uid',userController.deleteUser)
 
+//Eliminacion de usuarios sin conexion
+sessionRouter.delete('/admin/clear',userController.deleteUsers)
+
 
 
 module.exports = sessionRouter;
