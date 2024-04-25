@@ -362,10 +362,11 @@ class UserController {
 
         await this.userService.deleteBy(filter);
       }
+      res.status(200).send({status: 'success'})
     }
     catch (error) {
       logger.error(error.message);
-      res.status(404).send('Users Not Found');
+      res.status(404).send('Error al eliminar usuarios');
     }
   }
 

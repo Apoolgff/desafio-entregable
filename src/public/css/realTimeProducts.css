@@ -156,6 +156,32 @@ form {
   form button:hover {
     background-color: #45a049;
   }
+
+  .delete-container{
+    border: 3px solid #000000;
+    background-color: rgb(255, 232, 127);
+    width: 250px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
   
  
   #deleteProductForm {

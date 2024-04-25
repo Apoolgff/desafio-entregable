@@ -14,38 +14,7 @@ class ViewsController {
         this.userService = userService
     }
 
-    login = async (req, res) => {
-        //ELIMINA A LOS USUARIOS CON 2 O MAS DIAS SIN CONECTARSE, NO NOS HAN EXPLICADO COMO HACER FUNCIONES QUE FUNCIONEN AUTOMATICAMENTE
-        //SIN QUE NADIE ENTRE A LA PAGINA, ENTONCES SE ME OCURRIO HACERLO CUANDO ALGUIEN ENTRE A LA PAGINA PRINCIPAL.
-        //SEGURO HAY FORMAS DE HACERLO MAS OPTIMO PERO NO NOS LO HAN EXPLICADO.
-        const now = new Date(); 
-        const twoDaysAgo = new Date(now - 2 * 24 * 60 * 60 * 1000);
-        const filter = {
-            last_connection: { $lt: twoDaysAgo },
-            role: { $ne: 'admin' }
-        };
-    
-        const inactiveUsers = await this.userService.getUsers(filter);
-    
-        if (inactiveUsers.length > 0) {
-            await Promise.all(inactiveUsers.map(async (inactiveUser) => {
-                const lastConnection = new Date(inactiveUser.last_connection);
-                const daysSinceLastConnection = Math.floor((now - lastConnection) / (1000 * 60 * 60 * 24));
-    
-                if (daysSinceLastConnection >= 2) {
-                    const to = inactiveUser.email;
-                    const subject = 'Cuenta Eliminada por Inactividad';
-                    const html = `<div>
-                                    <h1>Su cuenta ha sido eliminada por inactividad de 2 días o más.</h1>
-                                    <p>Si desea seguir utilizando nuestros servicios, por favor regístrese nuevamente.</p>
-                                </div>`;
-                    await sendMail(to, subject, html); 
-                }
-            }));
-    
-            await this.userService.deleteBy(filter);
-        }
-    
+    login = async (req, res) => {    
         res.render('login', { title: 'Login', style: 'login.css', body: 'login'});
     }
     

@@ -40,8 +40,11 @@
                 </form>
             </div>
             <div>
-                <h2>Eliminar usuarios con 2 o mas dias sin conexion</h2>
-                <button type="button" id="delete-users-btn">Eliminar</button>
+                <h2>Eliminar usuarios</h2>
+                <div class="delete-container">
+                    <P>Limpia los usuarios con 2 o mas dias sin conexion</P>
+                    <button type="button" id="delete-users-btn">Eliminar</button>
+                </div>
             </div>
             <div>
                 <h2>Lista de Usuarios</h2>
@@ -102,10 +105,10 @@
                                 window.location.reload();
 
                             } else {
-                                console.error('Error al eliminar el producto:', response.statusText);
+                                console.error('Error al eliminar usuarios:', response.statusText);
                             }
                         })
-                        .catch(error => console.error('Error al eliminar el producto:', error));
+                        .catch(error => console.error('Error al eliminar usuarios:', error));
                 }
 
                 function deleteUser() {
