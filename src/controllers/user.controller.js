@@ -41,7 +41,6 @@ class UserController {
   userLogin = async (req, res) => {
     const { email, password } = req.body;
 
-    //En el form del login yo puse como que los campos son "required" lo que hace que este error no pueda darse, pero por las dudas...
     if (!email || !password) {
       logger.error('No ingreso todos los campos necesarios')
       return res.send('Todos los campos son obligatorios')
