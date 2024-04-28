@@ -8,3 +8,7 @@ error: updatedUser is not defined
 error: Cannot set headers after they are sent to the client
 error: No puedes agregar tu propio producto al carrito.
 error: No puedes agregar tu propio producto al carrito.
+error: Password incorrecta
+error: Password incorrecta
+error: Password incorrecta
+

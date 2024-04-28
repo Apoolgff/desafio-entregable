@@ -73,7 +73,7 @@ class UserController {
 
   userRegister = async (req, res, next) => {
     try {
-      const { first_name, last_name, email, password, confirmPassword, age, role } = req.body;
+      const { first_name, last_name, email, password, confirmPassword, age } = req.body;
       const cart = await this.cartService.createCart()
 
       if (!first_name || !last_name || !email || !age) {
@@ -102,7 +102,7 @@ class UserController {
         password: await createHash(password),
         age,
         cart: cart._id,
-        role,
+        role: 'user',
         documents: []
       }
 
@@ -320,12 +320,13 @@ class UserController {
     try {
       const userId = req.params.uid;
       const user = await this.userService.getUserBy(userId);
-
+      
       if (!user) {
         return res.status(400).send('Usuario no encontrado.');
       }
-
+      await this.cartService.deleteCart(user.cart)
       await this.userService.deleteUser(userId)
+      res.status(200).send({status: 'success'})
     } catch (error) {
       logger.error(error.message);
       res.status(404).send('User Not Found');
@@ -358,7 +359,7 @@ class UserController {
             await sendMail(to, subject, html);
           }
         }));
-
+        await this.cartService.deleteCart(inactiveUsers.cart)
         await this.userService.deleteBy(filter);
       }
       res.status(200).send({status: 'success'})

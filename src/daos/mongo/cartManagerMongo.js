@@ -72,7 +72,9 @@ class CartDaoMongo {
       { $set: { products: [] } }
     )
   }
-
+  async delete(cid) {
+    return await this.model.findByIdAndDelete(cid);
+  }
 
 }
 

@@ -20,6 +20,8 @@ class CartRepository{
 
     removeAllProducts = async (cartId) => await this.dao.removeAllProducts(cartId)
 
+    deleteCart = async (cartId) => await this.dao.delete(cartId)
+
 }
 
 module.exports = { CartRepository }

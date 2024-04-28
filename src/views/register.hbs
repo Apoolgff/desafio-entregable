@@ -22,17 +22,7 @@
             <label for="confirmPassword">Confirma el Password:</label>
             <input type="password" id="confirmPassword" name="confirmPassword">
 
-            <div class="radio-container">
-                <label for="role">Rol:</label>
-                <label class='radio-label' for="userRole">Usuario</label>
-                <input type="radio" id="userRole" name="role" value="user" checked>
 
-                <label class='radio-label' for="premiumRole">Premium</label>
-                <input type="radio" id="premiumRole" name="role" value="premium" checked>
-
-                <label class='radio-label' for="adminRole">Admin</label>
-                <input type="radio" id="adminRole" name="role" value="admin">
-            </div>
 
             <button type="submit">Registrate</button>
         </form>
@@ -49,14 +39,14 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    const role = document.querySelector('input[name="role"]:checked').value;
+    //const role = document.querySelector('input[name="role"]:checked').value;
 
     fetch('/api/user/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ first_name, last_name, age, email, password, confirmPassword, role }),
+        body: JSON.stringify({ first_name, last_name, age, email, password, confirmPassword }),
     })
     .then(response => response.json())
     .then(data => {
